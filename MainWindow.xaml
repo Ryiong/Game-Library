@@ -414,6 +414,7 @@
                         </ListBox>
 
                     </StackPanel>
+                    <TextBlock Grid.Row="1" Text="v1.0.0" Foreground="#888888" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                 </Grid>
             </Border>
             <Grid Grid.Column="1" Background="#FFFFFF">
@@ -482,8 +483,9 @@
                         </Button>
                     </Grid>
                 </Border>
-                <Grid Grid.Row="1" VerticalAlignment="Bottom" Background="#E5F0EC">
-                    <TextBlock Text="Server Status: Off" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
+                <ContentControl x:Name="DynamicContentViewer" Grid.Row="1" Margin="0"/>
+                <Grid Grid.Row="2" VerticalAlignment="Bottom" Background="#E5F0EC">
+                    <TextBlock x:Name="ServerStatus" Text="Server Status: Off" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
                 </Grid>
             </Grid>
         </Grid>
