@@ -40,7 +40,7 @@ namespace Game_Library
             {
                 var allGamesSample = new List<GameModels>
                 {
-                    new GameModels {  Title = "Vector Siege", Type = "FLASH", Thumbnail = "", AddedDate = "Added Mar 12, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Lorem Ipsum is a placeholder text used in publishing and design to simulate readable content without distracting from layout or typography.", ImageInGame=["E:/0_Ryiong/Documents/Area.png", "E:/0_Ryiong/Documents/AreaMapVersion 10.png"] },
+                    new GameModels {  Title = "Vector Siege", Type = "FLASH", Thumbnail = "", AddedDate = "Added Mar 12, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Lorem Ipsum is a placeholder text used in publishing and design to simulate readable content without distracting from layout or typography.", ImageInGame=["./Resources/IMG_1067_500.jpg", "./Resources/IMG_1079_500.jpg"] },
                     new GameModels {  Title = "Lorem Ipsum Indie Game", Type = "HTML5", Thumbnail = "", AddedDate = "Added Mar 12, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true },
                     new GameModels {  Title = "Cyberpunk Classic", Type = "HTML5", Thumbnail = "", AddedDate = "Added Jun 04, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true },
                     new GameModels {  Title = "Super Mario Flash", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = false },

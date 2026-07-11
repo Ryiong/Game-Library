@@ -38,7 +38,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Image Source="{Binding Converter={StaticResource ThumbConverter}}" 
-                               Width="450" Height="281" 
+                               Width="425" Height="281" 
                                Stretch="UniformToFill"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

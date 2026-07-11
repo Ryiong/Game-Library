@@ -23,7 +23,7 @@ namespace Game_Library
     {
         private List<string> _slideshowImages = new List<string>();
         private int _currentSlideIndex = 0;
-        private const double SlideWidth = 420.0;
+        private const double SlideWidth = 425.0;
         private GameModels _currentGame;
         public DetailGameView(GameModels selectedGame)
         {
@@ -107,9 +107,9 @@ namespace Game_Library
                 if (DotsContainer.Children[i] is System.Windows.Shapes.Ellipse dot)
                 {
                     dot.Fill = (i == _currentSlideIndex)
-                        ? new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#005B41"))
-                        : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-                }
+                        ? new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#A4F5DA"))
+                        : new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F0FCF8"));
+        }
             }
         }
 
