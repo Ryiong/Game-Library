@@ -10,12 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Cover-Placeholder.jpg" />
     <None Remove="Resources\Fonts\SF-Pro.ttf" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Cover-Placeholder.jpg" />
+    <PackageReference Include="System.Text.Json" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Thumbnail-Placeholder.jpg" />
     <Resource Include="Resources\Fonts\SF-Pro.ttf" />
   </ItemGroup>
 

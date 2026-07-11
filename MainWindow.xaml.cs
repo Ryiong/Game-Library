@@ -19,7 +19,7 @@ namespace Game_Library
         public MainWindow()
         {
             InitializeComponent();
-
+            DynamicContentViewer.Content = new AllGamesView();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -62,5 +62,32 @@ namespace Game_Library
         {
             MessageBox.Show("Chức năng thêm Game thủ công đang được xây dựng!", "Thông báo");
         }
-    }
+
+        private void SidebarMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DynamicContentViewer == null) return;
+
+            switch (SidebarMenu.SelectedIndex)
+            {
+                case 0:
+                    DynamicContentViewer.Content = new AllGamesView();
+                    break;
+                case 1:
+                    DynamicContentViewer.Content = new FlashClassicsView();
+                    break;
+                case 2:
+                    DynamicContentViewer.Content = new HTML5IndieView();
+                    break;
+                case 3:
+                    DynamicContentViewer.Content = new FavoritesView();
+                    break;
+            } 
+        }
+
+        private void LiveServer_Toggle(object sender, RoutedEventArgs e)
+        {
+            if (ServerStatus == null) return;
+            ServerStatus.Text = LiveServerButton.IsChecked == true ? "Server Status: Active" : "Server Status: Off";
+        }
+    }    
 }

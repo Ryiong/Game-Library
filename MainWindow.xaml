@@ -301,8 +301,8 @@
 
                     <StackPanel Grid.Row="1">
                         <TextBlock Text="GAME LIBRARY" Style="{StaticResource MenuHeaderStyle}"></TextBlock>
-                        <ListBox Style="{StaticResource MenuListBoxStyle}"
-                                 SelectedIndex="0">
+                        <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}"
+                                 SelectedIndex="0" SelectionChanged="SidebarMenu_SelectionChanged">
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -407,7 +407,7 @@
 
                                     <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}"
                                                   IsChecked="False"
-                                                  x:Name="LiveServerButton"/>
+                                                  x:Name="LiveServerButton" Unchecked="LiveServer_Toggle" Checked="LiveServer_Toggle"/>
                                 </Grid>
                             </ListBoxItem>
 
