@@ -40,23 +40,22 @@ namespace Game_Library
             {
                 var allGamesSample = new List<GameModels>
                 {
-                    new GameModels { idGame = 1, Title = "Vector Siege", Type = "FLASH", Thumbnail = "", AddedDate = "Added Mar 12, 2026", isFavorite = true },
-                    new GameModels { idGame = 2, Title = "Lorem Ipsum Indie Game", Type = "HTML5", Thumbnail = "", AddedDate = "Added Mar 12, 2026", isFavorite = true },
-                    new GameModels { idGame = 3, Title = "Cyberpunk Classic", Type = "HTML5", Thumbnail = "", AddedDate = "Added Jun 04, 2026", isFavorite = true },
-                    new GameModels { idGame = 4, Title = "Super Mario Flash", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026", isFavorite = false },
-                    new GameModels { idGame = 5, Title = "Super Mario Flash", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026", isFavorite = false },
-                    new GameModels { idGame = 6, Title = "Display Test Text Very Long Title Game Name", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026", isFavorite = false }
+                    new GameModels {  Title = "Vector Siege", Type = "FLASH", Thumbnail = "", AddedDate = "Added Mar 12, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Lorem Ipsum is a placeholder text used in publishing and design to simulate readable content without distracting from layout or typography.", ImageInGame=["E:/0_Ryiong/Documents/Area.png", "E:/0_Ryiong/Documents/AreaMapVersion 10.png"] },
+                    new GameModels {  Title = "Lorem Ipsum Indie Game", Type = "HTML5", Thumbnail = "", AddedDate = "Added Mar 12, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true },
+                    new GameModels {  Title = "Cyberpunk Classic", Type = "HTML5", Thumbnail = "", AddedDate = "Added Jun 04, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = true },
+                    new GameModels {  Title = "Super Mario Flash", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = false },
+                    new GameModels {  Title = "Super Mario Flash", Type = "FLASH", Thumbnail = "", AddedDate = "Added Jul 11, 2026",ReleaseDate = "Mar 12, 2026", isFavorite = false },
+                    new GameModels {  Title = "Display Test Text Very Long Title Game Name", Type = "FLASH", Thumbnail = "",ReleaseDate = "Mar 12, 2026", AddedDate = "Added Jul 11, 2026", isFavorite = false }
                 };
                 string allGamesJson = JsonSerializer.Serialize(allGamesSample, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(allGamesJsonPath, allGamesJson);
 
                 var recentGameSample = new GameModels
                 {
-                    idGame = 1,
-                    Title = "Vector Siege (Recent)",
+                    Title = "Vector Siege",
                     Type = "FLASH",
                     Thumbnail = "",
-                    LastPlayText = "Last played 2 hours ago"
+                    LastPlayedText = "Last played 2 hours ago"
                 };
                 string recentJson = JsonSerializer.Serialize(recentGameSample, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(recentGameJsonPath, recentJson);
@@ -101,7 +100,6 @@ namespace Game_Library
                 MessageBox.Show("Lỗi đọc file recent_game.json: " + ex.Message);
             }
 
-            // 2. Đọc file Tất cả game
             try
             {
                 if (File.Exists(allGamesJsonPath))
@@ -118,6 +116,18 @@ namespace Game_Library
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi đọc file game.json: " + ex.Message);
+            }
+        }
+
+        private void GameCard_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.DataContext is GameModels selectedGame)
+            {
+                var mainWindow = Application.Current.MainWindow as MainWindow;
+                if (mainWindow != null)
+                {
+                    mainWindow.NavigateToDetail(selectedGame);
+                }
             }
         }
     }

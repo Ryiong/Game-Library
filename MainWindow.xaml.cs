@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Game_Library.Models;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -88,6 +89,15 @@ namespace Game_Library
         {
             if (ServerStatus == null) return;
             ServerStatus.Text = LiveServerButton.IsChecked == true ? "Server Status: Active" : "Server Status: Off";
+        }
+
+        public void NavigateToDetail(GameModels selectedGame)
+        {
+            if (DynamicContentViewer != null)
+            {
+                DynamicContentViewer.Content = new DetailGameView(selectedGame);
+                SidebarMenu.SelectedIndex = -1;
+            }
         }
     }    
 }

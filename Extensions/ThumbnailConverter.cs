@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace Game_Library
+namespace Game_Library.Extensions
 {
     public class ThumbnailConverter : IValueConverter
     {

@@ -1,0 +1,178 @@
+﻿<UserControl x:Class="Game_Library.DetailGameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Game_Library"
+             xmlns:ext="clr-namespace:Game_Library.Extensions"
+             FontFamily="./Resources/Fonts/#SF Pro Display"
+             mc:Ignorable="d"  Background="White">
+    <Grid Margin="10,0,10,0">
+        <Grid.Resources>
+            <ext:ThumbnailConverter x:Key="ThumbConverter"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!--Game Information-->
+            <RowDefinition Height="*"/> <!--RELATED GAMES List-->
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0" HorizontalAlignment="Center" Margin="0,30,0,40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Width="450" Height="281" ClipToBounds="True" Padding="0,0,25,0" Margin="0,0,25,0" Background="#EDF2F0">
+                <Grid>
+                    <StackPanel x:Name="SlideContainerStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform x:Name="SlideshowTranslate"/>
+                        </StackPanel.RenderTransform>
+                        <ItemsControl x:Name="icSlideshowImages">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Converter={StaticResource ThumbConverter}}" 
+                               Width="450" Height="281" 
+                               Stretch="UniformToFill"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- LEFT BUTTON -->
+                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="15" Height="15" Margin="10,0,0,0" Click="PrevSlide_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <TextBlock x:Name="fg" Text="‹" Foreground="#046B59" FontSize="50" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-10,0,-10"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="fg" Property="Foreground" Value="#18A68D"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- RIGHT BUTTON -->
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,10,0" Click="NextSlide_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <TextBlock x:Name="fg" Text="›" Foreground="#046B59" FontSize="50" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-10,0,-10"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="fg" Property="Foreground" Value="#18A68D"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- DOT -->
+                    <StackPanel x:Name="DotsContainer" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,15"/>
+                </Grid>
+            </Border>
+
+            <!-- Data Infor -->
+            <Grid Grid.Column="1" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="Type: " Foreground="#777777" FontSize="15" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding Type}" Foreground="#046B59" FontSize="15" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding Description}" Margin="0,0,0,8" Foreground="#777777" FontSize="15" FontWeight="Regular" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" ext:TextBlockExtensions.MaxLines="6"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8" >
+                        <TextBlock Text="Added Date: " Foreground="#777777" FontSize="15" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding AddedDate}" Foreground="#131E1B" FontSize="15" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Releases Date: " Foreground="#777777" FontSize="15" FontWeight="Medium"/>
+                        <TextBlock Text="{Binding ReleaseDate}" Foreground="#131E1B" FontSize="15" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+
+                    <Button Background="#D4EAE2" BorderThickness="0" Margin="0,0,15,0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="15"/>
+                                <Setter Property="Padding" Value="12, 7"/>
+                            </Style>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <Control Template="{StaticResource IconPlay}" Width="15" Height="15" Foreground="#005B41" VerticalAlignment="Center"/>
+                            <TextBlock Text="Play Now!" Foreground="#005B41" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Background="#EDF2F0" BorderThickness="0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="15"/>
+                                <Setter Property="Padding" Value="12, 7"/>
+                            </Style>
+                        </Button.Resources>
+                        <StackPanel Orientation="Horizontal">
+                            <Control Template="{StaticResource IconHeart}" Width="15" Height="15" Foreground="#005B41" VerticalAlignment="Center"/>
+                            <TextBlock Text="Yêu thích" Foreground="#005B41" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- RELATED GAMES -->
+        <TextBlock Grid.Row="1" Text="RELATED GAMES" Foreground="#005B41" FontSize="22" FontWeight="Heavy" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <!-- RELATED GAMES LIST -->
+        <ItemsControl x:Name="icRelatedGamesGrid" Grid.Row="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="12" Width="180">
+                        <Border Height="130" CornerRadius="12" ClipToBounds="True">
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Thumbnail, Converter={StaticResource ThumbConverter}}" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+                        <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="14" FontWeight="Bold" Margin="0,6,0,2" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding AddedDate}" Foreground="#888888" FontSize="11"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
