@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game_Library"
+        xmlns:ext="clr-namespace:Game_Library.Extensions"
         mc:Ignorable="d"
         FontFamily="./Resources/Fonts/#SF Pro Display"
         Title="Game Library" Height="730" Width="1027"
@@ -19,6 +20,8 @@
                       CornerRadius="14"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
+        <ext:ButtonProps x:Key="ButtonProps"/>
+        
         <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="14"/>
             <Setter Property="Height" Value="14"/>
@@ -45,10 +48,10 @@
                                 <Setter TargetName="contentIcon" Property="Opacity" Value="1"/>
                             </DataTrigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:ButtonProps.HoverBackground)}"/>
+                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.HoverBackground)}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:ButtonProps.PressedBackground)}"/>
+                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.PressedBackground)}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -266,8 +269,8 @@
                                 WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button Style="{StaticResource MacTrafficLightButtonStyle}"
                                 Background="#FF5F56"
-                                local:ButtonProps.HoverBackground="#F74339"
-                                local:ButtonProps.PressedBackground="#DB332a" 
+                                ext:ButtonProps.HoverBackground="#F74339"
+                                ext:ButtonProps.PressedBackground="#DB332a" 
                                 BorderThickness="1.5"
                                 BorderBrush="#cc4f46"
                                 Click="CloseButton_Click"
@@ -280,8 +283,8 @@
                         </Button>
                         <Button Style="{StaticResource MacTrafficLightButtonStyle}"
                                 Background="#FAC146"
-                                local:ButtonProps.HoverBackground="#F5B11D"
-                                local:ButtonProps.PressedBackground="#F2A807"
+                                ext:ButtonProps.HoverBackground="#F5B11D"
+                                ext:ButtonProps.PressedBackground="#F2A807"
                                 BorderThickness="1.5"
                                 BorderBrush="#d4a338"
                                 Click="MinimizeButton_Click">
@@ -290,8 +293,8 @@
                         <Button Style="{StaticResource MacTrafficLightButtonStyle}"
                                 Margin="0"
                                 Background="#27C93F"
-                                local:ButtonProps.HoverBackground="#13D630"
-                                local:ButtonProps.PressedBackground="#04C921"
+                                ext:ButtonProps.HoverBackground="#13D630"
+                                ext:ButtonProps.PressedBackground="#04C921"
                                 BorderThickness="1.5"
                                 BorderBrush="#369841"
                                 Click="MaximizeButton_Click">

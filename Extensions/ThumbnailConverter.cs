@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Data;
 using System.Globalization;
 using System.IO;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
 namespace Game_Library.Extensions
@@ -12,28 +10,25 @@ namespace Game_Library.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string imagePath = (string)value;
+            string imagePath = value as string;
 
-            if (!string.IsNullOrEmpty(imagePath))
+            if (string.IsNullOrEmpty(imagePath))
             {
                 return GetPlaceholderImage();
             }
-            
+
             try
             {
-                if (imagePath.StartsWith("./Resources/") || imagePath.StartsWith("Resources/"))
+                string normalizedPath = imagePath.ToLower().Replace("\\", "/");
+
+                if (normalizedPath.Contains("resources/"))
                 {
-                    string cleanPath = imagePath.Replace("./", "");
+                    int index = normalizedPath.IndexOf("resources/");
+                    string cleanPath = imagePath.Substring(index); 
+
                     string packUri = $"pack://application:,,,/{cleanPath}";
 
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
-
-                    bitmap.DecodePixelHeight = 450;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-
+                    BitmapImage bitmap = new BitmapImage(new Uri(packUri, UriKind.Absolute));
                     return bitmap;
                 }
 
@@ -41,19 +36,15 @@ namespace Game_Library.Extensions
                 {
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
-
-                    bitmap.DecodePixelHeight = 450;
+                    bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
-
                     return bitmap;
                 }
             }
             catch (Exception ex)
             {
-                return new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
-
+                System.Diagnostics.Debug.WriteLine("Lỗi nạp ảnh: " + ex.Message);
             }
 
             return GetPlaceholderImage();

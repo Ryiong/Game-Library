@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Game_Library
+namespace Game_Library.Extensions
 {
     public static class ButtonProps
     {
@@ -14,7 +14,6 @@ namespace Game_Library
         public static void SetHoverBackground(DependencyObject obj, Brush value) => obj.SetValue(HoverBackgroundProperty, value);
         public static Brush GetHoverBackground(DependencyObject obj) => (Brush)obj.GetValue(HoverBackgroundProperty);
 
-        // 2. Thuộc tính Pressed Background
         public static readonly DependencyProperty PressedBackgroundProperty =
             DependencyProperty.RegisterAttached("PressedBackground", typeof(Brush), typeof(ButtonProps), new PropertyMetadata(Brushes.Transparent));
 

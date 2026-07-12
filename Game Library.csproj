@@ -20,9 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\IMG_1067_500.jpg" />
-    <Resource Include="Resources\IMG_1079_500.jpg" />
-    <Resource Include="Resources\Thumbnail-Placeholder.jpg" />
+    <Resource Include="Resources\IMG_1067_500.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IMG_1079_500.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Thumbnail-Placeholder.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Fonts\SF-Pro.ttf" />
   </ItemGroup>
 
