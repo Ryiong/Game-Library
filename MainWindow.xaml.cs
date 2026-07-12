@@ -13,46 +13,16 @@ namespace Game_Library
     {
         private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         private readonly string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
+        private object _previousView = null;
+        private int _previousSidebarIndex = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-            // Đăng ký sự kiện Drag-Drop trên toàn ứng dụng để nhận thư mục game tiện lợi
-            this.AllowDrop = true;
-            this.Drop += MainWindow_Drop;
 
-            // Tạo thư mục lưu trữ tập trung nếu chưa có
             if (!Directory.Exists(centralStoragePath)) Directory.CreateDirectory(centralStoragePath);
 
             DynamicContentViewer.Content = new AllGamesView();
-        }
-
-        private void MainWindow_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string path in paths)
-                {
-                    if (Directory.Exists(path))
-                    {
-                        // Logic kéo thả thư mục: Sao chép toàn bộ thư mục vào vùng dữ liệu tập trung (games_data)
-                        string folderName = Path.GetFileName(path);
-                        string destinationPath = Path.Combine(centralStoragePath, folderName);
-
-                        try
-                        {
-                            CopyDirectory(path, destinationPath);
-                            MessageBox.Show($"Đã nạp thành công dữ liệu game '{folderName}' vào kho lưu trữ cá nhân tập trung!", "Thành công");
-                            // Tại đây bạn có thể hiển thị Hộp thoại nhập liệu Metadata để lưu thêm vào JSON.
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi sao chép dữ liệu game: " + ex.Message);
-                        }
-                    }
-                }
-            }
         }
 
         private void CopyDirectory(string sourceDir, string destinationDir)
@@ -89,33 +59,29 @@ namespace Game_Library
         {
             if (DynamicContentViewer != null)
             {
+                _previousView = DynamicContentViewer.Content;
+                _previousSidebarIndex = SidebarMenu.SelectedIndex;
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
-                SidebarMenu.SelectedIndex = -1; 
+                SidebarMenu.SelectedIndex = -1;
+                DefaultHeaderGrid.Visibility = Visibility.Collapsed;
+                DetailHeaderGrid.Visibility = Visibility.Visible;
             }
         }
 
-        public void ExecuteGameLauncher(GameModels game)
+        private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-            //string gameFolder = Path.Combine(centralStoragePath, game.FolderName ?? "");
+            if (_previousView != null)
+            {
+                DynamicContentViewer.Content = _previousView;
+                SidebarMenu.SelectedIndex = _previousSidebarIndex;
 
-            //if (game.Type.ToUpper() == "FLASH")
-            //{
-            //    // Thực thi Game Flash (.swf): Chạy qua FlashPlayer debug.exe tích hợp sẵn
-            //    string flashPlayerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "flashplayer_debugger.exe");
-            //    string swfFilePath = Path.Combine(gameFolder, game.MainFile);
-
-            //    MessageBox.Show($"Hệ thống đang gọi tiến trình nhúng giả lập cho Flash Game: {game.Title}\nFile: {game.MainFile}", "Kích hoạt Flash Player");
-            //    // Tiến trình kích hoạt thực tế bằng Win32 SetParent sẽ được gọi ở đây.
-            //}
-            //else if (game.Type.ToUpper() == "HTML5")
-            //{
-            //    // Thực thi Game HTML5: Bật trạng thái Live Server nội bộ và tải WebView2
-            //    if (ServerStatus != null) ServerStatus.Text = "Server Status: Active (Port 8080)";
-            //    LiveServerButton.IsChecked = true;
-
-            //    MessageBox.Show($"Hệ thống đã bật Web Server cục bộ tại http://localhost:8080/{game.MainFile} để khởi chạy thông qua WebView2!", "Kích hoạt HTML5");
-            //}
+                DefaultHeaderGrid.Visibility = Visibility.Visible;
+                DetailHeaderGrid.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                SidebarMenu.SelectedIndex = 0;
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Game_Library"
         xmlns:ext="clr-namespace:Game_Library.Extensions"
         mc:Ignorable="d"
-        FontFamily="./Resources/Fonts/#SF Pro Display"
+        FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
         Title="Game Library" Height="730" Width="1027"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -20,8 +20,7 @@
                       CornerRadius="14"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <ext:ButtonProps x:Key="ButtonProps"/>
-        
+
         <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="14"/>
             <Setter Property="Height" Value="14"/>
@@ -245,7 +244,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0"
-                    Background="#F0FCF8"
+                    Background="#F0FCF8" CornerRadius="14,0,0,14"
                     BorderBrush="#ffffff"
                     BorderThickness="0,0,1,0"
                     Panel.ZIndex="1">
@@ -420,76 +419,87 @@
                     <TextBlock Grid.Row="1" Text="v1.0.0" Foreground="#888888" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                 </Grid>
             </Border>
-            <Grid Grid.Column="1" Background="#FFFFFF">
+            <Grid Grid.Column="1" Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Border WindowChrome.IsHitTestVisibleInChrome="True" Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#E6F2ED">
+                <Border Background="White" WindowChrome.IsHitTestVisibleInChrome="True" Grid.Row="0" BorderThickness="0,0,0,1" CornerRadius="0,14,0,0" BorderBrush="#E6F2ED">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" 
-                                Background="#E5F0EC" 
-                                CornerRadius="18"
-                                Padding="0, 5"
-                                HorizontalAlignment="Left" 
-                                Width="360" 
-                                Margin="35,0,0,0"
-                                VerticalAlignment="Center">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                        <Grid x:Name="DefaultHeaderGrid" Visibility="Visible">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" 
+                Background="#E5F0EC" 
+                CornerRadius="18"
+                Padding="0, 5"
+                HorizontalAlignment="Left" 
+                Width="360" 
+                Margin="35,0,0,0"
+                VerticalAlignment="Center">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Control Grid.Column="0" 
-                                        Template="{StaticResource IconSearch}" 
-                                        Width="12" 
-                                        Height="12" 
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Center"
-                                        Foreground="#3E4945" Margin="10, 0"/>
+                                    <Control Grid.Column="0" 
+                        Template="{StaticResource IconSearch}" 
+                        Width="12" 
+                        Height="12" 
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Center"
+                        Foreground="#3E4945" Margin="10, 0"/>
 
-                                <TextBox Grid.Column="1" Name="SearchBox"
-                                        Background="Transparent"
-                                         BorderThickness="0"
-                                        VerticalContentAlignment="Center" 
-                                        Foreground="#3E4945"
-                                        FontSize="12"  FontWeight="Light" Padding="0, 5" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"/>
+                                    <TextBox Grid.Column="1" Name="SearchBox"
+                        Background="Transparent"
+                         BorderThickness="0"
+                        VerticalContentAlignment="Center" 
+                        Foreground="#3E4945"
+                        FontSize="12"  FontWeight="Light" Padding="0, 5" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"/>
 
-                                <TextBlock x:Name="SearchPlaceholder" 
-                                    Grid.Column="1" 
-                                    Text="Search your library..." 
-                                    Foreground="#3E4945" 
-                                    VerticalAlignment="Center" 
-                                    IsHitTestVisible="False" 
-                                    FontSize="12" Padding="0, 5" 
-                                    Margin="5,0,0,0" FontWeight="Light"/>
-                            </Grid>
-                        </Border>
-                        <Button x:Name="AddGameButton" Grid.Column="1" Style="{StaticResource MacPrimaryButtonStyle}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" Cursor="Hand"
-                            Margin="0,0,30,0" Click="AddGameButton_Click">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Control Template="{StaticResource IconPlus}"
-                Width="20"
-                Height="19" Margin="5, 0"/>
-                                    <TextBlock Text="Add Game" VerticalAlignment="Center" Margin="2,2,8,2" FontWeight="SemiBold"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
+                                    <TextBlock x:Name="SearchPlaceholder" 
+                    Grid.Column="1" 
+                    Text="Search your library..." 
+                    Foreground="#3E4945" 
+                    VerticalAlignment="Center" 
+                    IsHitTestVisible="False" 
+                    FontSize="12" Padding="0, 5" 
+                    Margin="5,0,0,0" FontWeight="Light"/>
+                                </Grid>
+                            </Border>
+                            <Button x:Name="AddGameButton" Grid.Column="1" Style="{StaticResource MacPrimaryButtonStyle}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" Cursor="Hand"
+            Margin="0,0,30,0" Click="AddGameButton_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Control Template="{StaticResource IconPlus}"
+Width="20"
+Height="19" Margin="5, 0"/>
+                                        <TextBlock Text="Add Game" VerticalAlignment="Center" Margin="2,2,8,2" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+
+                        <Grid x:Name="DetailHeaderGrid" Visibility="Collapsed">
+                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ReturnButton_Click">
+                                <Button.Content>
+                                    <Control Template="{StaticResource IconReturn}" Width="24" Height="24" Foreground="#046B59"/>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Border>
                 <ContentControl x:Name="DynamicContentViewer" Grid.Row="1" Margin="0"/>
-                <Grid Grid.Row="2" VerticalAlignment="Bottom" Background="#E5F0EC">
+                <Border Grid.Row="2" VerticalAlignment="Bottom" CornerRadius="0,0,14,0" Background="#E5F0EC" >
                     <TextBlock x:Name="ServerStatus" Text="Server Status: Off" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
-                </Grid>
+                </Border>
+                
             </Grid>
         </Grid>
     </Border>

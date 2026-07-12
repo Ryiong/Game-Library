@@ -125,7 +125,6 @@ namespace Game_Library.Views
 
             if (Application.Current.MainWindow is MainWindow main)
             {
-                main.ExecuteGameLauncher(_currentGame);
             }
         }
 
