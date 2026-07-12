@@ -115,7 +115,6 @@ namespace Game_Library.Views
 
         private void PlayNow_Click(object sender, RoutedEventArgs e)
         {
-            // Lưu lịch sử chơi vào recent_game.json
             try
             {
                 _currentGame.LastPlayedText = "Vừa chơi xong";
@@ -124,7 +123,6 @@ namespace Game_Library.Views
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
 
-            // Gọi điều hướng kích hoạt tiến trình cụ thể từ MainWindow
             if (Application.Current.MainWindow is MainWindow main)
             {
                 main.ExecuteGameLauncher(_currentGame);

@@ -74,13 +74,13 @@ namespace Game_Library
                     DynamicContentViewer.Content = new AllGamesView();
                     break;
                 case 1:
-                    DynamicContentViewer.Content = new FlashClassicsView(); // Lọc tự động Type = FLASH
+                    DynamicContentViewer.Content = new FlashClassicsView();
                     break;
                 case 2:
-                    DynamicContentViewer.Content = new HTML5IndieView();    // Lọc tự động Type = HTML5
+                    DynamicContentViewer.Content = new HTML5IndieView();  
                     break;
                 case 3:
-                    DynamicContentViewer.Content = new FavoritesView();     // Lọc tự động isFavorite = true
+                    DynamicContentViewer.Content = new FavoritesView(); 
                     break;
             }
         }
@@ -90,32 +90,32 @@ namespace Game_Library
             if (DynamicContentViewer != null)
             {
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
-                SidebarMenu.SelectedIndex = -1; // Bỏ chọn sidebar khi vào chi tiết
+                SidebarMenu.SelectedIndex = -1; 
             }
         }
 
-        // Logic thực thi chạy tiến trình phù hợp theo loại Game (Phương án A)
         public void ExecuteGameLauncher(GameModels game)
         {
-            string gameFolder = Path.Combine(centralStoragePath, game.FolderName ?? "");
+            throw new NotImplementedException();
+            //string gameFolder = Path.Combine(centralStoragePath, game.FolderName ?? "");
 
-            if (game.Type.ToUpper() == "FLASH")
-            {
-                // Thực thi Game Flash (.swf): Chạy qua FlashPlayer debug.exe tích hợp sẵn
-                string flashPlayerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "flashplayer_debugger.exe");
-                string swfFilePath = Path.Combine(gameFolder, game.MainFile);
+            //if (game.Type.ToUpper() == "FLASH")
+            //{
+            //    // Thực thi Game Flash (.swf): Chạy qua FlashPlayer debug.exe tích hợp sẵn
+            //    string flashPlayerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "flashplayer_debugger.exe");
+            //    string swfFilePath = Path.Combine(gameFolder, game.MainFile);
 
-                MessageBox.Show($"Hệ thống đang gọi tiến trình nhúng giả lập cho Flash Game: {game.Title}\nFile: {game.MainFile}", "Kích hoạt Flash Player");
-                // Tiến trình kích hoạt thực tế bằng Win32 SetParent sẽ được gọi ở đây.
-            }
-            else if (game.Type.ToUpper() == "HTML5")
-            {
-                // Thực thi Game HTML5: Bật trạng thái Live Server nội bộ và tải WebView2
-                if (ServerStatus != null) ServerStatus.Text = "Server Status: Active (Port 8080)";
-                LiveServerButton.IsChecked = true;
+            //    MessageBox.Show($"Hệ thống đang gọi tiến trình nhúng giả lập cho Flash Game: {game.Title}\nFile: {game.MainFile}", "Kích hoạt Flash Player");
+            //    // Tiến trình kích hoạt thực tế bằng Win32 SetParent sẽ được gọi ở đây.
+            //}
+            //else if (game.Type.ToUpper() == "HTML5")
+            //{
+            //    // Thực thi Game HTML5: Bật trạng thái Live Server nội bộ và tải WebView2
+            //    if (ServerStatus != null) ServerStatus.Text = "Server Status: Active (Port 8080)";
+            //    LiveServerButton.IsChecked = true;
 
-                MessageBox.Show($"Hệ thống đã bật Web Server cục bộ tại http://localhost:8080/{game.MainFile} để khởi chạy thông qua WebView2!", "Kích hoạt HTML5");
-            }
+            //    MessageBox.Show($"Hệ thống đã bật Web Server cục bộ tại http://localhost:8080/{game.MainFile} để khởi chạy thông qua WebView2!", "Kích hoạt HTML5");
+            //}
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();
