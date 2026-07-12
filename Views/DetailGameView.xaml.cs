@@ -85,7 +85,6 @@ namespace Game_Library.Views
             _currentGame.isFavorite = !_currentGame.isFavorite;
             UpdateFavoriteUI();
 
-            // Cập nhật trạng thái vào file JSON đồng bộ
             string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
             if (File.Exists(jsonPath))
             {

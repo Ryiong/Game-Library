@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Slideshow -->
-            <Border Grid.Column="0" Width="425" Height="281" CornerRadius="16" ClipToBounds="True" Background="#EDF2F0">
+            <Border Grid.Column="0" Width="425" Height="281" ClipToBounds="True" Background="#EDF2F0">
                 <Grid>
                     <Canvas x:Name="SlideshowCanvas" Width="425" Height="281">
                         <StackPanel x:Name="SlideContainerStackPanel" Orientation="Horizontal" Canvas.Left="0">
@@ -69,26 +69,26 @@
 
                 <!-- Thao tác kích hoạt -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,20,0,0">
-                    <Button Width="130" Height="40" Background="#046B59" BorderThickness="0" Cursor="Hand" Click="PlayNow_Click" Margin="0,0,15,0">
+                    <Button Width="130" Height="30" Background="#D4E6E2" BorderThickness="0" Cursor="Hand" Click="PlayNow_Click" Margin="0,0,15,0">
                         <Button.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="12"/>
+                                <Setter Property="CornerRadius" Value="16"/>
                             </Style>
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
-                            <Control Template="{StaticResource IconPlay}" Width="16" Height="16" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Text="PLAY NOW" Foreground="White" FontWeight="Bold" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            <Control Template="{StaticResource IconPlay}" Width="16" Height="16" Foreground="#046B59" VerticalAlignment="Center"/>
+                            <TextBlock Text="PLAY NOW" Foreground="#046B59" FontWeight="Bold" Margin="8,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="FavButton" Width="130" Height="40" Background="#EDF2F0" BorderThickness="0" Cursor="Hand" Click="Favorite_Click">
+                    <Button x:Name="FavButton" Width="130" Height="30" Background="#EDF2F0" BorderThickness="0" Cursor="Hand" Click="Favorite_Click">
                         <Button.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="12"/>
+                                <Setter Property="CornerRadius" Value="16"/>
                             </Style>
                         </Button.Resources>
                         <StackPanel Orientation="Horizontal">
-                            <Control x:Name="HeartIcon" Template="{StaticResource IconHeart}" Width="16" Height="16" Foreground="#FF5F56" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="FavText" Text="Yêu thích" Foreground="#131E1B" FontWeight="Medium" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            <Control x:Name="HeartIcon" Template="{StaticResource IconHeart}" Width="16" Height="16" Foreground="#046B59" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="FavText" Text="FAVARITE" Foreground="#046B59" FontWeight="Bold" Margin="8,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -96,7 +96,7 @@
         </Grid>
 
         <!-- Game Series liên quan -->
-        <TextBlock Grid.Row="1" Text="GAME CÙNG SERIES / LIÊN QUAN" Foreground="#046B59" FontSize="18" FontWeight="Bold" Margin="0,10,0,15"/>
+        <TextBlock Grid.Row="1" Text="RELATED GAMES" Foreground="#046B59" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,10,0,15"/>
         <ItemsControl x:Name="icRelatedGamesGrid" Grid.Row="2">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
