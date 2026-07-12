@@ -11,8 +11,6 @@
 
   <ItemGroup>
     <None Remove="Resources\Fonts\SF-Pro.ttf" />
-    <None Remove="Resources\IMG_1067_500.jpg" />
-    <None Remove="Resources\IMG_1079_500.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,12 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\IMG_1067_500.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\IMG_1079_500.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Thumbnail-Placeholder.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

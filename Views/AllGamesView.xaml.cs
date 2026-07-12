@@ -34,8 +34,8 @@ namespace Game_Library.Views
             {
                 var allGamesSample = new List<GameModels>
                 {
-                    new GameModels { Title = "Vector Siege", Type = "FLASH", Thumbnail = "Resources/IMG_1067_500.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Game bắn súng Flash không gian Vector cổ điển cực kỳ hấp dẫn.", MainFile="vector_siege.swf", FolderName="vector_siege" },
-                    new GameModels { Title = "HTML5 Indie Adventure", Type = "HTML5", Thumbnail = "Resources/IMG_1079_500.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Nov 20, 2025", isFavorite = false, Description="Một tựa game phiêu lưu mã nguồn mở HTML5.", MainFile="index.html", FolderName="indie_adventure" }
+                    new GameModels { Title = "Vector Siege", Type = "FLASH", Thumbnail = "./Resources/Thumbnail-Placeholder.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Game bắn súng Flash không gian Vector cổ điển cực kỳ hấp dẫn.", MainFile="vector_siege.swf", FolderName="vector_siege", ImageInGame=["./Resources/Thumbnail-Placeholder.jpg", "./Resources/Thumbnail-Placeholder.jpg"] },
+                    new GameModels { Title = "HTML5 Indie Adventure", Type = "HTML5", Thumbnail = "./Resources/Thumbnail-Placeholder.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Nov 20, 2025", isFavorite = false, Description="Một tựa game phiêu lưu mã nguồn mở HTML5.", MainFile="index.html", FolderName="indie_adventure" }
                 };
                 File.WriteAllText(allGamesJsonPath, JsonSerializer.Serialize(allGamesSample, new JsonSerializerOptions { WriteIndented = true }));
             }
@@ -72,7 +72,7 @@ namespace Game_Library.Views
         {
             if ((sender as Button)?.DataContext is GameModels selectedGame && Application.Current.MainWindow is MainWindow main)
             {
-                main.NavigateToDetail(selectedGame); // Điều hướng trực tiếp sang trang Detail của game để khởi chạy mạch lạc
+                main.NavigateToDetail(selectedGame); 
             }
         }
     }
