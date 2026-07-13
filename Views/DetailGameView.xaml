@@ -44,42 +44,12 @@
                         </StackPanel>
                     </Canvas>
 
-                    <Button HorizontalAlignment="Left" VerticalAlignment="Center" Width="15" Height="15" Margin="10,0,0,0" Click="PrevSlide_Click" Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <TextBlock x:Name="fg" Text="‹" Foreground="#046B59" FontSize="50" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-10,0,-10"/>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="fg" Property="Foreground" Value="#18A68D"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
+                    <Button Style="{StaticResource NonableButtonStyle}" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Click="PrevSlide_Click" Cursor="Hand">
+                        <Control Template="{StaticResource IconLeft}" Width="24" Height="24" VerticalAlignment="Center" Foreground="#046B59"/>
                     </Button>
 
-                    <Button HorizontalAlignment="Right" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,10,0" Click="NextSlide_Click" Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <TextBlock x:Name="fg" Text="›" Foreground="#046B59" FontSize="50" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-10,0,-10"/>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="fg" Property="Foreground" Value="#18A68D"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
+                    <Button Style="{StaticResource NonableButtonStyle}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" Click="NextSlide_Click" Cursor="Hand">
+                        <Control Template="{StaticResource IconRight}" Width="24" Height="24" VerticalAlignment="Center" Foreground="#046B59"/>
                     </Button>
                     <StackPanel x:Name="DotsContainer" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,15"/>
                 </Grid>
