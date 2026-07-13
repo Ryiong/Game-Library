@@ -36,9 +36,17 @@ namespace Game_Library
 
         private void SidebarMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (SidebarMenu.SelectedIndex != -1)
+            {
+                NavigateToTab(SidebarMenu.SelectedIndex);
+            }
+        }
+
+        private void NavigateToTab(int tabIndex)
+        {
             if (DynamicContentViewer == null) return;
 
-            switch (SidebarMenu.SelectedIndex)
+            switch (tabIndex)
             {
                 case 0:
                     DynamicContentViewer.Content = new AllGamesView();
@@ -106,7 +114,17 @@ namespace Game_Library
         private void MaximizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e) => SearchPlaceholder.Visibility = Visibility.Collapsed;
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e) { if (string.IsNullOrEmpty(SearchBox.Text)) SearchPlaceholder.Visibility = Visibility.Visible; }
-        private void AddGameButton_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Vui lòng kéo thả thư mục game trực tiếp vào giao diện ứng dụng để nạp tự động!", "Hướng dẫn");
+        private void AddGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddGameWindow addDialog = new AddGameWindow();
+            addDialog.Owner = this;
+            if (addDialog.ShowDialog() == true)
+            {
+                int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
+                SidebarMenu.SelectedIndex = currentTab;
+                NavigateToTab(currentTab);
+            }
+        }
         private void LiveServer_Toggle(object sender, RoutedEventArgs e) { if (ServerStatus != null) ServerStatus.Text = LiveServerButton.IsChecked == true ? "Server Status: Active" : "Server Status: Off"; }
     }
 }

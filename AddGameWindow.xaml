@@ -25,11 +25,12 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <!-- Header -->
             <Border Grid.Row="0" Background="#F0FCF8" BorderBrush="#ffffff" CornerRadius="14,14,0,0" BorderThickness="0,0,0,0" Panel.ZIndex="1">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="14" Direction="0" ShadowDepth="2" Opacity="0.14" Color="Black"/>
                 </Border.Effect>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,5,16,5" WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="16,0" WindowChrome.IsHitTestVisibleInChrome="True">
                     <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FF5F56" ext:ButtonProps.HoverBackground="#F74339" ext:ButtonProps.PressedBackground="#DB332a" BorderThickness="1.5" BorderBrush="#cc4f46" Click="CloseButton_Click" Foreground="#E0443E">
                         <Control Template="{StaticResource IconQuit}" BorderThickness="2" Width="6" Height="6" Foreground="#7b0708"/>
                     </Button>
@@ -41,6 +42,8 @@
                     </Button>
                 </StackPanel>
             </Border>
+            <TextBlock Grid.Row="0" Text="ADD NEW GAME" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="20" FontSize="13" FontWeight="Bold" Foreground="#046B59"/>
+            <!-- Content -->
         </Grid>
     </Border>
 </Window>
