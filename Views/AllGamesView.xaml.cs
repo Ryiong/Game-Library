@@ -16,30 +16,7 @@ namespace Game_Library.Views
         public AllGamesView()
         {
             InitializeComponent();
-            InitializeJsonFiles();
             LoadDataFromJsons();
-        }
-
-        private void InitializeJsonFiles()
-        {
-            if (!File.Exists(allGamesJsonPath))
-            {
-                CreateSampleJson();
-            }
-        }
-
-        private void CreateSampleJson()
-        {
-            try
-            {
-                var allGamesSample = new List<GameModels>
-                {
-                    new GameModels { Title = "Vector Siege", Type = "FLASH", Thumbnail = "./Resources/Thumbnail-Placeholder.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Mar 12, 2026", isFavorite = true, Description="Game bắn súng Flash không gian Vector cổ điển cực kỳ hấp dẫn.", MainFile="vector_siege.swf", FolderName="vector_siege", ImageInGame=["./Resources/Thumbnail-Placeholder.jpg", "./Resources/Thumbnail-Placeholder.jpg"] },
-                    new GameModels { Title = "HTML5 Indie Adventure", Type = "HTML5", Thumbnail = "./Resources/Thumbnail-Placeholder.jpg", AddedDate = "Added Mar 12, 2026", ReleaseDate = "Nov 20, 2025", isFavorite = false, Description="Một tựa game phiêu lưu mã nguồn mở HTML5.", MainFile="index.html", FolderName="indie_adventure" }
-                };
-                File.WriteAllText(allGamesJsonPath, JsonSerializer.Serialize(allGamesSample, new JsonSerializerOptions { WriteIndented = true }));
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
         }
 
         private void LoadDataFromJsons()
@@ -65,14 +42,6 @@ namespace Game_Library.Views
             if ((sender as Button)?.DataContext is GameModels selectedGame && Application.Current.MainWindow is MainWindow main)
             {
                 main.NavigateToDetail(selectedGame);
-            }
-        }
-
-        private void PlayAgainBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if ((sender as Button)?.DataContext is GameModels selectedGame && Application.Current.MainWindow is MainWindow main)
-            {
-                main.NavigateToDetail(selectedGame); 
             }
         }
     }

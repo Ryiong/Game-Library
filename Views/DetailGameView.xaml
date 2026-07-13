@@ -109,7 +109,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,20,0,0">
-                    <Button x:Name="PlayButton" Width="130" Height="30" Background="#EDF2F0" Margin="0,0,10,0" BorderThickness="0" Cursor="Hand" Click="PlayNow_Click">
+                    <Button x:Name="PlayButton" Style="{StaticResource MacPrimaryButtonStyle}" Width="130" Height="30" Background="#EDF2F0" Margin="0,0,10,0" BorderThickness="0" Cursor="Hand" Click="PlayNow_Click">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="16"/>
@@ -120,7 +120,7 @@
                             <TextBlock Text="PLAY NOW!" Foreground="#046B59" FontWeight="Bold" Margin="8,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="FavButton" Width="130" Height="30" Background="#EDF2F0" BorderThickness="0" Cursor="Hand" Click="Favorite_Click">
+                    <Button x:Name="FavButton" Style="{StaticResource MacPrimaryButtonStyle}" Width="130" Height="30" Background="#EDF2F0" BorderThickness="0" Cursor="Hand" Click="Favorite_Click">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="16"/>

@@ -42,15 +42,19 @@ namespace Game_Library
             {
                 case 0:
                     DynamicContentViewer.Content = new AllGamesView();
+                    DisplayHeader(1);
                     break;
                 case 1:
                     DynamicContentViewer.Content = new FlashClassicsView();
+                    DisplayHeader(1);
                     break;
                 case 2:
-                    DynamicContentViewer.Content = new HTML5IndieView();  
+                    DynamicContentViewer.Content = new HTML5IndieView();
+                    DisplayHeader(1);
                     break;
                 case 3:
-                    DynamicContentViewer.Content = new FavoritesView(); 
+                    DynamicContentViewer.Content = new FavoritesView();
+                    DisplayHeader(1);
                     break;
             }
         }
@@ -63,8 +67,7 @@ namespace Game_Library
                 _previousSidebarIndex = SidebarMenu.SelectedIndex;
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
                 SidebarMenu.SelectedIndex = -1;
-                DefaultHeaderGrid.Visibility = Visibility.Collapsed;
-                DetailHeaderGrid.Visibility = Visibility.Visible;
+                DisplayHeader(2);
             }
         }
 
@@ -75,12 +78,26 @@ namespace Game_Library
                 DynamicContentViewer.Content = _previousView;
                 SidebarMenu.SelectedIndex = _previousSidebarIndex;
 
-                DefaultHeaderGrid.Visibility = Visibility.Visible;
-                DetailHeaderGrid.Visibility = Visibility.Collapsed;
+                DisplayHeader(1);
             }
             else
             {
                 SidebarMenu.SelectedIndex = 0;
+            }
+        }
+
+        private void DisplayHeader(int a)
+        {
+            switch (a)
+            {
+                case 1:
+                    DefaultHeaderGrid.Visibility = Visibility.Visible;
+                    DetailHeaderGrid.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
+                    DetailHeaderGrid.Visibility= Visibility.Visible;
+                    DefaultHeaderGrid.Visibility = Visibility.Collapsed;
+                    break;
             }
         }
 

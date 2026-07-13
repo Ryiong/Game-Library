@@ -19,292 +19,43 @@
                       GlassFrameThickness="0"
                       CornerRadius="14"/>
     </WindowChrome.WindowChrome>
-    <Window.Resources>
 
-        <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="14"/>
-            <Setter Property="Height" Value="14"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="0,0,8,0"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="hoverLayer"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="14" Cursor="Hand"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"/>
-                            <ContentPresenter x:Name="contentIcon"
-                                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                              Opacity="0"/>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=StackPanel}}" Value="True">
-                                <Setter TargetName="contentIcon" Property="Opacity" Value="1"/>
-                            </DataTrigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.HoverBackground)}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.PressedBackground)}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="MenuListBoxStyle" TargetType="ListBox">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Margin" Value="11,2,12,2"/>
-                        <Setter Property="Padding" Value="10,8,10,8"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="itemBorder"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="6"
-                                    Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="itemBorder" Property="Background" Value="#0D000000"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="itemBorder" Property="Background" Value="#D4E6E2"/>
-                                            <Setter Property="Foreground" Value="#659287"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="MenuHeaderStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#046B59"/>
-            <Setter Property="Margin" Value="12,0,0,15"/>
-        </Style>
-
-        <Style x:Key="MenuItemTextStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Light"/>
-            <Setter Property="Foreground" Value="#576865"/>
-            <Setter Property="FontWeight" Value="Regular"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                    <Setter Property="Foreground" Value="#046B59"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="MenuItemIconStyle" TargetType="Control">
-            <Setter Property="Foreground" Value="#576865"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="2,0,5,0"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                    <Setter Property="Foreground" Value="#046B59"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="MacPrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#D4E6E2"/>
-            <Setter Property="Foreground" Value="#046B59"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="6"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontFamily" Value="./Resources/Fonts/#SF Pro Text"/>
-            <Setter Property="FontSize" Value="13"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="buttonBorder" 
-                            Background="{TemplateBinding Background}" 
-                            CornerRadius="15" 
-                            Padding="{TemplateBinding Padding}">
-                                <Border.Effect>
-                                    <DropShadowEffect x:Name="ButtonShadow"
-                                              BlurRadius="6" 
-                                              ShadowDepth="2" 
-                                              Opacity="0.10" 
-                                              Direction="270" 
-                                              Color="Black"/>
-                                </Border.Effect>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-
-                            <Border x:Name="overlay" Background="#FF659287" CornerRadius="15" Opacity="0" IsHitTestVisible="False"/>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="overlay" Property="Opacity" Value="0.08"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="overlay" Property="Opacity" Value="0.12"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ModernToggleSwitchStyle" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Grid>
-                            <Border x:Name="BackgroundBorder"
-    Background="#E5E5EA"
-    CornerRadius="13"
-    BorderThickness="0">
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="4" ShadowDepth="1" Opacity="0.05" Direction="270"/>
-                                </Border.Effect>
-                            </Border>
-
-                            <Canvas Margin="2">
-                                <Ellipse x:Name="Thumb"
-         Width="22"
-         Height="22"
-         Fill="White"
-         Canvas.Left="0"
-         Canvas.Top="0">
-                                    <Ellipse.Effect>
-                                        <DropShadowEffect BlurRadius="4" ShadowDepth="1.5" Opacity="0.2" Direction="270"/>
-                                    </Ellipse.Effect>
-                                </Ellipse>
-                            </Canvas>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="BackgroundBorder" Property="Background" Value="#2ecc71"/>
-                            </Trigger>
-
-                            <EventTrigger RoutedEvent="ToggleButton.Checked">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="Thumb"
-                         Storyboard.TargetProperty="(Canvas.Left)"
-                         To="24" Duration="0:0:0.18"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-
-                            <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="Thumb"
-                         Storyboard.TargetProperty="(Canvas.Left)"
-                         To="0" Duration="0:0:0.18"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    <Border Background="#F5F5F7"
-            CornerRadius="14"
-            BorderBrush="#D2D2D7"
-            BorderThickness="1"
-            ClipToBounds="True">
+    <Border Background="#F5F5F7" CornerRadius="14" BorderBrush="#D2D2D7" BorderThickness="1" ClipToBounds="True">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0"
-                    Background="#F0FCF8" CornerRadius="14,0,0,14"
-                    BorderBrush="#ffffff"
-                    BorderThickness="0,0,1,0"
-                    Panel.ZIndex="1">
+            <!-- Sidebar Navigation -->
+            <Border Grid.Column="0" Background="#F0FCF8" CornerRadius="14,0,0,14" BorderBrush="#ffffff" BorderThickness="0,0,1,0" Panel.ZIndex="1">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="14" 
-                          Direction="0" 
-                          ShadowDepth="2" 
-                          Opacity="0.14" 
-                          Color="Black"/>
+                    <DropShadowEffect BlurRadius="14" Direction="0" ShadowDepth="2" Opacity="0.14" Color="Black"/>
                 </Border.Effect>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Margin="16,16,16,0"
-                                WindowChrome.IsHitTestVisibleInChrome="True">
-                        <Button Style="{StaticResource MacTrafficLightButtonStyle}"
-                                Background="#FF5F56"
-                                ext:ButtonProps.HoverBackground="#F74339"
-                                ext:ButtonProps.PressedBackground="#DB332a" 
-                                BorderThickness="1.5"
-                                BorderBrush="#cc4f46"
-                                Click="CloseButton_Click"
-                                Foreground="#E0443E">
-                            <Control Template="{StaticResource IconQuit}"
-                                     BorderThickness="2"
-                                     Width="6"
-                                     Height="6"
-                                     Foreground="#7b0708"/>
+                    
+                    <!-- Title Button App -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,16,16,0" WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FF5F56" ext:ButtonProps.HoverBackground="#F74339" ext:ButtonProps.PressedBackground="#DB332a"  BorderThickness="1.5" BorderBrush="#cc4f46" Click="CloseButton_Click" Foreground="#E0443E">
+                            <Control Template="{StaticResource IconQuit}" BorderThickness="2" Width="6" Height="6" Foreground="#7b0708"/>
                         </Button>
-                        <Button Style="{StaticResource MacTrafficLightButtonStyle}"
-                                Background="#FAC146"
-                                ext:ButtonProps.HoverBackground="#F5B11D"
-                                ext:ButtonProps.PressedBackground="#F2A807"
-                                BorderThickness="1.5"
-                                BorderBrush="#d4a338"
-                                Click="MinimizeButton_Click">
+                        <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FAC146" ext:ButtonProps.HoverBackground="#F5B11D" ext:ButtonProps.PressedBackground="#F2A807" BorderThickness="1.5" BorderBrush="#d4a338" Click="MinimizeButton_Click">
                             <Control Template="{StaticResource IconMinimize}" BorderThickness="2" Width="8" Height="8" Foreground="#9c5512" VerticalAlignment="Center"/>
                         </Button>
-                        <Button Style="{StaticResource MacTrafficLightButtonStyle}"
-                                Margin="0"
-                                Background="#27C93F"
-                                ext:ButtonProps.HoverBackground="#13D630"
-                                ext:ButtonProps.PressedBackground="#04C921"
-                                BorderThickness="1.5"
-                                BorderBrush="#369841"
-                                Click="MaximizeButton_Click">
+                        <Button Style="{StaticResource MacTrafficLightButtonStyle}" Margin="0" Background="#27C93F" ext:ButtonProps.HoverBackground="#13D630" ext:ButtonProps.PressedBackground="#04C921" BorderThickness="1.5" BorderBrush="#369841" Click="MaximizeButton_Click">
                             <Control Template="{StaticResource IconMaximize}" BorderThickness="2" Width="8" Height="8" Foreground="#0d660f"/>
                         </Button>
                     </StackPanel>
 
+                    <!-- Sidebar Content Navigation -->
                     <StackPanel Grid.Row="1">
                         <TextBlock Text="GAME LIBRARY" Style="{StaticResource MenuHeaderStyle}"></TextBlock>
-                        <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}"
-                                 SelectedIndex="0" SelectionChanged="SidebarMenu_SelectionChanged">
+                        <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}" SelectedIndex="0" SelectionChanged="SidebarMenu_SelectionChanged">
+                            <!-- All Game -->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -312,19 +63,12 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Control Grid.Column="0" 
-                                        Template="{StaticResource IconGame}"
-                                        Width="20"
-                                        Height="24"
-                                        Style="{StaticResource MenuItemIconStyle}"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconGame}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
 
-                                    <TextBlock Grid.Column="1" 
-                                          Text="All Games" 
-                                          Style="{StaticResource MenuItemTextStyle}"
-                                          VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="All Games"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-
+                            <!-- Flash Classics-->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -332,19 +76,12 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Control Grid.Column="0" 
-                                        Template="{StaticResource IconFlash}"
-                                        Width="20"
-                                        Height="20"
-                                        Style="{StaticResource MenuItemIconStyle}"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconFlash}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
 
-                                    <TextBlock Grid.Column="1" 
-                                          Text="Flash Classics" 
-                                          Style="{StaticResource MenuItemTextStyle}"
-                                          VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="Flash Classics"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-
+                            <!-- HTML5 Indie -->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -352,19 +89,12 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Control Grid.Column="0" 
-                                        Template="{StaticResource IconHTML}"
-                                        Width="20"
-                                        Height="24"
-                                        Style="{StaticResource MenuItemIconStyle}"/>
+                                    <Control Grid.Column="0"  Template="{StaticResource IconHTML}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
 
-                                    <TextBlock Grid.Column="1" 
-                                          Text="HTML5 Indie" 
-                                          Style="{StaticResource MenuItemTextStyle}"
-                                          VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1"  Text="HTML5 Indie"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-
+                            <!-- Favorites -->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -372,19 +102,11 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Control Grid.Column="0" 
-                                        Template="{StaticResource IconHeart}"
-                                        Width="20"
-                                        Height="24"
-                                        Style="{StaticResource MenuItemIconStyle}"/>
-
-                                    <TextBlock Grid.Column="1" 
-                                          Text="Favorites" 
-                                          Style="{StaticResource MenuItemTextStyle}"
-                                          VerticalAlignment="Center"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconHeart}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
+                                    <TextBlock Grid.Column="1" Text="Favorites" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-
+                            <!-- Live Server -->
                             <ListBoxItem Focusable="False" IsSelected="False">
                                 <ListBoxItem.CommandBindings>
                                     <CommandBinding/>
@@ -395,99 +117,59 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <Control Grid.Column="0" 
-                                        Template="{StaticResource IconCloud}"
-                                        Width="20"
-                                        Height="20"
-                                        Style="{StaticResource MenuItemIconStyle}"/>
-
-                                    <TextBlock Grid.Column="1" 
-                                        Text="Live Server" 
-                                        Style="{StaticResource MenuItemTextStyle}"
-                                        VerticalAlignment="Center"/>
-
-                                    <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}"
-                                                  IsChecked="False"
-                                                  x:Name="LiveServerButton" Unchecked="LiveServer_Toggle" Checked="LiveServer_Toggle"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
+                                    <TextBlock Grid.Column="1" Text="Live Server"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
+                                    <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="False" x:Name="LiveServerButton" Unchecked="LiveServer_Toggle" Checked="LiveServer_Toggle"/>
                                 </Grid>
                             </ListBoxItem>
-
                         </ListBox>
-
                     </StackPanel>
-                    <TextBlock Grid.Row="1" Text="v1.0.0" Foreground="#888888" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                 </Grid>
             </Border>
+            
+            <!-- Content Area -->
             <Grid Grid.Column="1" Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="55"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <!-- Header -->
                 <Border Background="White" WindowChrome.IsHitTestVisibleInChrome="True" Grid.Row="0" BorderThickness="0,0,0,1" CornerRadius="0,14,0,0" BorderBrush="#E6F2ED">
                     <Grid>
+                        <!-- Default Header -->
                         <Grid x:Name="DefaultHeaderGrid" Visibility="Visible">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" 
-                Background="#E5F0EC" 
-                CornerRadius="18"
-                Padding="0, 5"
-                HorizontalAlignment="Left" 
-                Width="360" 
-                Margin="35,0,0,0"
-                VerticalAlignment="Center">
+                            <Border Grid.Column="0" Background="#E5F0EC" CornerRadius="18" Padding="0, 5" HorizontalAlignment="Left" Width="360" Margin="35,0,0,0" VerticalAlignment="Center">
+                                <!-- Search Label -->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <Control Grid.Column="0" 
-                        Template="{StaticResource IconSearch}" 
-                        Width="12" 
-                        Height="12" 
-                        VerticalAlignment="Center" 
-                        HorizontalAlignment="Center"
-                        Foreground="#3E4945" Margin="10, 0"/>
-
-                                    <TextBox Grid.Column="1" Name="SearchBox"
-                        Background="Transparent"
-                         BorderThickness="0"
-                        VerticalContentAlignment="Center" 
-                        Foreground="#3E4945"
-                        FontSize="12"  FontWeight="Light" Padding="0, 5" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"/>
-
-                                    <TextBlock x:Name="SearchPlaceholder" 
-                    Grid.Column="1" 
-                    Text="Search your library..." 
-                    Foreground="#3E4945" 
-                    VerticalAlignment="Center" 
-                    IsHitTestVisible="False" 
-                    FontSize="12" Padding="0, 5" 
-                    Margin="5,0,0,0" FontWeight="Light"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconSearch}" Width="12" Height="12" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#3E4945" Margin="10, 0"/>
+                                    <TextBox Grid.Column="1" Name="SearchBox" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center"  Foreground="#3E4945" FontSize="12"  FontWeight="Light" Padding="0, 5" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"/>
+                                    <TextBlock x:Name="SearchPlaceholder" Grid.Column="1" Text="Search your library..." Foreground="#3E4945" VerticalAlignment="Center" IsHitTestVisible="False" FontSize="12" Padding="0, 5" Margin="5,0,0,0" FontWeight="Light"/>
                                 </Grid>
                             </Border>
-                            <Button x:Name="AddGameButton" Grid.Column="1" Style="{StaticResource MacPrimaryButtonStyle}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center" Cursor="Hand"
-            Margin="0,0,30,0" Click="AddGameButton_Click">
+                            <!-- Add Game Button -->
+                            <Button x:Name="AddGameButton" Grid.Column="1" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0" Click="AddGameButton_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Control Template="{StaticResource IconPlus}"
-Width="20"
-Height="19" Margin="5, 0"/>
+                                        <Control Template="{StaticResource IconPlus}" Width="20" Height="19" Margin="5, 0"/>
                                         <TextBlock Text="Add Game" VerticalAlignment="Center" Margin="2,2,8,2" FontWeight="SemiBold"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
                         </Grid>
-
+                        
+                        <!-- Header Detail -->
                         <Grid x:Name="DetailHeaderGrid" Visibility="Collapsed">
-                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="35,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ReturnButton_Click">
+                            <!-- Return Button -->
+                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource NonableButtonStyle}" Margin="18,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ReturnButton_Click">
                                 <Button.Content>
                                     <Control Template="{StaticResource IconReturn}" Width="24" Height="24" Foreground="#046B59"/>
                                 </Button.Content>
@@ -495,11 +177,13 @@ Height="19" Margin="5, 0"/>
                         </Grid>
                     </Grid>
                 </Border>
+                <!-- Content View -->
                 <ContentControl x:Name="DynamicContentViewer" Grid.Row="1" Margin="0"/>
+                <!-- Footer -->
                 <Border Grid.Row="2" VerticalAlignment="Bottom" CornerRadius="0,0,14,0" Background="#E5F0EC" >
                     <TextBlock x:Name="ServerStatus" Text="Server Status: Off" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
                 </Border>
-                
+
             </Grid>
         </Grid>
     </Border>

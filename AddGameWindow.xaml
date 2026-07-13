@@ -19,45 +19,6 @@
                   GlassFrameThickness="0"
                   CornerRadius="14"/>
     </WindowChrome.WindowChrome>
-    <Window.Resources>
-        <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="14"/>
-            <Setter Property="Height" Value="14"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="0,0,8,0"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="hoverLayer"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="14" Cursor="Hand"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"/>
-                            <ContentPresenter x:Name="contentIcon"
-                                      HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                      Opacity="0"/>
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=StackPanel}}" Value="True">
-                                <Setter TargetName="contentIcon" Property="Opacity" Value="1"/>
-                            </DataTrigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.HoverBackground)}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="hoverLayer" Property="Background" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ext:ButtonProps.PressedBackground)}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </Window.Resources>
     <Border Background="#F5F5F7" CornerRadius="14" BorderBrush="#D2D2D7" BorderThickness="1" ClipToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
