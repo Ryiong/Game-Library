@@ -236,4 +236,42 @@
         </Viewbox>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="IconCalender" TargetType="Control">
+        <Viewbox Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Uniform">
+            <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Fill="Transparent">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry FillRule="EvenOdd" Figures="M19,4 H17 V3 A1,1 0 0,0 15,3 V4 H9 V3 A1,1 0 0,0 7,3 V4 H5 A2,2 0 0,0 3,6 V19 A2,2 0 0,0 5,21 H19 A2,2 0 0,0 21,19 V6 A2,2 0 0,0 19,4 M19,19 H5 V9 H19 M19,7 H5 V6 H7 V7 A1,1 0 0,0 9,7 V6 H15 V7 A1,1 0 0,0 17,7 V6 H19 Z M7,11 H9 V13 H7 Z M11,11 H13 V13 H11 Z M15,11 H17 V13 H15 Z M7,15 H9 V17 H7 Z M11,15 H13 V17 H11 Z M15,15 H17 V17 H15 Z"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Viewbox>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IconEdit" TargetType="Control">
+        <Viewbox Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Uniform">
+            <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Fill="Transparent">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry FillRule="EvenOdd" Figures="M20.1497 7.93997L8.27971 19.81C7.21971 20.88 4.04971 21.3699 3.27971 20.6599C2.50971 19.9499 3.06969 16.78 4.12969 15.71L15.9997 3.84C16.5478 3.31801 17.2783 3.03097 18.0351 3.04019C18.7919 3.04942 19.5151 3.35418 20.0503 3.88938C20.5855 4.42457 20.8903 5.14781 20.8995 5.90463C20.9088 6.66146 20.6217 7.39189 20.0997 7.93997H20.1497Z"/>
+                        <PathGeometry FillRule="EvenOdd" Figures="M21 21H12"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Viewbox>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IconDelete" TargetType="Control">
+        <Viewbox Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Uniform">
+            <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Fill="Transparent">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry FillRule="EvenOdd" Figures="M16 15L18.5 17.5M21 20L18.5 17.5M18.5 17.5L21 15M18.5 17.5L16 20"/>
+                        <PathGeometry FillRule="EvenOdd" Figures="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V11"/>
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+        </Viewbox>
+    </ControlTemplate>
+
 </ResourceDictionary>

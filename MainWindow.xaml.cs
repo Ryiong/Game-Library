@@ -11,7 +11,6 @@ namespace Game_Library
 {
     public partial class MainWindow : Window
     {
-        private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         private readonly string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
         private object _previousView = null;
         private int _previousSidebarIndex = 0;
@@ -71,8 +70,14 @@ namespace Game_Library
         {
             if (DynamicContentViewer != null)
             {
-                _previousView = DynamicContentViewer.Content;
-                _previousSidebarIndex = SidebarMenu.SelectedIndex;
+                if (DynamicContentViewer.Content != null &&
+                    !DynamicContentViewer.Content.GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase))
+                {
+                    _previousView = DynamicContentViewer.Content;
+                    _previousSidebarIndex = SidebarMenu.SelectedIndex;
+                }
+
+                DynamicContentViewer.Content = new AllGamesView();
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
                 SidebarMenu.SelectedIndex = -1;
                 DisplayHeader(2);
@@ -85,12 +90,12 @@ namespace Game_Library
             {
                 DynamicContentViewer.Content = _previousView;
                 SidebarMenu.SelectedIndex = _previousSidebarIndex;
-
                 DisplayHeader(1);
             }
             else
             {
                 SidebarMenu.SelectedIndex = 0;
+                NavigateToTab(0);
             }
         }
 
@@ -126,5 +131,11 @@ namespace Game_Library
             }
         }
         private void LiveServer_Toggle(object sender, RoutedEventArgs e) { if (ServerStatus != null) ServerStatus.Text = LiveServerButton.IsChecked == true ? "Server Status: Active" : "Server Status: Off"; }
+
+        internal void NavigateToList()
+        {
+            SidebarMenu.SelectedIndex = 0;
+            NavigateToTab(0);
+        }
     }
 }

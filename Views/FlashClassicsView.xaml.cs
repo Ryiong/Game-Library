@@ -5,13 +5,16 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using Application = System.Windows.Application;
+using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library
 {
     /// <summary>
     /// Interaction logic for FlashClassicsView.xaml
     /// </summary>
-    public partial class FlashClassicsView : UserControl
+    public partial class FlashClassicsView : System.Windows.Controls.UserControl
     {
         private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         public FlashClassicsView()

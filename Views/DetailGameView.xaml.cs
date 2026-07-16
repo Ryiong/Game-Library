@@ -7,10 +7,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Application = System.Windows.Application;
+using Button = System.Windows.Controls.Button;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library.Views
 {
-    public partial class DetailGameView : UserControl
+    public partial class DetailGameView : System.Windows.Controls.UserControl
     {
         private List<string> _slideshowImages = new List<string>();
         private int _currentSlideIndex = 0;
@@ -29,13 +34,24 @@ namespace Game_Library.Views
 
         private void InitializeSlideshow()
         {
-            _slideshowImages.Add(!string.IsNullOrEmpty(_currentGame.Thumbnail) ? _currentGame.Thumbnail : "Resources/Thumbnail-Placeholder.jpg");
+            _slideshowImages.Clear();
+
+            if (!string.IsNullOrEmpty(_currentGame.Thumbnail))
+                _slideshowImages.Add(_currentGame.Thumbnail);
+            else
+                _slideshowImages.Add("Resources/Thumbnail-Placeholder.jpg");
+
             if (_currentGame.ImageInGame != null)
             {
                 foreach (var img in _currentGame.ImageInGame)
-                    if (!string.IsNullOrEmpty(img)) _slideshowImages.Add(img);
+                {
+                    if (!string.IsNullOrEmpty(img))
+                        _slideshowImages.Add(img);
+                }
             }
+
             icSlideshowImages.ItemsSource = _slideshowImages;
+            _currentSlideIndex = 0;
             UpdatePaginationDots();
         }
 
@@ -115,6 +131,7 @@ namespace Game_Library.Views
 
         private void PlayNow_Click(object sender, RoutedEventArgs e)
         {
+            if (_currentGame == null) return;
             try
             {
                 _currentGame.LastPlayedText = "Vừa chơi xong";
@@ -125,6 +142,7 @@ namespace Game_Library.Views
 
             if (Application.Current.MainWindow is MainWindow main)
             {
+                main.DynamicContentViewer.Content = new GameView(_currentGame);
             }
         }
 
@@ -132,12 +150,101 @@ namespace Game_Library.Views
         {
             string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
             if (!File.Exists(jsonPath)) return;
+
             try
             {
                 var allGames = JsonSerializer.Deserialize<List<GameModels>>(File.ReadAllText(jsonPath));
-                icRelatedGamesGrid.ItemsSource = allGames.FindAll(g => g.Title != _currentGame.Title);
+                if (allGames == null) return;
+
+                var relatedGames = allGames.FindAll(g =>
+                    g.Id != _currentGame.Id && (
+                        g.SeriesId == _currentGame.Id ||
+                        (!string.IsNullOrEmpty(_currentGame.SeriesId) && g.Id == _currentGame.SeriesId) ||
+                        (!string.IsNullOrEmpty(_currentGame.SeriesId) && g.SeriesId == _currentGame.SeriesId)
+                    )
+                );
+
+                if (relatedGames.Count == 0)
+                {
+                    relatedGames = allGames.FindAll(g => g.Id != _currentGame.Id);
+                }
+
+                icRelatedGamesGrid.ItemsSource = relatedGames;
             }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Lỗi tải danh sách game liên quan: " + ex.Message);
+            }
+        }
+
+        private void RelatedGameCard_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.DataContext is GameModels selectedGame && Application.Current.MainWindow is MainWindow main)
+            {
+                main.NavigateToDetail(selectedGame);
+    }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentGame == null) return;
+
+            var editWindow = new AddGameWindow(_currentGame); 
+            if (editWindow.ShowDialog() == true)
+            {
+                if (Application.Current.MainWindow is MainWindow main)
+                {
+                    main.NavigateToDetail(_currentGame);  
+                }
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentGame == null) return;
+
+            var result = MessageBox.Show(
+                $"Bạn có chắc muốn xóa game '{_currentGame.Title}'?\nHành động này không thể hoàn tác!",
+                "Xác nhận xóa",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
+
+                    if (File.Exists(jsonPath))
+                    {
+                        var games = JsonSerializer.Deserialize<List<GameModels>>(File.ReadAllText(jsonPath));
+                        var gameToRemove = games.FirstOrDefault(g => g.Id == _currentGame.Id);
+
+                        if (gameToRemove != null)
+                        {
+                            games.Remove(gameToRemove);
+                            File.WriteAllText(jsonPath, JsonSerializer.Serialize(games, new JsonSerializerOptions { WriteIndented = true }));
+
+                            string gameFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", _currentGame.Id);
+                            if (Directory.Exists(gameFolder))
+                            {
+                                Directory.Delete(gameFolder, true);
+                            }
+
+                            MessageBox.Show("Đã xóa game thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                            if (Application.Current.MainWindow is MainWindow main)
+                            {
+                                main.NavigateToList();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa game: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

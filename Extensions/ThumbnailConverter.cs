@@ -10,41 +10,33 @@ namespace Game_Library.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string imagePath = value as string;
-
-            if (string.IsNullOrEmpty(imagePath))
-            {
+            string path = value as string;
+            if (string.IsNullOrWhiteSpace(path))
                 return GetPlaceholderImage();
+
+            string fullPath = path.Replace("\\", "/");
+
+            if (fullPath.StartsWith("games_data/") || fullPath.StartsWith("Resources/"))
+            {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string absolutePath = Path.Combine(baseDir, fullPath.Replace("/", "\\"));
+
+                if (File.Exists(absolutePath))
+                    path = absolutePath;
             }
 
-            try
+            if (File.Exists(path))
             {
-                string normalizedPath = imagePath.ToLower().Replace("\\", "/");
-
-                if (normalizedPath.Contains("resources/"))
+                try
                 {
-                    int index = normalizedPath.IndexOf("resources/");
-                    string cleanPath = imagePath.Substring(index); 
-
-                    string packUri = $"pack://application:,,,/{cleanPath}";
-
-                    BitmapImage bitmap = new BitmapImage(new Uri(packUri, UriKind.Absolute));
-                    return bitmap;
-                }
-
-                if (File.Exists(imagePath))
-                {
-                    BitmapImage bitmap = new BitmapImage();
+                    var bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
+                    bitmap.UriSource = new Uri(path, UriKind.Absolute);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     return bitmap;
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Lỗi nạp ảnh: " + ex.Message);
+                catch { }
             }
 
             return GetPlaceholderImage();

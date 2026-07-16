@@ -37,7 +37,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding Converter={StaticResource ThumbConverter}}" Width="425" Height="281" Stretch="UniformToFill"/>
+                                        <Image Source="{Binding ., Converter={StaticResource ThumbConverter}}" Width="425" Height="281" Stretch="UniformToFill"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -60,6 +60,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
                     <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
@@ -67,7 +68,7 @@
                         <TextBlock Text="Type: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
                         <TextBlock Text="{Binding Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15" ext:TextBlockExtensions.MaxLines="4"/>
+                    <TextBlock Text="{Binding Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15" ext:TextBlockExtensions.MaxLines="10"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="Added Date: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
                         <TextBlock Text="{Binding AddedDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
@@ -77,8 +78,16 @@
                         <TextBlock Text="{Binding ReleaseDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="EditButton" Style="{StaticResource NonableButtonStyle}" Height="30" Margin="10, 0" Click="EditButton_Click">
+                        <Control Template="{StaticResource IconEdit}" Width="20" Height="20" Foreground="#046B59" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button x:Name="DeleteButton" Style="{StaticResource NonableButtonStyle}" Height="30" Click="DeleteButton_Click">
+                        <Control Template="{StaticResource IconDelete}" Width="20" Height="20" Foreground="#046B59" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,20,0,0">
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
                     <Button x:Name="PlayButton" Style="{StaticResource MacPrimaryButtonStyle}" Width="130" Height="30" Background="#EDF2F0" Margin="0,0,10,0" BorderThickness="0" Cursor="Hand" Click="PlayNow_Click">
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -115,14 +124,16 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="0,0,20,20" Width="150">
-                        <Border Height="110" CornerRadius="12" ClipToBounds="True">
-                            <Border.Background>
-                                <ImageBrush ImageSource="{Binding Thumbnail, Converter={StaticResource ThumbConverter}}" Stretch="UniformToFill"/>
-                            </Border.Background>
-                        </Border>
-                        <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="13" FontWeight="SemiBold" Margin="0,5,0,2" TextTrimming="CharacterEllipsis"/>
-                    </StackPanel>
+                    <Button Style="{StaticResource NonableButtonStyle}" Click="RelatedGameCard_Click" Margin="0,0,20,20" Width="150" Cursor="Hand" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <StackPanel>
+                            <Border Height="110" CornerRadius="12" ClipToBounds="True">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding Thumbnail, Converter={StaticResource ThumbConverter}}" Stretch="UniformToFill"/>
+                                </Border.Background>
+                            </Border>
+                            <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="13" FontWeight="SemiBold" Margin="0,5,0,2" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

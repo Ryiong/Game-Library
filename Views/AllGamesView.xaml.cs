@@ -5,10 +5,13 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using Application = System.Windows.Application;
+using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library.Views
 {
-    public partial class AllGamesView : UserControl
+    public partial class AllGamesView : System.Windows.Controls.UserControl
     {
         private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         private readonly string recentGameJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recent_game.json");

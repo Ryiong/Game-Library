@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <ext:ThumbnailConverter x:Key="ThumbConverter"/>
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Style="{DynamicResource ModernScrollViewer}">
         <StackPanel Margin="28,0">
             <!-- Recent Game -->
             <StackPanel Margin="0,25,0,0" x:Name="RecentSection" Visibility="Collapsed">

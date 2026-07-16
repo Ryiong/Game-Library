@@ -5,13 +5,18 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using Application = System.Windows.Application;
+using Button = System.Windows.Controls.Button;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library
 {
     /// <summary>
     /// Interaction logic for HTML5IndieView.xaml
     /// </summary>
-    public partial class HTML5IndieView : UserControl
+    public partial class HTML5IndieView : System.Windows.Controls.UserControl
     {
         private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         public HTML5IndieView()

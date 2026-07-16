@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <ext:ThumbnailConverter x:Key="ThumbConverter"/>
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Style="{DynamicResource ModernScrollViewer}">
         <StackPanel Margin="28,0">
             <!-- Game Layout -->
             <TextBlock Text="HTML5 Indie Games" Foreground="#131E1B" FontSize="26" FontWeight="Bold" Margin="0,35,0,15"/>
