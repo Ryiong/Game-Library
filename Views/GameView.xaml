@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
              xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              xmlns:local="clr-namespace:Game_Library.Views"
              FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
              mc:Ignorable="d" Unloaded="UserControl_Unloaded"
@@ -42,8 +43,9 @@
             <wfi:WindowsFormsHost x:Name="wfHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <wf:Panel x:Name="pnlGameContainer" BackColor="LightGray" />
             </wfi:WindowsFormsHost>
+            <wv2:WebView2 x:Name="htmlWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="Collapsed"/>
             <TextBlock x:Name="txtLoadingStatus" 
-           Text="LOADING FLASH GAME..." 
+           Text="LOADING GAME..." 
            HorizontalAlignment="Center" 
            VerticalAlignment="Center" 
            FontSize="18" 

@@ -1,19 +1,10 @@
 ﻿using Game_Library.Models;
+using Game_Library.Services;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
@@ -27,6 +18,7 @@ namespace Game_Library.Views
     {
         private readonly GameModels _gameData;
         private Process _flashProcess = null;
+        private GameHttpServer _htmlServer = null;
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -49,7 +41,50 @@ namespace Game_Library.Views
             _gameData = selectedGame;
             lblPlayingGameTitle.Text = _gameData.Title.ToUpper();
 
-            Loaded += (s, e) => LaunchFlashGame();
+            Loaded += (s, e) => GameView_Load(s, e);
+        }
+
+        private void GameView_Load(object sender, RoutedEventArgs e)
+        {
+            if (_gameData.Type.Equals("FLASH", StringComparison.OrdinalIgnoreCase))
+            {
+                wfHost.Visibility = Visibility.Visible;
+                htmlWebView.Visibility = Visibility.Collapsed;
+                LaunchFlashGame(); // Chạy hàm xử lý Win32 API cũ của bạn
+            }
+            else if (_gameData.Type.Equals("HTML5", StringComparison.OrdinalIgnoreCase))
+            {
+                wfHost.Visibility = Visibility.Collapsed;
+                htmlWebView.Visibility = Visibility.Visible;
+                LaunchHtml5Game();
+            }
+        }
+
+        private async void LaunchHtml5Game()
+        {
+            try
+            {
+                string gameFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", _gameData.Id);
+
+                _htmlServer = new GameHttpServer();
+                _htmlServer.Start(gameFolderPath);
+
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    mainWindow.ServerStatus.Text = "Server Status: Active";
+                }
+
+                await htmlWebView.EnsureCoreWebView2Async();
+                string gameUrl = _htmlServer.BaseUrl + _gameData.MainFile;
+
+                htmlWebView.Source = new Uri(gameUrl);
+
+                txtLoadingStatus.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể nạp game HTML5: " + ex.Message, "Lỗi Server", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void LaunchFlashGame()
@@ -160,6 +195,17 @@ namespace Game_Library.Views
                 }
             }
             catch { /* Bỏ qua nếu tiến trình đã tự đóng trước đó */ }
+
+            if (_htmlServer != null)
+            {
+                _htmlServer.Stop();
+                _htmlServer = null;
+
+                if (Application.Current.MainWindow is MainWindow main)
+                {
+                    main.ServerStatus.Text = "Server Status: Off";
+                }
+            }
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
