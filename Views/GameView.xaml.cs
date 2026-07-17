@@ -203,6 +203,16 @@ namespace Game_Library.Views
             }
             catch { /* Bỏ qua nếu tiến trình đã tự đóng trước đó */ }
 
+            try
+            {
+                if (htmlWebView != null && htmlWebView.CoreWebView2 != null)
+                {
+                    htmlWebView.Source = new Uri("about:blank");
+                    htmlWebView.Dispose(); 
+                }
+            }
+            catch { /* Bỏ qua nếu WebView2 đã bị hủy trước đó */ }
+
             if (_htmlServer != null)
             {
                 _htmlServer.Stop();

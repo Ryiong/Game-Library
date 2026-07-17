@@ -37,7 +37,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding ., Converter={StaticResource ThumbConverter}}" Width="425" Height="281" Stretch="UniformToFill"/>
+                                        <Image Source="{Binding ., Converter={StaticResource ThumbConverter}}" Width="425" Height="281" Stretch="Uniform"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -63,7 +63,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="Type: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
                         <TextBlock Text="{Binding Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold"/>
