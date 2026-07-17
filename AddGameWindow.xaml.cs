@@ -126,6 +126,8 @@ namespace Game_Library
                 UpdateInGameImagesUI();
             }
 
+            tgNsfw.IsChecked = _editingGame.isNSFW;
+
             string gameFolder = Path.Combine(centralStoragePath, _editingGame.Id);
             if (Directory.Exists(gameFolder))
             {
@@ -383,6 +385,7 @@ namespace Game_Library
                 targetGame.Id = gameId;
                 targetGame.Title = txtTitle.Text.Trim();
                 targetGame.Type = (cbType.SelectedItem as ComboBoxItem)?.Content.ToString();
+                targetGame.isNSFW = tgNsfw.IsChecked == true;
                 targetGame.Description = txtDescription.Text;
                 targetGame.AddedDate = dpAddedDate.SelectedDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd");
                 targetGame.ReleaseDate = dpReleaseDate.SelectedDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd");

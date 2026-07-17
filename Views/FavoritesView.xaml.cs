@@ -36,7 +36,14 @@ namespace Game_Library
                     if (allGames != null)
                     {
                         var favoriteGames = allGames.FindAll(g => g.isFavorite);
-                        FavoritesGameLayout.ItemsSource = favoriteGames;
+                        if (MainWindow.IsNsfwEnabled)
+                        {
+                            FavoritesGameLayout.ItemsSource = favoriteGames;
+                        } else
+                        {
+                            var safeFavoriteGames = favoriteGames.Where(g => (!g.isNSFW)).ToList();
+                            FavoritesGameLayout.ItemsSource = safeFavoriteGames;
+                        }
                     }
                 }
             }

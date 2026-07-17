@@ -14,6 +14,7 @@ namespace Game_Library
         private readonly string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
         private object _previousView = null;
         private int _previousSidebarIndex = 0;
+        public static bool IsNsfwEnabled { get; private set; } = false;
 
         public MainWindow()
         {
@@ -117,8 +118,6 @@ namespace Game_Library
         private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();
         private void MinimizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
         private void MaximizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        private void SearchBox_GotFocus(object sender, RoutedEventArgs e) => SearchPlaceholder.Visibility = Visibility.Collapsed;
-        private void SearchBox_LostFocus(object sender, RoutedEventArgs e) { if (string.IsNullOrEmpty(SearchBox.Text)) SearchPlaceholder.Visibility = Visibility.Visible; }
         private void AddGameButton_Click(object sender, RoutedEventArgs e)
         {
             AddGameWindow addDialog = new AddGameWindow();
@@ -130,12 +129,38 @@ namespace Game_Library
                 NavigateToTab(currentTab);
             }
         }
-        private void LiveServer_Toggle(object sender, RoutedEventArgs e) { if (ServerStatus != null) ServerStatus.Text = LiveServerButton.IsChecked == true ? "Server Status: Active" : "Server Status: Off"; }
-
+        
         internal void NavigateToList()
         {
             SidebarMenu.SelectedIndex = 0;
             NavigateToTab(0);
         }
+
+        private void NsfwToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            PasswordDialog authDialog = new PasswordDialog();
+            authDialog.Owner = this;
+
+            if (authDialog.ShowDialog() == true)
+            {
+                IsNsfwEnabled = true;
+
+                int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
+        NavigateToTab(currentTab); 
+    }
+            else
+            {
+                NsfwToggleButton.IsChecked = false;
+                IsNsfwEnabled = false;
+            }
+        }
+
+        private void NsfwToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            IsNsfwEnabled = false;
+
+            int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
+    NavigateToTab(currentTab); 
+}
     }
 }

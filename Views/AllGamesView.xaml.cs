@@ -29,7 +29,19 @@ namespace Game_Library.Views
                 if (File.Exists(allGamesJsonPath))
                 {
                     var allGames = JsonSerializer.Deserialize<List<GameModels>>(File.ReadAllText(allGamesJsonPath));
-                    AllGamesLayout.ItemsSource = allGames;
+                    if (allGames != null)
+                    {
+                        if (MainWindow.IsNsfwEnabled)
+                        {
+                            AllGamesLayout.ItemsSource = allGames;
+                        }
+                        else
+                        {
+                            var safeGame = allGames.Where(g => (!g.isNSFW)).ToList();
+                            AllGamesLayout.ItemsSource = safeGame;
+                        }
+                    }
+                    
                 }
                 if (File.Exists(recentGameJsonPath))
                 {
