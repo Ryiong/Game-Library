@@ -23,6 +23,13 @@ namespace Game_Library
         {
             InitializeComponent();
             txtPassword.Focus();
+            txtPassword.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Confirm_Click(this, new RoutedEventArgs());
+                }
+            };
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)

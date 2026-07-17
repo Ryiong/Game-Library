@@ -72,13 +72,13 @@ namespace Game_Library
             if (DynamicContentViewer != null)
             {
                 if (DynamicContentViewer.Content != null &&
-                    !DynamicContentViewer.Content.GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase))
+                    !DynamicContentViewer.Content.GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase) &&
+                    !DynamicContentViewer.Content.GetType().Name.Equals("DetailGameView", StringComparison.OrdinalIgnoreCase))
                 {
                     _previousView = DynamicContentViewer.Content;
                     _previousSidebarIndex = SidebarMenu.SelectedIndex;
                 }
 
-                DynamicContentViewer.Content = new AllGamesView();
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
                 SidebarMenu.SelectedIndex = -1;
                 DisplayHeader(2);

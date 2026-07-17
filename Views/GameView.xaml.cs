@@ -75,6 +75,13 @@ namespace Game_Library.Views
                 }
 
                 await htmlWebView.EnsureCoreWebView2Async();
+                await htmlWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+                    "window.open = function() { console.log('App Launcher: Đã chặn đứng lệnh mở quảng cáo pop-up/clickunder ngầm!'); return null; };"
+                );
+                htmlWebView.CoreWebView2.NewWindowRequested += (sender, args) =>
+                {
+                    args.Handled = true;
+                };
                 string gameUrl = _htmlServer.BaseUrl + _gameData.MainFile;
 
                 htmlWebView.Source = new Uri(gameUrl);

@@ -132,13 +132,6 @@ namespace Game_Library.Views
         private void PlayNow_Click(object sender, RoutedEventArgs e)
         {
             if (_currentGame == null) return;
-            try
-            {
-                _currentGame.LastPlayedText = "Vừa chơi xong";
-                string recentPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recent_game.json");
-                File.WriteAllText(recentPath, JsonSerializer.Serialize(_currentGame, new JsonSerializerOptions { WriteIndented = true }));
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
 
             if (Application.Current.MainWindow is MainWindow main)
             {
@@ -164,9 +157,17 @@ namespace Game_Library.Views
                     )
                 );
 
-                if (relatedGames.Count == 0)
+                if (relatedGames != null && relatedGames.Count > 0)
                 {
-                    relatedGames = allGames.FindAll(g => g.Id != _currentGame.Id);
+                    icRelatedGamesGrid.ItemsSource = relatedGames;
+                    icRelatedGamesGrid.Visibility = Visibility.Visible;
+                    txtNoRelatedGames.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    icRelatedGamesGrid.ItemsSource = null;
+                    icRelatedGamesGrid.Visibility = Visibility.Collapsed;
+                    txtNoRelatedGames.Visibility = Visibility.Visible;
                 }
 
                 icRelatedGamesGrid.ItemsSource = relatedGames;
@@ -189,7 +190,8 @@ namespace Game_Library.Views
         {
             if (_currentGame == null) return;
 
-            var editWindow = new AddGameWindow(_currentGame); 
+            var editWindow = new AddGameWindow(_currentGame);
+            editWindow.Owner = Application.Current.MainWindow;
             if (editWindow.ShowDialog() == true)
             {
                 if (Application.Current.MainWindow is MainWindow main)

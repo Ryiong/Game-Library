@@ -116,7 +116,7 @@
 
         <!-- Game Series liên quan -->
         <TextBlock Grid.Row="1" Text="RELATED GAMES" Foreground="#046B59" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold" Margin="0,10,0,15"/>
-        <ItemsControl x:Name="icRelatedGamesGrid" Grid.Row="2">
+        <ItemsControl x:Name="icRelatedGamesGrid" Grid.Row="2" Visibility="Visible">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
@@ -137,5 +137,14 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <TextBlock Grid.Row="2" x:Name="txtNoRelatedGames" 
+               Text="Không có game nào cùng series" 
+               Foreground="#888888" 
+               FontSize="13" 
+               FontStyle="Italic"
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Top" 
+               Margin="0,10,0,0" 
+               Visibility="Collapsed"/>
     </Grid>
 </UserControl>

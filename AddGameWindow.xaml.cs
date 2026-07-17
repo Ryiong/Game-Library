@@ -34,23 +34,31 @@ namespace Game_Library
 
         private List<GameModels> _allGames = new List<GameModels>();
 
-        private readonly bool _isEditMode = false;
+        private readonly bool _isEditMode;
         private readonly GameModels _editingGame = null;
 
         public AddGameWindow(GameModels gameToEdit = null)
         {
             InitializeComponent();
-            LoadRelatedGamesComboBox();
             if (gameToEdit != null)
             {
                 _isEditMode = true;
                 _editingGame = gameToEdit;
+            }
+            else
+            {
+                _isEditMode = false;
+            }
+
+            LoadRelatedGamesComboBox();
+
+            if (_isEditMode)
+            {
                 txtWindowTitle.Text = "EDIT GAME";
                 PopulateFieldsForEditing();
             }
             else
             {
-                _isEditMode = false;
                 dpAddedDate.SelectedDate = DateTime.Now;
                 dpReleaseDate.SelectedDate = DateTime.Now;
             }
@@ -125,8 +133,10 @@ namespace Game_Library
                 }
                 UpdateInGameImagesUI();
             }
+            Dispatcher.BeginInvoke(new Action(() => {
+                tgNsfw.IsChecked = _editingGame.isNSFW;
+            }), System.Windows.Threading.DispatcherPriority.Background);
 
-            tgNsfw.IsChecked = _editingGame.isNSFW;
 
             string gameFolder = Path.Combine(centralStoragePath, _editingGame.Id);
             if (Directory.Exists(gameFolder))

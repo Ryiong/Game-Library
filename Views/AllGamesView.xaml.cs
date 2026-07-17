@@ -14,7 +14,6 @@ namespace Game_Library.Views
     public partial class AllGamesView : System.Windows.Controls.UserControl
     {
         private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
-        private readonly string recentGameJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recent_game.json");
 
         public AllGamesView()
         {
@@ -42,11 +41,6 @@ namespace Game_Library.Views
                         }
                     }
                     
-                }
-                if (File.Exists(recentGameJsonPath))
-                {
-                    var recentGame = JsonSerializer.Deserialize<GameModels>(File.ReadAllText(recentGameJsonPath));
-                    if (recentGame != null) { RecentSection.DataContext = recentGame; RecentSection.Visibility = Visibility.Visible; }
                 }
             }
             catch (Exception ex) { MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message); }
