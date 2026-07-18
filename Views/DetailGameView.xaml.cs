@@ -135,7 +135,7 @@ namespace Game_Library.Views
 
             if (Application.Current.MainWindow is MainWindow main)
             {
-                main.DynamicContentViewer.Content = new GameView(_currentGame);
+                main.NavigateToPlay(_currentGame);
             }
         }
 

@@ -71,6 +71,22 @@ namespace Game_Library
             }
         }
 
+        public void NavigateToPlay(GameModels selectedGame)
+        {
+            if (DynamicContentViewer != null)
+            {
+                if (DynamicContentViewer.Content != null)
+                {
+                    _viewHistory.Push(DynamicContentViewer.Content);
+                    _sidebarHistory.Push(SidebarMenu.SelectedIndex);
+                }
+
+                DynamicContentViewer.Content = new GameView(selectedGame);
+                SidebarMenu.SelectedIndex = -1;
+                DisplayHeader(2); 
+            }
+        }
+
         public void NavigateToDetail(GameModels selectedGame)
         {
             if (DynamicContentViewer != null)
@@ -87,8 +103,13 @@ namespace Game_Library
             }
         }
 
-        private void ReturnButton_Click(object sender, RoutedEventArgs e)
+        public void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
+            while (_viewHistory.Count > 0 && _viewHistory.Peek().GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase))
+            {
+                _viewHistory.Pop();
+                _sidebarHistory.Pop();
+            }
             if (_viewHistory.Count > 0)
             {
                 object previousView = _viewHistory.Pop();

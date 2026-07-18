@@ -186,7 +186,7 @@ namespace Game_Library.Views
 
             if (Application.Current.MainWindow is MainWindow main)
             {
-                main.NavigateToDetail(_gameData);
+                main.ReturnButton_Click(null, null);
             }
         }
 

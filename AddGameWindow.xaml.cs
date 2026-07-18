@@ -1,4 +1,5 @@
-﻿using Game_Library.Models;
+﻿using Game_Library.Extensions;
+using Game_Library.Models;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -13,9 +14,9 @@ using Button = System.Windows.Controls.Button;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using Image = System.Windows.Controls.Image;
+using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using ListBox = System.Windows.Controls.ListBox;
 
 
 namespace Game_Library
@@ -374,7 +375,7 @@ namespace Game_Library
                     string thumbName = "thumbnail" + thumbExt;
                     string targetThumbPath = Path.Combine(targetGameFolder, thumbName);
 
-                    File.Copy(_selectedThumbnailPath, targetThumbPath, true);
+                    ImageOptimizer.OptimizeAndSave(_selectedThumbnailPath, targetThumbPath);
                     finalThumbnailRelativePath = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, targetThumbPath);
                 }
 
@@ -392,7 +393,7 @@ namespace Game_Library
                         string imgName = $"ingame_{imgIndex++}{imgExt}";
                         string targetImgPath = Path.Combine(targetGameFolder, imgName);
 
-                        File.Copy(srcImgPath, targetImgPath, true);
+                        ImageOptimizer.OptimizeAndSave(srcImgPath, targetImgPath);
                         finalInGameRelativePaths.Add(Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, targetImgPath));
                     }
                 }

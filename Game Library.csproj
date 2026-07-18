@@ -9,8 +9,8 @@
     <UseWPF>true</UseWPF>
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <ApplicationIcon>Group-17.ico</ApplicationIcon>
-	  <AssemblyVersion>1.1.1</AssemblyVersion>
-	  <FileVersion>1.1.1</FileVersion>
+	  <AssemblyVersion>1.2.0</AssemblyVersion>
+	  <FileVersion>1.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
