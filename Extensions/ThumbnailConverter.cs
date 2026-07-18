@@ -10,33 +10,40 @@ namespace Game_Library.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string path = value as string;
-            if (string.IsNullOrWhiteSpace(path))
-                return GetPlaceholderImage();
+            if (value == null) return null;
+            string relativePath = value.ToString();
+            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
 
-            string fullPath = path.Replace("\\", "/");
-
-            if (fullPath.StartsWith("games_data/") || fullPath.StartsWith("Resources/"))
+            if (parameter?.ToString() == "IsGif")
             {
-                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string absolutePath = Path.Combine(baseDir, fullPath.Replace("/", "\\"));
-
-                if (File.Exists(absolutePath))
-                    path = absolutePath;
+                return relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase);
             }
 
-            if (File.Exists(path))
+            if (File.Exists(fullPath))
             {
+                if (relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new Uri(fullPath);
+                }
+
                 try
                 {
-                    var bitmap = new BitmapImage();
+                    BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(path, UriKind.Absolute);
+                    bitmap.UriSource = new Uri(fullPath);
+
+                    bitmap.DecodePixelWidth = 550;
+
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
+                    bitmap.Freeze();
+
                     return bitmap;
                 }
-                catch { }
+                catch
+                {
+                    return GetPlaceholderImage();
+                }
             }
 
             return GetPlaceholderImage();
@@ -44,7 +51,21 @@ namespace Game_Library.Extensions
 
         private BitmapImage GetPlaceholderImage()
         {
-            return new BitmapImage(new Uri("pack://application:,,,/Resources/Thumbnail-Placeholder.jpg", UriKind.Absolute));
+            try
+            {
+                BitmapImage placeholder = new BitmapImage();
+                placeholder.BeginInit();
+                placeholder.UriSource = new Uri("pack://application:,,,/Resources/Thumbnail-Placeholder.jpg", UriKind.Absolute);
+                placeholder.DecodePixelWidth = 250;
+                placeholder.CacheOption = BitmapCacheOption.OnLoad;
+                placeholder.EndInit();
+                placeholder.Freeze();
+                return placeholder;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

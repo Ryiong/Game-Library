@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
@@ -14,6 +15,7 @@ using ColorConverter = System.Windows.Media.ColorConverter;
 using Image = System.Windows.Controls.Image;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using ListBox = System.Windows.Controls.ListBox;
 
 
 namespace Game_Library
@@ -73,9 +75,17 @@ namespace Game_Library
                 if (File.Exists(jsonPath))
                 {
                     _allGames = JsonSerializer.Deserialize<List<GameModels>>(File.ReadAllText(jsonPath)) ?? new List<GameModels>();
-                    var comboDataSource = _isEditMode
+
+                    var filteredGames = _isEditMode
                         ? _allGames.Where(g => g.Id != _editingGame.Id).ToList()
                         : _allGames;
+
+                    var comboDataSource = filteredGames.Select(g => new GameCheckItem
+                    {
+                        Id = g.Id,
+                        Title = g.Title,
+                        IsSelected = _isEditMode && _editingGame.RelatedGameIds != null && _editingGame.RelatedGameIds.Contains(g.Id)
+                    }).ToList();
 
                     cbRelatedGame.ItemsSource = comboDataSource;
                 }
@@ -107,11 +117,6 @@ namespace Game_Library
                 }
             }
 
-            if (!string.IsNullOrEmpty(_editingGame.SeriesId))
-            {
-                cbRelatedGame.SelectedValue = _editingGame.SeriesId;
-            }
-
             if (!string.IsNullOrEmpty(_editingGame.Thumbnail))
             {
                 _selectedThumbnailPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _editingGame.Thumbnail);
@@ -133,6 +138,7 @@ namespace Game_Library
                 }
                 UpdateInGameImagesUI();
             }
+
             Dispatcher.BeginInvoke(new Action(() => {
                 tgNsfw.IsChecked = _editingGame.isNSFW;
             }), System.Windows.Threading.DispatcherPriority.Background);
@@ -401,7 +407,11 @@ namespace Game_Library
                 targetGame.ReleaseDate = dpReleaseDate.SelectedDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd");
                 targetGame.Thumbnail = finalThumbnailRelativePath;
                 targetGame.ImageInGame = finalInGameRelativePaths;
-                targetGame.SeriesId = cbRelatedGame.SelectedValue?.ToString();
+                var selectedRelatedGames = cbRelatedGame.ItemsSource as List<GameCheckItem>;
+                targetGame.RelatedGameIds = selectedRelatedGames?
+                    .Where(x => x.IsSelected)
+                    .Select(x => x.Id)
+                    .ToList() ?? new List<string>();
 
                 targetGame.FolderName = !string.IsNullOrEmpty(_selectedSingleFilePath)
                     ? gameId
@@ -459,10 +469,88 @@ namespace Game_Library
         }
         #endregion
 
+        #region Window Action
         private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();
         private void MinimizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
         private void MaximizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-        
+        #endregion
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            if (cbRelatedGame != null)
+            {
+                cbRelatedGame.Loaded += (s, e) => InitializeCheckComboBox();
+            }
+        }
+
+        private void InitializeCheckComboBox()
+        {
+            if (cbRelatedGame.Template.FindName("PART_ListBox", cbRelatedGame) is ListBox listBox)
+            {
+                listBox.PreviewMouseLeftButtonDown += (s, e) =>
+                {
+                    var clickedObject = e.OriginalSource as DependencyObject;
+                    var listBoxItem = WPFMouseHelper.FindParent<ListBoxItem>(clickedObject);
+
+                    if (listBoxItem != null)
+                    {
+                        listBoxItem.IsSelected = !listBoxItem.IsSelected;
+
+                        if (listBoxItem.DataContext is GameCheckItem item)
+                        {
+                            item.IsSelected = listBoxItem.IsSelected;
+                        }
+
+                        e.Handled = true;
+                    }
+                };
+
+                listBox.SelectionChanged += (s, e) =>
+                {
+                    UpdateSelectedText(listBox);
+                };
+
+                UpdateSelectedText(listBox);
+            }
+        }
+
+        private void UpdateSelectedText(ListBox listBox)
+        {
+            if (listBox.SelectedItems.Count == 0)
+            {
+                cbRelatedGame.Text = "-- Chọn các game liên quan --";
+                icPreviewRelatedGames.ItemsSource = null;
+                return;
+            }
+
+            var selectedGames = new List<GameCheckItem>();
+            var selectedTitles = new List<string>();
+            foreach (var item in listBox.SelectedItems)
+            {
+                if (item is GameCheckItem gameItem)
+                {
+                    selectedGames.Add(gameItem);
+                    selectedTitles.Add(gameItem.Title);
+                }
+            }
+
+            cbRelatedGame.Text = string.Join(", ", selectedTitles);
+            icPreviewRelatedGames.ItemsSource = selectedGames;
+        }
+
+        public static class WPFMouseHelper
+        {
+            public static T FindParent<T>(DependencyObject child) where T : DependencyObject
+            {
+                DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+                if (parentObject == null) return null;
+                if (parentObject is T parent) return parent;
+                return FindParent<T>(parentObject);
+            }
+        }
+
+
     }
 }

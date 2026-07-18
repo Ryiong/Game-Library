@@ -151,11 +151,9 @@ namespace Game_Library.Views
 
                 var relatedGames = allGames.FindAll(g =>
                     g.Id != _currentGame.Id && (
-                        g.SeriesId == _currentGame.Id ||
-                        (!string.IsNullOrEmpty(_currentGame.SeriesId) && g.Id == _currentGame.SeriesId) ||
-                        (!string.IsNullOrEmpty(_currentGame.SeriesId) && g.SeriesId == _currentGame.SeriesId)
-                    )
-                );
+                    (_currentGame.RelatedGameIds != null && _currentGame.RelatedGameIds.Contains(g.Id)) ||
+                    (g.RelatedGameIds != null && g.RelatedGameIds.Contains(_currentGame.Id))
+                ));
 
                 if (relatedGames != null && relatedGames.Count > 0)
                 {
@@ -196,6 +194,11 @@ namespace Game_Library.Views
             {
                 if (Application.Current.MainWindow is MainWindow main)
                 {
+                    this.DataContext = null;
+                    this.DataContext = _currentGame;
+
+                    InitializeSlideshow();
+                    LoadRelatedGames();
                     main.NavigateToDetail(_currentGame);  
                 }
             }
@@ -225,6 +228,13 @@ namespace Game_Library.Views
                         if (gameToRemove != null)
                         {
                             games.Remove(gameToRemove);
+                            foreach (var game in games)
+                            {
+                                if (game.RelatedGameIds != null && game.RelatedGameIds.Contains(_currentGame.Id))
+                                {
+                                    game.RelatedGameIds.Remove(_currentGame.Id); // Gỡ liên kết tới game bị xóa
+                                }
+                            }
                             File.WriteAllText(jsonPath, JsonSerializer.Serialize(games, new JsonSerializerOptions { WriteIndented = true }));
 
                             string gameFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", _currentGame.Id);

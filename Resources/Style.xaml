@@ -3,6 +3,7 @@
                     xmlns:ext="clr-namespace:Game_Library.Extensions">
     
   
+    <!-- Calendar -->
     <Style x:Key="MordemCalendarButton" TargetType="{x:Type CalendarButton}">
         <Setter Property="Background" Value="#046B59"/>
         <Setter Property="MinWidth" Value="40"/>
@@ -399,6 +400,7 @@
         </Setter>
     </Style>
 
+    <!-- DatePicker -->
     <Style x:Key="MordemDatePickerTextBox" TargetType="{x:Type DatePickerTextBox}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -430,7 +432,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="MordemDatePicker" TargetType="{x:Type DatePicker}">
         <Setter Property="Foreground" Value="#BCBCBC"/>
         <Setter Property="IsTodayHighlighted" Value="True"/>
@@ -510,7 +511,7 @@
         </Setter>
     </Style>
 
-    <!-- Title Button Bar  -->
+    <!-- Window Main Button  -->
     <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="14"/>
         <Setter Property="Height" Value="14"/>
@@ -926,4 +927,98 @@
         </Setter>
     </Style>
 
+    <!-- Check ComboBox -->
+    <Style x:Key="CheckComboBoxToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="templateRoot" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="4" ShadowDepth="2" Direction="270" Color="#D6D6D6"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <Control x:Name="ArrowIcon" Template="{StaticResource IconArrowDown}" Grid.Column="1" Width="10" Height="6" Foreground="#046B59" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ArrowIcon" Property="Template" Value="{StaticResource IconArrowUp}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CheckComboBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Margin" Value="6,2,6,2"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="itemBorder" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Control x:Name="CheckIcon" Template="{StaticResource IconCheck}" Width="12" Height="10" Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0" Visibility="Collapsed"/>
+                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center" TextElement.FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text" TextElement.FontSize="13"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="itemBorder" Property="Background" Value="#C2E4DE"/>
+                            <Setter Property="Foreground" Value="#046B59"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="itemBorder" Property="Background" Value="#046B59"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="CheckIcon" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ModernCheckComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="#F2F2F2"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/Fonts/#SF Pro Display"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#131E1B"/>
+        <Setter Property="MaxDropDownHeight" Value="300"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton x:Name="ToggleButton" Style="{StaticResource CheckComboBoxToggleButtonStyle}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" Focusable="False" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <TextBlock x:Name="txtHeaderDisplay"  Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, Mode=OneWay}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" IsHitTestVisible="False" Foreground="#131E1B" TextTrimming="CharacterEllipsis"/>
+
+                        <Popup x:Name="PART_Popup"  AllowsTransparency="True" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="Slide" VerticalOffset="4" StaysOpen="False">
+                            <Border Background="#F2F2F2" BorderBrush="#D6D6D6" BorderThickness="1" CornerRadius="8" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
+                                <ScrollViewer Style="{StaticResource ModernScrollViewer}">
+                                    <ListBox x:Name="PART_ListBox" ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}" ItemContainerStyle="{StaticResource CheckComboBoxItemStyle}" SelectionMode="Multiple" BorderThickness="0" Background="Transparent" DisplayMemberPath="Title">
+                                    </ListBox>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

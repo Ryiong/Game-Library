@@ -163,7 +163,7 @@
                                 <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="* Tối đa 6 hình ảnh chụp trong game." FontSize="11" Foreground="#888888" Margin="0,2,3,0"/>
                             </Grid>
                             <TextBlock Grid.Row="6" Grid.Column="0" Text="Game liên quan" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,12,15,12"/>
-                            <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbRelatedGame" Style="{StaticResource RoundedComboBoxStyle}" Height="34" Margin="0,6,5,6" Background="#F2F2F7" HorizontalAlignment="Stretch" DisplayMemberPath="Title" SelectedValuePath="Id"/>
+                            <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbRelatedGame" Style="{StaticResource ModernCheckComboBoxStyle}" Height="34" Margin="0,6,5,6" Background="#F2F2F7" HorizontalAlignment="Stretch" DisplayMemberPath="Title" SelectedValuePath="Id"/>
                             <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Content="Save" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Click="btnSave_Click" Margin="139,10,139,0" />
                         </Grid>
                     </ScrollViewer>
@@ -220,7 +220,14 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Series" Style="{StaticResource InputHeaderLabelStyle}" Foreground="#131E1B"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding ElementName=cbRelatedGame, Path=SelectedItem.Title}" Style="{StaticResource PreviewDataTextStyle}"/>
+                                    <ItemsControl Grid.Column="1" x:Name="icPreviewRelatedGames">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <!-- Định dạng hiển thị từng game được chọn, bạn có thể tùy chỉnh Style tại đây -->
+                                                <TextBlock Text="{Binding Title}" Style="{StaticResource PreviewDataTextStyle}" Margin="0,2" Foreground="#046B59" FontWeight="Medium"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </Grid>
                                 <Grid Margin="0,4">
                                     <Grid.ColumnDefinitions>

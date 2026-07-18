@@ -14,7 +14,7 @@ namespace Game_Library.Models
         public string ReleaseDate { get; set; }
         public bool isFavorite { get; set; }
         public bool isNSFW { get; set; }
-        public string SeriesId { get; set; }
+        public List<string> RelatedGameIds { get; set; } = new List<string>();
         public string Thumbnail { get; set; }
         public List<string> ImageInGame { get; set; } = new List<string>();
         public string FolderName { get; set; }

@@ -274,4 +274,16 @@
         </Viewbox>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="IconArrowDown">
+        <Path Data="M0,0 L4,4 L8,0" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform"/>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IconArrowUp">
+        <Path Data="M0,4 L4,0 L8,4" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform"/>
+    </ControlTemplate>
+    
+    <ControlTemplate x:Key="IconCheck">
+        <Path Data="M1,5 L4,8 L10,2" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform"/>
+    </ControlTemplate>
+    
 </ResourceDictionary>

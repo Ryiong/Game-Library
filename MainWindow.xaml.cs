@@ -12,8 +12,8 @@ namespace Game_Library
     public partial class MainWindow : Window
     {
         private readonly string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
-        private object _previousView = null;
-        private int _previousSidebarIndex = 0;
+        private Stack<object> _viewHistory = new Stack<object>();
+        private Stack<int> _sidebarHistory = new Stack<int>();
         public static bool IsNsfwEnabled { get; private set; } = false;
 
         public MainWindow()
@@ -34,6 +34,7 @@ namespace Game_Library
                 CopyDirectory(subDir, Path.Combine(destinationDir, Path.GetFileName(subDir)));
         }
 
+        #region Content change
         private void SidebarMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SidebarMenu.SelectedIndex != -1)
@@ -45,6 +46,9 @@ namespace Game_Library
         private void NavigateToTab(int tabIndex)
         {
             if (DynamicContentViewer == null) return;
+
+            _viewHistory.Clear();
+            _sidebarHistory.Clear();
 
             switch (tabIndex)
             {
@@ -71,12 +75,10 @@ namespace Game_Library
         {
             if (DynamicContentViewer != null)
             {
-                if (DynamicContentViewer.Content != null &&
-                    !DynamicContentViewer.Content.GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase) &&
-                    !DynamicContentViewer.Content.GetType().Name.Equals("DetailGameView", StringComparison.OrdinalIgnoreCase))
+                if (DynamicContentViewer.Content != null)
                 {
-                    _previousView = DynamicContentViewer.Content;
-                    _previousSidebarIndex = SidebarMenu.SelectedIndex;
+                    _viewHistory.Push(DynamicContentViewer.Content);
+                    _sidebarHistory.Push(SidebarMenu.SelectedIndex);
                 }
 
                 DynamicContentViewer.Content = new DetailGameView(selectedGame);
@@ -87,11 +89,17 @@ namespace Game_Library
 
         private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_previousView != null)
+            if (_viewHistory.Count > 0)
             {
-                DynamicContentViewer.Content = _previousView;
-                SidebarMenu.SelectedIndex = _previousSidebarIndex;
-                DisplayHeader(1);
+                object previousView = _viewHistory.Pop();
+                int previousIndex = _sidebarHistory.Pop();
+
+                DynamicContentViewer.Content = previousView;
+                SidebarMenu.SelectedIndex = previousIndex;
+                if (previousView.GetType().Name != "DetailGameView")
+                {
+                    DisplayHeader(1);
+                }
             }
             else
             {
@@ -115,9 +123,12 @@ namespace Game_Library
             }
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        public void NavigateToList()
+        {
+            SidebarMenu.SelectedIndex = 0;
+            NavigateToTab(0);
+        }
+
         private void AddGameButton_Click(object sender, RoutedEventArgs e)
         {
             AddGameWindow addDialog = new AddGameWindow();
@@ -129,13 +140,10 @@ namespace Game_Library
                 NavigateToTab(currentTab);
             }
         }
-        
-        internal void NavigateToList()
-        {
-            SidebarMenu.SelectedIndex = 0;
-            NavigateToTab(0);
-        }
 
+        #endregion
+
+        #region NSFW Content Enable
         private void NsfwToggle_Checked(object sender, RoutedEventArgs e)
         {
             PasswordDialog authDialog = new PasswordDialog();
@@ -146,8 +154,8 @@ namespace Game_Library
                 IsNsfwEnabled = true;
 
                 int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
-        NavigateToTab(currentTab); 
-    }
+                NavigateToTab(currentTab); 
+            }
             else
             {
                 NsfwToggleButton.IsChecked = false;
@@ -160,7 +168,24 @@ namespace Game_Library
             IsNsfwEnabled = false;
 
             int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
-    NavigateToTab(currentTab); 
-}
+            NavigateToTab(currentTab); 
+        }
+        #endregion
+
+        #region WindowAction
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+        #endregion
     }
 }
