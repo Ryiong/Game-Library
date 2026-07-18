@@ -21,7 +21,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Margin="0,0,18,18" Width="180" Click="GameCard_Click" Cursor="Hand">
+                        <Button Margin="0,0,15,15" Width="180" Click="GameCard_Click" Cursor="Hand">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Template">
