@@ -32,7 +32,7 @@ namespace Game_Library.Extensions
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(fullPath);
 
-                    bitmap.DecodePixelWidth = 550;
+                    bitmap.DecodePixelWidth = 350;
 
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();

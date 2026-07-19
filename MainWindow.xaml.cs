@@ -1,212 +1,63 @@
 ﻿using Game_Library.Models;
-using Game_Library.Views;
+using Game_Library.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Game_Library
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private readonly string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
-        private Stack<object> _viewHistory = new Stack<object>();
-        private Stack<int> _sidebarHistory = new Stack<int>();
-        public static bool IsNsfwEnabled { get; private set; } = false;
+        private static bool _isNsfwEnabled = false;
+        public static bool IsNsfwEnabled
+        {
+            get => _isNsfwEnabled;
+            set
+            {
+                _isNsfwEnabled = value;
+                Instance?.OnPropertyChanged(nameof(IsNsfwEnabled));
+            }
+        }
+        public static void SetNsfwStatus(bool status)
+        {
+            IsNsfwEnabled = status;
+        }
+        public static MainWindow Instance { get; private set; }
+        public MainViewModel ViewModel { get; private set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         public MainWindow()
         {
             InitializeComponent();
-
-            if (!Directory.Exists(centralStoragePath)) Directory.CreateDirectory(centralStoragePath);
-
-            DynamicContentViewer.Content = new AllGamesView();
+            Instance = this;
+            ViewModel = new MainViewModel();
+            this.DataContext = ViewModel;
         }
+        public void NavigateToDetail(GameModels selectedGame) => ViewModel.NavigateToDetail(selectedGame);
+        public void NavigateToPlay(GameModels selectedGame) => ViewModel.NavigateToPlay(selectedGame);
+        public void NavigateToList() => ViewModel.SidebarSelectedIndex = 0;
 
-        private void CopyDirectory(string sourceDir, string destinationDir)
-        {
-            Directory.CreateDirectory(destinationDir);
-            foreach (string file in Directory.GetFiles(sourceDir))
-                File.Copy(file, Path.Combine(destinationDir, Path.GetFileName(file)), true);
-            foreach (string subDir in Directory.GetDirectories(sourceDir))
-                CopyDirectory(subDir, Path.Combine(destinationDir, Path.GetFileName(subDir)));
-        }
-
-        #region Content change
-        private void SidebarMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (SidebarMenu.SelectedIndex != -1)
-            {
-                NavigateToTab(SidebarMenu.SelectedIndex);
-            }
-        }
-
-        private void NavigateToTab(int tabIndex)
-        {
-            if (DynamicContentViewer == null) return;
-
-            _viewHistory.Clear();
-            _sidebarHistory.Clear();
-
-            switch (tabIndex)
-            {
-                case 0:
-                    DynamicContentViewer.Content = new AllGamesView();
-                    DisplayHeader(1);
-                    break;
-                case 1:
-                    DynamicContentViewer.Content = new FlashClassicsView();
-                    DisplayHeader(1);
-                    break;
-                case 2:
-                    DynamicContentViewer.Content = new HTML5IndieView();
-                    DisplayHeader(1);
-                    break;
-                case 3:
-                    DynamicContentViewer.Content = new FavoritesView();
-                    DisplayHeader(1);
-                    break;
-            }
-        }
-
-        public void NavigateToPlay(GameModels selectedGame)
-        {
-            if (DynamicContentViewer != null)
-            {
-                if (DynamicContentViewer.Content != null)
-                {
-                    _viewHistory.Push(DynamicContentViewer.Content);
-                    _sidebarHistory.Push(SidebarMenu.SelectedIndex);
-                }
-
-                DynamicContentViewer.Content = new GameView(selectedGame);
-                SidebarMenu.SelectedIndex = -1;
-                DisplayHeader(2); 
-            }
-        }
-
-        public void NavigateToDetail(GameModels selectedGame)
-        {
-            if (DynamicContentViewer != null)
-            {
-                if (DynamicContentViewer.Content != null)
-                {
-                    _viewHistory.Push(DynamicContentViewer.Content);
-                    _sidebarHistory.Push(SidebarMenu.SelectedIndex);
-                }
-
-                DynamicContentViewer.Content = new DetailGameView(selectedGame);
-                SidebarMenu.SelectedIndex = -1;
-                DisplayHeader(2);
-            }
-        }
-
-        public void ReturnButton_Click(object sender, RoutedEventArgs e)
-        {
-            while (_viewHistory.Count > 0 && _viewHistory.Peek().GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase))
-            {
-                _viewHistory.Pop();
-                _sidebarHistory.Pop();
-            }
-            if (_viewHistory.Count > 0)
-            {
-                object previousView = _viewHistory.Pop();
-                int previousIndex = _sidebarHistory.Pop();
-
-                DynamicContentViewer.Content = previousView;
-                SidebarMenu.SelectedIndex = previousIndex;
-                if (previousView.GetType().Name != "DetailGameView")
-                {
-                    DisplayHeader(1);
-                }
-            }
-            else
-            {
-                SidebarMenu.SelectedIndex = 0;
-                NavigateToTab(0);
-            }
-        }
-
-        private void DisplayHeader(int a)
-        {
-            switch (a)
-            {
-                case 1:
-                    DefaultHeaderGrid.Visibility = Visibility.Visible;
-                    DetailHeaderGrid.Visibility = Visibility.Collapsed;
-                    break;
-                case 2:
-                    DetailHeaderGrid.Visibility= Visibility.Visible;
-                    DefaultHeaderGrid.Visibility = Visibility.Collapsed;
-                    break;
-            }
-        }
-
-        public void NavigateToList()
-        {
-            SidebarMenu.SelectedIndex = 0;
-            NavigateToTab(0);
-        }
-
-        private void AddGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddGameWindow addDialog = new AddGameWindow();
-            addDialog.Owner = this;
-            if (addDialog.ShowDialog() == true)
-            {
-                int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
-                SidebarMenu.SelectedIndex = currentTab;
-                NavigateToTab(currentTab);
-            }
-        }
-
-        #endregion
-
-        #region NSFW Content Enable
-        private void NsfwToggle_Checked(object sender, RoutedEventArgs e)
-        {
-            PasswordDialog authDialog = new PasswordDialog();
-            authDialog.Owner = this;
-
-            if (authDialog.ShowDialog() == true)
-            {
-                IsNsfwEnabled = true;
-
-                int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
-                NavigateToTab(currentTab); 
-            }
-            else
-            {
-                NsfwToggleButton.IsChecked = false;
-                IsNsfwEnabled = false;
-            }
-        }
-
-        private void NsfwToggle_Unchecked(object sender, RoutedEventArgs e)
-        {
-            IsNsfwEnabled = false;
-
-            int currentTab = SidebarMenu.SelectedIndex == -1 ? 0 : SidebarMenu.SelectedIndex;
-            NavigateToTab(currentTab); 
-        }
-        #endregion
-
-        #region WindowAction
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        }
+        #region Window System Action (Giữ nguyên cấu trúc điều khiển kéo đóng cửa sổ)
+        private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         #endregion
     }
 }

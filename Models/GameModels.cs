@@ -19,6 +19,20 @@ namespace Game_Library.Models
         public List<string> ImageInGame { get; set; } = new List<string>();
         public string FolderName { get; set; }
         public string MainFile { get; set; }
-        public string LastPlayedText { get; set; }
+
+        public bool IsVaild(out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                errorMessage = "Tên game không được để trống";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(Type))
+            {
+                errorMessage = "Phân loại game bắt buộc phải chọn";
+            }
+            return true;
+        }
     }
 }

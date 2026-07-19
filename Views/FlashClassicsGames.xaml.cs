@@ -13,12 +13,12 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library.Views
 {
-    public partial class AllGamesView : System.Windows.Controls.UserControl
+    public partial class FlashClassicsGames : System.Windows.Controls.UserControl
     {
-        public AllGamesView()
+        public FlashClassicsGames()
         {
             InitializeComponent();
-            this.DataContext = new AllGamesViewModel();
+            this.DataContext = new FlashClassicsViewModel();
         }
 
     }

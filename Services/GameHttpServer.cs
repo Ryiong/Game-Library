@@ -21,13 +21,13 @@ namespace Game_Library.Services
         {
             if (_isRunning) Stop();
 
-            _gameFolderPath = gameFolderPath;
+            _gameFolderPath = Path.GetFullPath(gameFolderPath);
             _listener = new HttpListener();
-            string prefix = BaseUrl;
-            if (!prefix.EndsWith("/"))
-            {
-                prefix += "/";
-            }
+            //string prefix = BaseUrl;
+            //if (!prefix.EndsWith("/"))
+            //{
+            //    prefix += "/";
+            //}
             _listener.Prefixes.Add(BaseUrl);
             _listener.Start();
             _isRunning = true;
@@ -56,14 +56,20 @@ namespace Game_Library.Services
 
                 if (string.IsNullOrEmpty(requestUrl)) requestUrl = "index.html";
 
-                string filePath = Path.Combine(_gameFolderPath, requestUrl);
+                string combinedPath = Path.Combine(_gameFolderPath, requestUrl);
+                string finalFullPath = Path.GetFullPath(combinedPath);
 
-                if (File.Exists(filePath))
+                if (!finalFullPath.StartsWith(_gameFolderPath, StringComparison.OrdinalIgnoreCase))
                 {
-                    byte[] responseBytes = File.ReadAllBytes(filePath);
+                    context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    return;
+                }
 
-                    // Thiết lập định dạng Content-Type chuẩn để trình duyệt đọc được dữ liệu
-                    string ext = Path.GetExtension(filePath).ToLower();
+                if (File.Exists(finalFullPath))
+                {
+                    byte[] responseBytes = File.ReadAllBytes(finalFullPath);
+
+                    string ext = Path.GetExtension(finalFullPath).ToLower();
                     context.Response.ContentType = ext switch
                     {
                         ".html" or ".htm" => "text/html; charset=utf-8",
@@ -92,7 +98,7 @@ namespace Game_Library.Services
             }
             finally
             {
-                context.Response.OutputStream.Close();
+                try { context.Response.OutputStream.Close(); } catch { }
             }
         }
 

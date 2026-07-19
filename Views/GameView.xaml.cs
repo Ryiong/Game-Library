@@ -1,5 +1,6 @@
 ﻿using Game_Library.Models;
 using Game_Library.Services;
+using Game_Library.ViewModels;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +17,7 @@ namespace Game_Library.Views
     /// </summary>
     public partial class GameView : System.Windows.Controls.UserControl
     {
-        private readonly GameModels _gameData;
+        public GameViewModel ViewModel { get; private set; }
         private Process _flashProcess = null;
         private GameHttpServer _htmlServer = null;
 
@@ -38,21 +39,22 @@ namespace Game_Library.Views
         public GameView(GameModels selectedGame)
         {
             InitializeComponent();
-            _gameData = selectedGame;
-            lblPlayingGameTitle.Text = _gameData.Title.ToUpper();
+            ViewModel = new GameViewModel(selectedGame);
+            this.DataContext = ViewModel;
+            ViewModel.RequestCloseGame += CloseGameProcess;
 
             Loaded += (s, e) => GameView_Load(s, e);
         }
 
         private void GameView_Load(object sender, RoutedEventArgs e)
         {
-            if (_gameData.Type.Equals("FLASH", StringComparison.OrdinalIgnoreCase))
+            if (ViewModel.GameData.Type.Equals("FLASH", StringComparison.OrdinalIgnoreCase))
             {
                 wfHost.Visibility = Visibility.Visible;
                 htmlWebView.Visibility = Visibility.Collapsed;
                 LaunchFlashGame(); // Chạy hàm xử lý Win32 API cũ của bạn
             }
-            else if (_gameData.Type.Equals("HTML5", StringComparison.OrdinalIgnoreCase))
+            else if (ViewModel.GameData.Type.Equals("HTML5", StringComparison.OrdinalIgnoreCase))
             {
                 wfHost.Visibility = Visibility.Collapsed;
                 htmlWebView.Visibility = Visibility.Visible;
@@ -64,15 +66,17 @@ namespace Game_Library.Views
         {
             try
             {
-                string gameFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", _gameData.Id);
+                string gameFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", ViewModel.GameData.Id);
 
                 _htmlServer = new GameHttpServer();
                 _htmlServer.Start(gameFolderPath);
 
-                if (Application.Current.MainWindow is MainWindow mainWindow)
-                {
-                    mainWindow.ServerStatus.Text = "Server Status: Active";
-                }
+                GameDataService.Instance.SaveGameAsync(ViewModel.GameData, true);
+
+                //if (Application.Current.MainWindow is MainWindow mainWindow)
+                //{
+                //    mainWindow.ServerStatus.Text = "Server Status: Active";
+                //}
 
                 await htmlWebView.EnsureCoreWebView2Async();
                 await htmlWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
@@ -82,7 +86,7 @@ namespace Game_Library.Views
                 {
                     args.Handled = true;
                 };
-                string gameUrl = _htmlServer.BaseUrl + _gameData.MainFile;
+                string gameUrl = _htmlServer.BaseUrl + ViewModel.GameData.MainFile;
 
                 htmlWebView.Source = new Uri(gameUrl);
 
@@ -110,7 +114,7 @@ namespace Game_Library.Views
                     }
                 }
 
-                string fullSwfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", _gameData.Id, _gameData.MainFile);
+                string fullSwfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", ViewModel.GameData.Id, ViewModel.GameData.MainFile);
 
                 if (!File.Exists(fullSwfPath))
                 {
@@ -180,16 +184,6 @@ namespace Game_Library.Views
             ResizeEmbeddedGame();
         }
 
-        private void btnExitGame_Click(object sender, RoutedEventArgs e)
-        {
-            CloseGameProcess();
-
-            if (Application.Current.MainWindow is MainWindow main)
-            {
-                main.ReturnButton_Click(null, null);
-            }
-        }
-
         private void CloseGameProcess()
         {
             try
@@ -218,15 +212,16 @@ namespace Game_Library.Views
                 _htmlServer.Stop();
                 _htmlServer = null;
 
-                if (Application.Current.MainWindow is MainWindow main)
-                {
-                    main.ServerStatus.Text = "Server Status: Off";
-                }
+                //if (Application.Current.MainWindow is MainWindow main)
+                //{
+                //    main.ServerStatus.Text = "Server Status: Off";
+                //}
             }
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
+            ViewModel.RequestCloseGame -= CloseGameProcess;
             CloseGameProcess();
         }
     }

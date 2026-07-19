@@ -1,4 +1,6 @@
 ﻿using Game_Library.Models;
+using Game_Library.Services;
+using Game_Library.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,49 +9,17 @@ using System.Windows;
 using System.Windows.Controls;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
-using Color = System.Windows.Media.Color;
-using ColorConverter = System.Windows.Media.ColorConverter;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Game_Library
+namespace Game_Library.Views
 {
-    /// <summary>
-    /// Interaction logic for HTML5IndieView.xaml
-    /// </summary>
     public partial class HTML5IndieView : System.Windows.Controls.UserControl
     {
-        private readonly string allGamesJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game.json");
         public HTML5IndieView()
         {
             InitializeComponent();
-            LoadHTMLGames();
+            this.DataContext = new HTML5IndieViewModel();
         }
 
-        private void LoadHTMLGames()
-        {
-            try
-            {
-                if (File.Exists(allGamesJsonPath))
-                {
-                    string jsonContent = File.ReadAllText(allGamesJsonPath);
-                    var allGames = JsonSerializer.Deserialize<List<GameModels>>(jsonContent);
-
-                    if (allGames != null)
-                    {
-                        var htmlGames = allGames.FindAll(g => g.Type != null && g.Type.ToUpper() == "HTML5");
-                        HTMLIndieGameLayout.ItemsSource = htmlGames;
-                    }
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message); }
-        }
-
-        private void GameCard_Click(object sender, RoutedEventArgs e)
-        {
-            if ((sender as Button)?.DataContext is GameModels selectedGame && Application.Current.MainWindow is MainWindow main)
-            {
-                main.NavigateToDetail(selectedGame);
-            }
-        }
     }
 }

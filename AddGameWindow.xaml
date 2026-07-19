@@ -45,7 +45,7 @@
                     </Button>
                 </StackPanel>
             </Border>
-            <TextBlock x:Name="txtWindowTitle" Grid.Row="0" Text="ADD NEW GAME" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="20" FontSize="13" FontWeight="Bold" Foreground="#046B59"/>
+            <TextBlock x:Name="txtWindowTitle" Grid.Row="0" Text="{Binding WindowTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="20" FontSize="13" FontWeight="Bold" Foreground="#046B59"/>
             <!-- Content -->
             <Border Grid.Row="1" CornerRadius="0,0,14,14" Background="White">
                 <Grid>
@@ -73,7 +73,7 @@
 
                             <!--Title -->
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên Game" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,12,15,12"/>
-                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtTitle" Style="{StaticResource RoundedTextBoxStyle}" Margin="0,6,5,6" FontSize="13"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtTitle" Text="{Binding Title, Mode=TwoWay}" Style="{StaticResource RoundedTextBoxStyle}" Margin="0,6,5,6" FontSize="13"/>
 
                             <!-- Type -->
                             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,5,8">
@@ -84,10 +84,10 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Type" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,0,15,0"/>
-                                <ComboBox Grid.Column="1" x:Name="cbType" Style="{StaticResource RoundedComboBoxStyle}" Width="100" Height="34" Margin="0,6" Background="#F2F2F7" HorizontalAlignment="Left">
-                                    <ComboBoxItem Content="FLASH" IsSelected="True" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
+                                <ComboBox Grid.Column="1" x:Name="cbType" SelectedValue="{Binding SelectedType, Mode=TwoWay}" SelectedValuePath="Content" Style="{StaticResource RoundedComboBoxStyle}" Width="100" Height="34" Margin="0,6" Background="#F2F2F7" HorizontalAlignment="Left">
+                                    <ComboBoxItem Content="FLASH" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                     <ComboBoxItem Content="HTML5" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
-                                    <ComboBoxItem Content="Other" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
+                                    <ComboBoxItem Content="EXE" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                 </ComboBox>
                                 <TextBlock Grid.Column="2" Text="NSFW" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,0,15,0"/>
                                 <ToggleButton Grid.Column="3" x:Name="tgNsfw" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="False" HorizontalAlignment="Left" Margin="0,6"/>
@@ -95,7 +95,7 @@
 
                             <!-- Description -->
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Mô tả" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,12,15,0"/>
-                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtDescription" Style="{StaticResource RoundedTextBoxStyle}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,6,5,6"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtDescription" Text="{Binding Description, Mode=TwoWay}" Style="{StaticResource RoundedTextBoxStyle}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" Margin="0,6,5,6"/>
 
                             <!-- Date -->
                             <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,5,8">
@@ -121,7 +121,7 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Ảnh bìa" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,10,15,0" Height="16" Width="43"/>
-                                <Button x:Name="SelectThumbnail" Grid.Column="1" Width="80" Height="80" HorizontalAlignment="Left" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Cursor="Hand" Click="SelectThumbnail_Click">
+                                <Button x:Name="SelectThumbnail" Grid.Column="1" Width="80" Height="80" HorizontalAlignment="Left" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Cursor="Hand" Command="{Binding SelectThumbnailCommand}">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="8"/>
@@ -135,8 +135,8 @@
 
                                 <TextBlock Grid.Column="2" Text="Import Folder / File" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,0,10,0" Height="35" Width="88" TextWrapping="Wrap"/>
                                 <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Top">
-                                    <Button x:Name="SelectFolder" Content="Chọn Folder game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Margin="0,0,0,6" Click="SelectFolder_Click"/>
-                                    <Button x:Name="SelectSingleFile" Content="Chọn File game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Click="SelectSingleFile_Click"/>
+                                    <Button x:Name="SelectFolder" Content="Chọn Folder game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Margin="0,0,0,6" Command="{Binding SelectFolderCommand}"/>
+                                    <Button x:Name="SelectSingleFile" Content="Chọn File game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SelectSingleFileCommand}"/>
                                 </StackPanel>
                             </Grid>
 
@@ -148,7 +148,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <WrapPanel Grid.Column="0" Orientation="Horizontal">
-                                    <Button x:Name="SelectImageInGame" Width="80" Height="80" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Margin="0,0,8,8" Cursor="Hand" Click="SelectImageInGame_Click">
+                                    <Button x:Name="SelectImageInGame" Width="80" Height="80" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Margin="0,0,8,8" Cursor="Hand" Command="{Binding SelectFolderCommand}">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="6"/>
@@ -164,7 +164,8 @@
                             </Grid>
                             <TextBlock Grid.Row="6" Grid.Column="0" Text="Game liên quan" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,12,15,12"/>
                             <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbRelatedGame" Style="{StaticResource ModernCheckComboBoxStyle}" Height="34" Margin="0,6,5,6" Background="#F2F2F7" HorizontalAlignment="Stretch" DisplayMemberPath="Title" SelectedValuePath="Id"/>
-                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Content="Save" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Click="btnSave_Click" Margin="139,10,139,0" />
+                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SaveCommand}" Margin="139,10,139,0" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
+                                    Content="{Binding SaveButtonContent}"/>
                         </Grid>
                     </ScrollViewer>
 
@@ -277,9 +278,7 @@
                                     <TextBlock Grid.Column="0" Text="Folder Structure" FontWeight="Bold" Foreground="#131E1B" VerticalAlignment="Top"/>
                                     <StackPanel Grid.Column="1">
                                         <TextBlock x:Name="txtPreviewFolderName" Text="FolderName (Root)" FontWeight="Bold" Foreground="#576865" Margin="0,0,0,4"/>
-                                        <TreeView x:Name="trvFolderStructure" BorderThickness="0" Background="Transparent" Padding="0">
-
-                                        </TreeView>
+                                        <TreeView x:Name="trvFolderStructure" ItemsSource="{Binding FolderTreeItems}" BorderThickness="0" Background="Transparent" Padding="0"/>
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>

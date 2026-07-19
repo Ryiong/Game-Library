@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Game_Library"
+        xmlns:local="clr-namespace:Game_Library.Views"
         xmlns:ext="clr-namespace:Game_Library.Extensions"
         mc:Ignorable="d"
         FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
@@ -15,11 +15,13 @@
         ResizeMode="NoResize">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"
-                      UseAeroCaptionButtons="False"
-                      GlassFrameThickness="0"
-                      CornerRadius="14"/>
+                  UseAeroCaptionButtons="False"
+                  GlassFrameThickness="0"
+                  CornerRadius="14"/>
     </WindowChrome.WindowChrome>
-
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
     <Border Background="#F5F5F7" CornerRadius="14" BorderBrush="#D2D2D7" BorderThickness="1" ClipToBounds="True">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -37,7 +39,7 @@
                         <RowDefinition Height="65"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!-- Title Button App -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,16,16,0" WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FF5F56" ext:ButtonProps.HoverBackground="#F74339" ext:ButtonProps.PressedBackground="#DB332a"  BorderThickness="1.5" BorderBrush="#cc4f46" Click="CloseButton_Click" Foreground="#E0443E">
@@ -54,7 +56,7 @@
                     <!-- Sidebar Content Navigation -->
                     <StackPanel Grid.Row="1">
                         <TextBlock Text="GAME LIBRARY" Style="{StaticResource MenuHeaderStyle}"></TextBlock>
-                        <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}" SelectedIndex="0" SelectionChanged="SidebarMenu_SelectionChanged">
+                        <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}" SelectedIndex="{Binding SidebarSelectedIndex, Mode=TwoWay}">
                             <!-- All Game -->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
@@ -119,14 +121,14 @@
                                     </Grid.ColumnDefinitions>
                                     <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
                                     <TextBlock Grid.Column="1" Text="Live Server"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                    
+
                                 </Grid>
                             </ListBoxItem>
                         </ListBox>
                     </StackPanel>
                 </Grid>
             </Border>
-            
+
             <!-- Content Area -->
             <Grid Grid.Column="1" Background="Transparent">
                 <Grid.RowDefinitions>
@@ -138,17 +140,17 @@
                 <Border Background="White" WindowChrome.IsHitTestVisibleInChrome="True" Grid.Row="0" BorderThickness="0,0,0,1" CornerRadius="0,14,0,0" BorderBrush="#E6F2ED">
                     <Grid>
                         <!-- Default Header -->
-                        <Grid x:Name="DefaultHeaderGrid" Visibility="Visible">
+                        <Grid x:Name="DefaultHeaderGrid" Visibility="{Binding IsDefaultHeaderVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="35,0,0,0">
                                 <TextBlock Text="Giới hạn" VerticalAlignment="Center" Foreground="#046B59" FontWeight="Bold" FontSize="15" Margin="0,0,12,0"/>
-                                <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="False" x:Name="NsfwToggleButton" Unchecked="NsfwToggle_Unchecked" Checked="NsfwToggle_Checked"/>
+                                <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="{Binding IsNsfwChecked, Mode=TwoWay}" x:Name="NsfwToggleButton"/>
                             </StackPanel>
                             <!-- Add Game Button -->
-                            <Button x:Name="AddGameButton" Grid.Column="1" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0" Click="AddGameButton_Click">
+                            <Button x:Name="AddGameButton" Grid.Column="1" Command="{Binding AddGameCommand}" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Control Template="{StaticResource IconPlus}" Width="20" Height="19" Margin="5, 0"/>
@@ -157,11 +159,11 @@
                                 </Button.Content>
                             </Button>
                         </Grid>
-                        
+
                         <!-- Header Detail -->
-                        <Grid x:Name="DetailHeaderGrid" Visibility="Collapsed">
+                        <Grid x:Name="DetailHeaderGrid" Visibility="{Binding IsDetailHeaderVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <!-- Return Button -->
-                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource NonableButtonStyle}" Margin="18,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="ReturnButton_Click">
+                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource NonableButtonStyle}" Margin="18,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding ReturnCommand}">
                                 <Button.Content>
                                     <Control Template="{StaticResource IconReturn}" Width="24" Height="24" Foreground="#046B59"/>
                                 </Button.Content>
@@ -170,10 +172,17 @@
                     </Grid>
                 </Border>
                 <!-- Content View -->
-                <ContentControl x:Name="DynamicContentViewer" Grid.Row="1" Margin="0"/>
+                <ContentControl x:Name="DynamicContentViewer" Grid.Row="1" Margin="0" Content="{Binding CurrentView}"/>
                 <!-- Footer -->
                 <Border Grid.Row="2" VerticalAlignment="Bottom" CornerRadius="0,0,14,0" Background="#E5F0EC" >
-                    <TextBlock x:Name="ServerStatus" Text="Server Status: Off" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="LogApp" Text="{Binding LogText}" FontSize="15" HorizontalAlignment="Left" Margin="15,0,0,0" Padding="0,4,0,4" FontWeight="Medium"/>
+                        <TextBlock x:Name="ServerStatus" Text="{Binding StatusText}" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
+                    </Grid>
                 </Border>
 
             </Grid>
