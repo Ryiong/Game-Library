@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Game_Library.ViewModels
 {
-    public abstract class GameListViewModel : ViewModelBase
+    public abstract class GameListViewModel : ViewModelBase, IDisposable
     {
         private ObservableCollection<GameModels> _filteredGames;
         private string _searchKeyword = string.Empty;

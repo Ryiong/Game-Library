@@ -63,6 +63,7 @@ namespace Game_Library
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             ClearPreviewMedia();
+            this.DialogResult = false;
             this.Close();
 
             GC.Collect();

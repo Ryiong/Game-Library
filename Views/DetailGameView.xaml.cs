@@ -25,6 +25,7 @@ namespace Game_Library.Views
         {
             InitializeComponent();
             ViewModel = new DetailGameViewModel(selectedGame);
+            ViewModel.ReleaseMediaAction = ClearMediaElements;
             this.DataContext = ViewModel;
 
             this.Unloaded += DetailGameView_Unloaded;
@@ -41,6 +42,7 @@ namespace Game_Library.Views
 
         private void DetailGameView_Unloaded(object sender, RoutedEventArgs e)
         {
+            ClearMediaElements();
             this.Unloaded -= DetailGameView_Unloaded;
             try
             {
@@ -162,6 +164,10 @@ namespace Game_Library.Views
             {
                 if (icSlideshowImages != null)
                 {
+                    icSlideshowImages.ItemsSource = null;
+                }
+                if (icSlideshowImages != null)
+                {
                     for (int i = 0; i < icSlideshowImages.Items.Count; i++)
                     {
                         var container = icSlideshowImages.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ContentPresenter;
@@ -175,6 +181,7 @@ namespace Game_Library.Views
                                     if (child is System.Windows.Controls.MediaElement mediaElement)
                                     {
                                         mediaElement.Stop();
+                                        mediaElement.Close();
                                         mediaElement.Source = null;
                                     }
                                 }
@@ -183,7 +190,7 @@ namespace Game_Library.Views
                     }
                 }
             }
-            catch { /* Chặn lỗi truy vấn UI visual tree */ }
+            catch {}
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)

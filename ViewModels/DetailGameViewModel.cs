@@ -22,6 +22,7 @@ namespace Game_Library.ViewModels
         private string _favoriteButtonBackground;
         private Visibility _noRelatedGamesVisibility = Visibility.Collapsed;
         private Visibility _relatedGamesGridVisibility = Visibility.Visible;
+        public Action ReleaseMediaAction { get; set; }
 
         public GameModels CurrentGame
         {
@@ -181,6 +182,13 @@ namespace Game_Library.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
+                string gameIdToDelete = CurrentGame.Id;
+                SlideshowImages?.Clear();
+                ReleaseMediaAction?.Invoke();
+                MainWindow.Instance.NavigateToList();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                await Task.Delay(300);
                 string centralStoragePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data");
 
                 bool isDeleted = await GameDataService.Instance.DeleteGameAsync(CurrentGame.Id, centralStoragePath);

@@ -34,7 +34,7 @@ namespace Game_Library.Extensions
                     {
                         BitmapImage bitmap = new BitmapImage();
                         bitmap.BeginInit();
-                        bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
+                        bitmap.StreamSource = stream;
 
                         bitmap.DecodePixelWidth = 550;
 

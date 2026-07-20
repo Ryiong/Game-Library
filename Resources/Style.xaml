@@ -737,22 +737,21 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="BackgroundBorder" Property="Background" Value="#2ecc71"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Thumb" Storyboard.TargetProperty="(Canvas.Left)" To="24" Duration="0:0:0.18"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Thumb" Storyboard.TargetProperty="(Canvas.Left)" To="0" Duration="0:0:0.18"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
-
-                        <EventTrigger RoutedEvent="ToggleButton.Checked">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="Thumb" Storyboard.TargetProperty="(Canvas.Left)" To="24" Duration="0:0:0.18"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="Thumb" Storyboard.TargetProperty="(Canvas.Left)" To="0" Duration="0:0:0.18"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -993,7 +992,7 @@
         <Setter Property="Margin" Value="6,2,6,2"/>
         <Setter Property="Padding" Value="10,6"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Focusable" Value="True"/>
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Setter Property="Template">
             <Setter.Value>

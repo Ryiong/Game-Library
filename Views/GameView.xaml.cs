@@ -47,40 +47,14 @@ namespace Game_Library.Views
 
             ViewModel.RequestCloseGame += CloseGameProcess;
 
-            ViewModel.SetMuteAction = (isMuted) =>
-            {
-                if (htmlWebView?.CoreWebView2 != null)
-                {
-                    htmlWebView.CoreWebView2.IsMuted = isMuted;
-                }
-                if (_flashProcess != null && !_flashProcess.HasExited)
-                {
-                    const int WM_APPCOMMAND = 0x0319;
-                    const int APPCOMMAND_VOLUME_MUTE = 0x80000;
-                    SendMessage(_flashProcess.MainWindowHandle, WM_APPCOMMAND, _flashProcess.MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_MUTE);
-                }
-            };
+            ViewModel.SetMuteAction = OnSetMute;
 
-            ViewModel.SetVolumeAction = (volumeRatio) =>
-            {
-                if (htmlWebView?.CoreWebView2 != null)
-                {
-                    htmlWebView.CoreWebView2.IsMuted = (volumeRatio == 0 || ViewModel.IsMuted);
-                }
-            };
+            ViewModel.SetVolumeAction = OnSetVolume;
 
-            ViewModel.ToggleFullscreenAction = () =>
-            {
-                var parentWindow = Window.GetWindow(this);
-                if (parentWindow != null)
-                {
-                    parentWindow.WindowState = (parentWindow.WindowState == WindowState.Maximized)
-                        ? WindowState.Normal
-                        : WindowState.Maximized;
-                }
-            };
+            ViewModel.ToggleFullscreenAction = OnToggleFullscreen;
 
             Loaded += (s, e) => GameView_Load(s, e);
+            Unloaded += GameView_Unloaded;
         }
 
         private void GameView_Load(object sender, RoutedEventArgs e)
@@ -97,6 +71,11 @@ namespace Game_Library.Views
                 htmlWebView.Visibility = Visibility.Visible;
                 LaunchHtml5Game();
             }
+        }
+
+        private void GameView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Dispose();
         }
 
         private async void LaunchHtml5Game()
@@ -223,26 +202,12 @@ namespace Game_Library.Views
 
         private void CloseGameProcess()
         {
-            try
+            if (_flashProcess != null && !_flashProcess.HasExited)
             {
-                if (_flashProcess != null && !_flashProcess.HasExited)
-                {
-                    _flashProcess.Kill();
-                    _flashProcess.Dispose();
-                    _flashProcess = null;
-                }
+                try { _flashProcess.Kill(); } catch { }
+                _flashProcess.Dispose();
+                _flashProcess = null;
             }
-            catch { /* Bỏ qua nếu tiến trình đã tự đóng trước đó */ }
-
-            try
-            {
-                if (htmlWebView != null && htmlWebView.CoreWebView2 != null)
-                {
-                    htmlWebView.Source = new Uri("about:blank");
-                    htmlWebView.Dispose(); 
-                }
-            }
-            catch { /* Bỏ qua nếu WebView2 đã bị hủy trước đó */ }
 
             if (_htmlServer != null)
             {
@@ -250,9 +215,7 @@ namespace Game_Library.Views
                 _htmlServer = null;
 
                 if (Application.Current.MainWindow is MainWindow main)
-                {
                     main.ServerStatus.Text = "Server Status: Off";
-                }
             }
         }
 
@@ -260,6 +223,50 @@ namespace Game_Library.Views
         {
             ViewModel.RequestCloseGame -= CloseGameProcess;
             CloseGameProcess();
+        }
+
+        private void OnSetMute(bool isMuted)
+        {
+            if (htmlWebView?.CoreWebView2 != null)
+                htmlWebView.CoreWebView2.IsMuted = isMuted;
+
+            if (_flashProcess?.HasExited == false)
+            {
+                const int WM_APPCOMMAND = 0x0319;
+                const int APPCOMMAND_VOLUME_MUTE = 0x80000;
+                SendMessage(_flashProcess.MainWindowHandle, WM_APPCOMMAND, _flashProcess.MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_MUTE);
+            }
+        }
+
+        private void OnSetVolume(double volumeRatio)
+        {
+            if (htmlWebView?.CoreWebView2 != null)
+                htmlWebView.CoreWebView2.IsMuted = (volumeRatio == 0 || ViewModel.IsMuted);
+        }
+
+        private void OnToggleFullscreen()
+        {
+            var parent = Window.GetWindow(this);
+            if (parent != null)
+                parent.WindowState = parent.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        public void Dispose()
+        {
+            ViewModel.RequestCloseGame -= CloseGameProcess;
+            CloseGameProcess();
+
+            if (htmlWebView != null)
+            {
+                try
+                {
+                    htmlWebView.Source = new Uri("about:blank");
+                    htmlWebView.Dispose();
+                }
+                catch { }
+            }
+
+            GC.SuppressFinalize(this);
         }
     }
 }

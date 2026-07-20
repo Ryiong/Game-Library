@@ -80,8 +80,11 @@ namespace Game_Library.ViewModels
 
         public MainViewModel()
         {
-            GameDataService.Instance.OnStatusChanged += (msg) => StatusText = msg;
-            GameDataService.Instance.OnLogChanged += (log) => LogText = log;
+            GameDataService.Instance.OnStatusChanged += (msg) =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() => StatusText = msg);
+
+            GameDataService.Instance.OnLogChanged += (log) =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() => LogText = log);
             GameDataService.Instance.InitializeData();
             CurrentView = new AllGamesView();
 
@@ -95,6 +98,10 @@ namespace Game_Library.ViewModels
 
         private void NavigateToTab(int tabIndex)
         {
+            if (CurrentView is UserControl oldView && oldView.DataContext is IDisposable disposableVM)
+            {
+                disposableVM.Dispose();
+            }
             _viewHistory.Clear();
             _sidebarHistory.Clear();
 
@@ -141,12 +148,22 @@ namespace Game_Library.ViewModels
         {
             while (_viewHistory.Count > 0 && _viewHistory.Peek().GetType().Name.Equals("GameView", StringComparison.OrdinalIgnoreCase))
             {
-                _viewHistory.Pop();
+                var viewToDispose = _viewHistory.Pop();
+                if (viewToDispose is System.Windows.Controls.UserControl uc && uc.DataContext is IDisposable disposableVM)
+                {
+                    disposableVM.Dispose();
+                }
+
                 _sidebarHistory.Pop();
             }
 
             if (_viewHistory.Count > 0)
             {
+                if (CurrentView is System.Windows.Controls.UserControl currentUc && currentUc.DataContext is IDisposable currentDisposable)
+                {
+                    currentDisposable.Dispose();
+                }
+
                 CurrentView = _viewHistory.Pop();
                 _sidebarSelectedIndex = _sidebarHistory.Pop();
                 OnPropertyChanged(nameof(SidebarSelectedIndex));
@@ -195,7 +212,7 @@ namespace Game_Library.ViewModels
             }
             else
             {
-                MainWindow.SetNsfwStatus(true);
+                MainWindow.SetNsfwStatus(false);
                 GameDataService.Instance.Log("Hi");
                 RefreshCurrentTab();
             }

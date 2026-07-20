@@ -107,7 +107,12 @@ namespace Game_Library.ViewModels
                 IsSelected = _isEditMode && _editingGame.RelatedGameIds != null && _editingGame.RelatedGameIds.Contains(g.Id)
             }).ToList();
 
-            RelatedGames = new ObservableCollection<GameCheckItem>(items);
+            RelatedGames.Clear();
+            foreach (var item in items)
+            {
+                RelatedGames.Add(item);
+            }
+            OnPropertyChanged(nameof(RelatedGames));
         }
 
         private void PopulateFieldsForEditing()

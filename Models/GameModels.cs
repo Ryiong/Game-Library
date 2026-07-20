@@ -20,7 +20,7 @@ namespace Game_Library.Models
         public string FolderName { get; set; }
         public string MainFile { get; set; }
 
-        public bool IsVaild(out string errorMessage)
+        public bool IsValid(out string errorMessage)
         {
             errorMessage = string.Empty;
             if (string.IsNullOrWhiteSpace(Title))

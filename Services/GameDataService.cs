@@ -153,7 +153,25 @@ namespace Game_Library.Services
                     string gameFolder = Path.Combine(centralStoragePath, gameId);
                     if (Directory.Exists(gameFolder))
                     {
-                        Directory.Delete(gameFolder, true);
+                        bool deleted = false;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            try
+                            {
+                                Directory.Delete(gameFolder, true);
+                                deleted = true;
+                                break;
+                            }
+                            catch (IOException)
+                            {
+                                Thread.Sleep(200);
+                            }
+                        }
+
+                        if (!deleted)
+                        {
+                            throw new Exception($"Không thể xoá thư mục {gameFolder} do bị HĐH khoá.");
+                        }
                     }
 
                     OnStatusChanged?.Invoke("Server Status: Online");
@@ -173,6 +191,30 @@ namespace Game_Library.Services
             });
         }
 
+        private void DeleteDirectoryRecursive(string targetDir)
+        {
+            foreach (string file in Directory.GetFiles(targetDir))
+            {
+                try
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                catch { }
+            }
+
+            foreach (string subDir in Directory.GetDirectories(targetDir))
+            {
+                DeleteDirectoryRecursive(subDir);
+            }
+
+            try
+            {
+                Directory.Delete(targetDir, false);
+            }
+            catch { }
+        }
+
         ///<summary>
         /// BACKUP ENGINE
         /// </summary>
@@ -190,7 +232,7 @@ namespace Game_Library.Services
                     foreach (var file in files) file.Delete();
                 }
             }
-            catch { /* Chặn lỗi âm thầm để không ảnh hưởng luồng công việc chính của người dùng */ }
+            catch {  }
         }
         private void RestoreLatestBackup()
         {

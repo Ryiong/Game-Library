@@ -42,13 +42,13 @@ namespace Game_Library.Services
                 try
                 {
                     var context = await _listener.GetContextAsync();
-                    ProcessRequest(context);
+                    _ = Task.Run(() => ProcessRequestAsync(context));
                 }
                 catch { /* Bỏ qua lỗi khi tắt server đột ngột */ }
             }
         }
 
-        private void ProcessRequest(HttpListenerContext context)
+        private async Task ProcessRequestAsync(HttpListenerContext context)
         {
             try
             {
@@ -67,8 +67,6 @@ namespace Game_Library.Services
 
                 if (File.Exists(finalFullPath))
                 {
-                    byte[] responseBytes = File.ReadAllBytes(finalFullPath);
-
                     string ext = Path.GetExtension(finalFullPath).ToLower();
                     context.Response.ContentType = ext switch
                     {
@@ -84,8 +82,11 @@ namespace Game_Library.Services
                         _ => "application/octet-stream",
                     };
 
-                    context.Response.ContentLength64 = responseBytes.Length;
-                    context.Response.OutputStream.Write(responseBytes, 0, responseBytes.Length);
+                    using (FileStream fs = new FileStream(finalFullPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 81920, useAsync: true))
+                    {
+                        context.Response.ContentLength64 = fs.Length;
+                        await fs.CopyToAsync(context.Response.OutputStream);
+                    }
                 }
                 else
                 {
