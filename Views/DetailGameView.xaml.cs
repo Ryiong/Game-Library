@@ -99,6 +99,26 @@ namespace Game_Library.Views
             };
             SlideshowTranslate.BeginAnimation(TranslateTransform.XProperty, slideAnimation);
             UpdatePaginationDots();
+            try
+            {
+                var container = icSlideshowImages.ItemContainerGenerator.ContainerFromIndex(ViewModel.CurrentSlideIndex) as ContentPresenter;
+                if (container != null && VisualTreeHelper.GetChildrenCount(container) > 0)
+                {
+                    var grid = VisualTreeHelper.GetChild(container, 0) as Grid;
+                    if (grid != null)
+                    {
+                        foreach (var child in grid.Children)
+                        {
+                            if (child is MediaElement gif && gif.Visibility == Visibility.Visible)
+                            {
+                                gif.Position = TimeSpan.FromMilliseconds(1);
+                                gif.Play();
+                            }
+                        }
+                    }
+                }
+            }
+            catch { /* Chặn lỗi truy vấn UI visual tree */ }
         }
 
         private void PrevSlide_Click(object sender, RoutedEventArgs e)
@@ -117,6 +137,23 @@ namespace Game_Library.Views
                 ? 0
                 : ViewModel.CurrentSlideIndex + 1;
             AnimateSlide();
+        }
+
+        private void GifPlayer_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is MediaElement mediaElement)
+            {
+                mediaElement.Play();
+            }
+        }
+
+        private void GifPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            if (sender is MediaElement mediaElement)
+            {
+                mediaElement.Position = TimeSpan.FromMilliseconds(1);
+                mediaElement.Play();
+            }
         }
     }
 }

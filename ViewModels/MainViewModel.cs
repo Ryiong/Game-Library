@@ -81,11 +81,13 @@ namespace Game_Library.ViewModels
         public MainViewModel()
         {
             GameDataService.Instance.OnStatusChanged += (msg) => StatusText = msg;
+            GameDataService.Instance.OnLogChanged += (log) => LogText = log;
             GameDataService.Instance.InitializeData();
             CurrentView = new AllGamesView();
 
             SidebarSelectedIndex = 0;
             StatusText = "Server Status: Off";
+            LogText = "Welcome.";
 
             ReturnCommand = new RelayCommand(_ => ExecuteReturn());
             AddGameCommand = new RelayCommand(_ => ExecuteAddGame());
@@ -132,6 +134,7 @@ namespace Game_Library.ViewModels
             _sidebarSelectedIndex = -1;
             OnPropertyChanged(nameof(SidebarSelectedIndex));
             ToggleHeader(isDetailMode: true);
+            GameDataService.Instance.Log($"Đang khởi chạy trò chơi: {selectedGame.Title}");
         }
 
         private void ExecuteReturn()
@@ -176,6 +179,7 @@ namespace Game_Library.ViewModels
             {
                 PasswordDialog authDialog = new PasswordDialog();
                 authDialog.Owner = System.Windows.Application.Current.MainWindow;
+                GameDataService.Instance.Log("Mở khóa nội dung Giới hạn (NSFW).");
 
                 if (authDialog.ShowDialog() == true)
                 {
@@ -192,6 +196,7 @@ namespace Game_Library.ViewModels
             else
             {
                 MainWindow.SetNsfwStatus(true);
+                GameDataService.Instance.Log("Hi");
                 RefreshCurrentTab();
             }
         }
@@ -206,6 +211,11 @@ namespace Game_Library.ViewModels
         {
             IsDefaultHeaderVisible = !isDetailMode;
             IsDetailHeaderVisible = isDetailMode;
+        }
+
+        public void Log(string message)
+        {
+            LogText = $"[{DateTime.Now:HH:mm:ss}] {message}";
         }
     }
 }

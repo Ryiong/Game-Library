@@ -177,11 +177,20 @@
                 <Border Grid.Row="2" VerticalAlignment="Bottom" CornerRadius="0,0,14,0" Background="#E5F0EC" >
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="LogApp" Text="{Binding LogText}" FontSize="15" HorizontalAlignment="Left" Margin="15,0,0,0" Padding="0,4,0,4" FontWeight="Medium"/>
-                        <TextBlock x:Name="ServerStatus" Text="{Binding StatusText}" FontSize="15" HorizontalAlignment="Right" Margin="0,0,15,0" Padding="0,4,0,4" FontWeight="Medium"/>
+                        <TextBlock x:Name="LogApp" Grid.Column="0"
+                                   Text="{Binding LogText}" FontSize="15"
+                                   HorizontalAlignment="Left" Margin="15,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Padding="0,4,0,4" FontWeight="Medium"
+                                   TextTrimming="CharacterEllipsis"/>
+                        <TextBlock x:Name="ServerStatus" Grid.Column="1"
+                                   Text="{Binding StatusText}" FontSize="15"
+                                   HorizontalAlignment="Right" Margin="0,0,15,0"
+                                   Padding="0,4,0,4" FontWeight="Medium"
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
 

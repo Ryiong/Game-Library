@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="/Resources/Icon.xaml"/>
                 <ResourceDictionary Source="/Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

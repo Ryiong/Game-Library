@@ -70,13 +70,13 @@ namespace Game_Library.Views
 
                 _htmlServer = new GameHttpServer();
                 _htmlServer.Start(gameFolderPath);
-
+                GameDataService.Instance.Log($"Live Server khởi chạy tại cổng 8080 cho game {ViewModel.GameData.Title}");
                 GameDataService.Instance.SaveGameAsync(ViewModel.GameData, true);
 
-                //if (Application.Current.MainWindow is MainWindow mainWindow)
-                //{
-                //    mainWindow.ServerStatus.Text = "Server Status: Active";
-                //}
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    mainWindow.ServerStatus.Text = "Server Status: Active";
+                }
 
                 await htmlWebView.EnsureCoreWebView2Async();
                 await htmlWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(

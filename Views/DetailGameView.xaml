@@ -29,7 +29,7 @@
                             <StackPanel.RenderTransform>
                                 <TranslateTransform x:Name="SlideshowTranslate"/>
                             </StackPanel.RenderTransform>
-                            <ItemsControl x:Name="icSlideshowImages">
+                            <ItemsControl x:Name="icSlideshowImages" ItemsSource="{Binding SlideshowImages}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -39,12 +39,13 @@
                                     <DataTemplate>
                                         <Grid Width="425" Height="281">
                                             <MediaElement x:Name="gifPlayer" 
-                                                Source="{Binding Converter={StaticResource ThumbConverter}}" 
-                                                LoadedBehavior="Play" 
-                                                UnloadedBehavior="Manual" 
+                                                Source="{Binding Converter={StaticResource ThumbConverter}, ConverterParameter=AsUri}"
+                                                LoadedBehavior="Manual" 
+                                                UnloadedBehavior="Manual"
+                                                MediaEnded="GifPlayer_MediaEnded"
                                                 IsMuted="True" 
                                                 Stretch="Uniform"
-                                                Visibility="Collapsed"/>
+                                                Visibility="Collapsed" MediaOpened="GifPlayer_MediaOpened"/>
                                             <Image x:Name="staticImage" 
                                                 Source="{Binding Converter={StaticResource ThumbConverter}}" 
                                                 Stretch="Uniform"
@@ -81,19 +82,19 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <TextBlock Text="{Binding Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding CurrentGame.Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="Type: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
-                        <TextBlock Text="{Binding Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CurrentGame.Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15" ext:TextBlockExtensions.MaxLines="10"/>
+                    <TextBlock Text="{Binding CurrentGame.Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15" ext:TextBlockExtensions.MaxLines="10"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="Added Date: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
-                        <TextBlock Text="{Binding AddedDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CurrentGame.AddedDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="Release Date: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
-                        <TextBlock Text="{Binding ReleaseDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CurrentGame.ReleaseDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">

@@ -10,9 +10,11 @@ namespace Game_Library.Extensions
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return null;
+            if (value == null) return GetPlaceholderImage();
             string relativePath = value.ToString();
-            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
+            string fullPath = Path.IsPathRooted(relativePath)
+                    ? relativePath
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
 
             if (parameter?.ToString() == "IsGif")
             {
@@ -21,18 +23,18 @@ namespace Game_Library.Extensions
 
             if (File.Exists(fullPath))
             {
-                if (relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                if (parameter?.ToString() == "AsUri" || relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
                 {
-                    return new Uri(fullPath);
+                    return new Uri(fullPath, UriKind.Absolute);
                 }
 
                 try
                 {
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(fullPath);
+                    bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
 
-                    bitmap.DecodePixelWidth = 350;
+                    bitmap.DecodePixelWidth = 550;
 
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
@@ -56,7 +58,7 @@ namespace Game_Library.Extensions
                 BitmapImage placeholder = new BitmapImage();
                 placeholder.BeginInit();
                 placeholder.UriSource = new Uri("pack://application:,,,/Resources/Thumbnail-Placeholder.jpg", UriKind.Absolute);
-                placeholder.DecodePixelWidth = 250;
+                placeholder.DecodePixelWidth = 400;
                 placeholder.CacheOption = BitmapCacheOption.OnLoad;
                 placeholder.EndInit();
                 placeholder.Freeze();

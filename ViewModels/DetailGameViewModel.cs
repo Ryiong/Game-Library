@@ -86,7 +86,7 @@ namespace Game_Library.ViewModels
             ToggleFavoriteCommand = new RelayCommand(_ => ExecuteToggleFavorite());
             PlayNowCommand = new RelayCommand(_ => ExecutePlayNow());
             EditGameCommand = new RelayCommand(_ => ExecuteEditGame());
-            DeleteGameCommand = new RelayCommand(_ => _ = ExecuteDeleteGameAsync()); // Xử lý bất đồng bộ ngầm an toàn
+            DeleteGameCommand = new RelayCommand(_ => _ = ExecuteDeleteGameAsync());
             OpenRelatedGameCommand = new RelayCommand(p => ExecuteOpenRelatedGame(p));
 
             LoadGameData();
@@ -106,7 +106,10 @@ namespace Game_Library.ViewModels
             {
                 foreach (var img in CurrentGame.ImageInGame)
                 {
-                    if (!string.IsNullOrEmpty(img)) SlideshowImages.Add(img);
+                    if (!string.IsNullOrEmpty(img) && !SlideshowImages.Contains(img))
+                    {
+                        SlideshowImages.Add(img);
+                    }
                 }
             }
 

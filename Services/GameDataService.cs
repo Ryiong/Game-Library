@@ -17,6 +17,9 @@ namespace Game_Library.Services
 
         private readonly ReaderWriterLockSlim _fileLock = new ReaderWriterLockSlim();
 
+        public delegate void LogChangedHandler(string logMessage);
+        public event LogChangedHandler OnLogChanged;
+
         public List<GameModels> AllGames { get; set; } = new List<GameModels>();
 
         public event Action<string> OnStatusChanged;
@@ -62,7 +65,7 @@ namespace Game_Library.Services
         public async Task<bool> SaveGameAsync(GameModels targetGame, bool isEditMode)
         {
             OnStatusChanged?.Invoke("System: Ứng dụng đang thực hiện tối ưu hóa ảnh và đóng gói dữ liệu ngầm...");
-
+            Log("System: Đang tối ưu hoá ảnh và chuyển dữ liệu");
             return await Task.Run(() =>
             {
                 _fileLock.EnterWriteLock();
@@ -98,6 +101,7 @@ namespace Game_Library.Services
                         WriteIndented = true,
                         Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
                     };
+                    Log("Đã lưu thành công game");
 
                     string jsonString = JsonSerializer.Serialize(AllGames, options);
                     File.WriteAllText(jsonPath, jsonString, Encoding.UTF8);
@@ -108,6 +112,7 @@ namespace Game_Library.Services
                 catch (Exception ex)
                 {
                     LogToFile($"Lỗi phát sinh trong tiến trình SaveGameAsync: {ex.Message}");
+                    Log("Lỗi phát sinh trong tiến trình Save Game");
                     OnStatusChanged?.Invoke("Server Status: Xảy ra lỗi khi lưu tệp tin");
                     return false;
                 }
@@ -152,6 +157,7 @@ namespace Game_Library.Services
                     }
 
                     OnStatusChanged?.Invoke("Server Status: Online");
+                    Log("Đã xoá game khỏi thư viện");
                     return true;
                 }
                 catch (Exception ex)
@@ -213,6 +219,12 @@ namespace Game_Library.Services
                 File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}{Environment.NewLine}");
             }
             catch { }
+        }
+
+        public void Log(string message)
+        {
+            string formattedLog = $"{message}";
+            OnLogChanged?.Invoke(formattedLog);
         }
     }
 }
