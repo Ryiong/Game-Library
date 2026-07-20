@@ -33,6 +33,9 @@ namespace Game_Library.Views
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SetMenu(IntPtr hWnd, IntPtr hMenu);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
         private const int GWL_STYLE = -16;
         private const int WS_VISIBLE = 0x10000000;
 
@@ -41,7 +44,41 @@ namespace Game_Library.Views
             InitializeComponent();
             ViewModel = new GameViewModel(selectedGame);
             this.DataContext = ViewModel;
+
             ViewModel.RequestCloseGame += CloseGameProcess;
+
+            ViewModel.SetMuteAction = (isMuted) =>
+            {
+                if (htmlWebView?.CoreWebView2 != null)
+                {
+                    htmlWebView.CoreWebView2.IsMuted = isMuted;
+                }
+                if (_flashProcess != null && !_flashProcess.HasExited)
+                {
+                    const int WM_APPCOMMAND = 0x0319;
+                    const int APPCOMMAND_VOLUME_MUTE = 0x80000;
+                    SendMessage(_flashProcess.MainWindowHandle, WM_APPCOMMAND, _flashProcess.MainWindowHandle, (IntPtr)APPCOMMAND_VOLUME_MUTE);
+                }
+            };
+
+            ViewModel.SetVolumeAction = (volumeRatio) =>
+            {
+                if (htmlWebView?.CoreWebView2 != null)
+                {
+                    htmlWebView.CoreWebView2.IsMuted = (volumeRatio == 0 || ViewModel.IsMuted);
+                }
+            };
+
+            ViewModel.ToggleFullscreenAction = () =>
+            {
+                var parentWindow = Window.GetWindow(this);
+                if (parentWindow != null)
+                {
+                    parentWindow.WindowState = (parentWindow.WindowState == WindowState.Maximized)
+                        ? WindowState.Normal
+                        : WindowState.Maximized;
+                }
+            };
 
             Loaded += (s, e) => GameView_Load(s, e);
         }
@@ -52,7 +89,7 @@ namespace Game_Library.Views
             {
                 wfHost.Visibility = Visibility.Visible;
                 htmlWebView.Visibility = Visibility.Collapsed;
-                LaunchFlashGame(); // Chạy hàm xử lý Win32 API cũ của bạn
+                LaunchFlashGame();
             }
             else if (ViewModel.GameData.Type.Equals("HTML5", StringComparison.OrdinalIgnoreCase))
             {
@@ -212,10 +249,10 @@ namespace Game_Library.Views
                 _htmlServer.Stop();
                 _htmlServer = null;
 
-                //if (Application.Current.MainWindow is MainWindow main)
-                //{
-                //    main.ServerStatus.Text = "Server Status: Off";
-                //}
+                if (Application.Current.MainWindow is MainWindow main)
+                {
+                    main.ServerStatus.Text = "Server Status: Off";
+                }
             }
         }
 

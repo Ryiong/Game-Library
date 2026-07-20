@@ -98,7 +98,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="EditButton" Style="{StaticResource NonableButtonStyle}" Height="30" Margin="10, 0" Command="{Binding EditGameCommand}">
+                    <Button x:Name="EditButton" Style="{StaticResource NonableButtonStyle}" Height="30" Margin="10, 0" Click="EditButton_Click">
                         <Control Template="{StaticResource IconEdit}" Width="20" Height="20" Foreground="#046B59" VerticalAlignment="Center"/>
                     </Button>
                     <Button x:Name="DeleteButton" Style="{StaticResource NonableButtonStyle}" Height="30" Command="{Binding DeleteGameCommand}">

@@ -157,12 +157,17 @@ namespace Game_Library.ViewModels
 
         private void ExecuteEditGame()
         {
+            SlideshowImages.Clear();
             AddGameWindow editWindow = new AddGameWindow(CurrentGame);
             editWindow.Owner = Application.Current.MainWindow;
             if (editWindow.ShowDialog() == true)
             {
                 LoadGameData();
                 MainWindow.Instance.NavigateToDetail(CurrentGame);
+            }
+            else
+            {
+                LoadGameData();
             }
         }
 

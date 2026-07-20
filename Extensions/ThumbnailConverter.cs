@@ -23,24 +23,27 @@ namespace Game_Library.Extensions
 
             if (File.Exists(fullPath))
             {
-                if (parameter?.ToString() == "AsUri" || relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
-                {
-                    return new Uri(fullPath, UriKind.Absolute);
-                }
-
                 try
                 {
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
+                    if (parameter?.ToString() == "AsUri" || relativePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return new Uri(fullPath, UriKind.Absolute);
+                    }
 
-                    bitmap.DecodePixelWidth = 550;
+                    using (FileStream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
 
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    bitmap.Freeze();
+                        bitmap.DecodePixelWidth = 550;
 
-                    return bitmap;
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        bitmap.Freeze();
+
+                        return bitmap;
+                    }
                 }
                 catch
                 {

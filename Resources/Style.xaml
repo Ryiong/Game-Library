@@ -582,7 +582,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Header Text Style -->
     <Style x:Key="MenuHeaderStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="20"/>
@@ -590,7 +590,7 @@
         <Setter Property="Foreground" Value="#046B59"/>
         <Setter Property="Margin" Value="12,0,0,15"/>
     </Style>
-    
+
     <!-- Sidebar Menu List Style -->
     <Style x:Key="MenuListBoxStyle" TargetType="ListBox">
         <Setter Property="Background" Value="Transparent"/>
@@ -625,7 +625,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="MenuItemTextStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="Light"/>
@@ -638,7 +638,7 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="MenuItemIconStyle" TargetType="Control">
         <Setter Property="Foreground" Value="#576865"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -686,7 +686,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Non Button Style-->
     <Style x:Key="NonableButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -707,11 +707,11 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-                
+
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Switch Button IOS Style -->
     <Style x:Key="ModernToggleSwitchStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Width" Value="50"/>
@@ -758,7 +758,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Glass Button -->
     <Style x:Key="GlassStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -782,7 +782,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Input Style -->
     <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="#F2F2F2"/>
@@ -804,7 +804,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Input label style -->
     <Style x:Key="InputHeaderLabelStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#3E4945"/>
@@ -814,7 +814,7 @@
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="Margin" Value="0,0,15,0"/>
     </Style>
-    
+
     <!-- Preview Text Style -->
     <Style x:Key="PreviewDataTextStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#777777"/>
@@ -822,7 +822,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
-    
+
     <!-- ComboBox Style -->
     <Style x:Key="ComboBoxToggleButtonStyle" TargetType="ToggleButton">
         <Setter Property="Template">
@@ -899,69 +899,69 @@
     </Style>
 
     <!-- Scroll Style -->
-<Style TargetType="Thumb" x:Key="{x:Type Thumb}">
-    <Setter Property="OverridesDefaultStyle" Value="true"/>
-    <Setter Property="IsTabStop" Value="false"/>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="Thumb">
-                <Border Background="#CCCCCC" CornerRadius="4" Margin="1,2" x:Name="thumbBorder"/>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="thumbBorder" Property="Background" Value="#046B59"/>
-                    </Trigger>
-                    <Trigger Property="IsDragging" Value="True">
-                        <Setter TargetName="thumbBorder" Property="Background" Value="#035446"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
+    <Style TargetType="Thumb" x:Key="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="IsTabStop" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border Background="#CCCCCC" CornerRadius="4" Margin="1,2" x:Name="thumbBorder"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="thumbBorder" Property="Background" Value="#046B59"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="thumbBorder" Property="Background" Value="#035446"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-<Style TargetType="ScrollBar" x:Key="{x:Type ScrollBar}">
-    <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
-    <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-    <Setter Property="Background" Value="#F5F5F7"/>
-    <Setter Property="BorderBrush" Value="Transparent"/>
-    <Setter Property="Width" Value="8"/>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="ScrollBar">
-                <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="{TemplateBinding Background}">
-                    <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
-                        <Track.DecreaseRepeatButton>
-                            <RepeatButton Command="ScrollBar.PageUpCommand" Background="Transparent" BorderThickness="0">
-                                <RepeatButton.Template>
-                                    <ControlTemplate TargetType="RepeatButton">
-                                        <Border Background="Transparent"/>
-                                    </ControlTemplate>
-                                </RepeatButton.Template>
-                            </RepeatButton>
-                        </Track.DecreaseRepeatButton>
-                        <Track.IncreaseRepeatButton>
-                            <RepeatButton Command="ScrollBar.PageDownCommand" Background="Transparent" BorderThickness="0">
-                                <RepeatButton.Template>
-                                    <ControlTemplate TargetType="RepeatButton">
-                                        <Border Background="Transparent"/>
-                                    </ControlTemplate>
-                                </RepeatButton.Template>
-                            </RepeatButton>
-                        </Track.IncreaseRepeatButton>
-                        <Track.Thumb>
-                            <Thumb />
-                        </Track.Thumb>
-                    </Track>
-                </Grid>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="Orientation" Value="Horizontal">
-                        <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
+    <Style TargetType="ScrollBar" x:Key="{x:Type ScrollBar}">
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+        <Setter Property="Background" Value="#F5F5F7"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="{TemplateBinding Background}">
+                        <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Background="Transparent" BorderThickness="0">
+                                    <RepeatButton.Template>
+                                        <ControlTemplate TargetType="RepeatButton">
+                                            <Border Background="Transparent"/>
+                                        </ControlTemplate>
+                                    </RepeatButton.Template>
+                                </RepeatButton>
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Background="Transparent" BorderThickness="0">
+                                    <RepeatButton.Template>
+                                        <ControlTemplate TargetType="RepeatButton">
+                                            <Border Background="Transparent"/>
+                                        </ControlTemplate>
+                                    </RepeatButton.Template>
+                                </RepeatButton>
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb />
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!-- Check ComboBox -->
     <Style x:Key="CheckComboBoxToggleButtonStyle" TargetType="ToggleButton">
         <Setter Property="Template">
@@ -1045,7 +1045,7 @@
 
                         <Popup x:Name="PART_Popup"  AllowsTransparency="True" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="Slide" VerticalOffset="4" StaysOpen="False">
                             <Border Background="#F2F2F2" BorderBrush="#D6D6D6" BorderThickness="1" CornerRadius="8" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
-                                <ScrollViewer Style="{StaticResource ModernScrollViewer}">
+                                <ScrollViewer>
                                     <ListBox x:Name="PART_ListBox" ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}" ItemContainerStyle="{StaticResource CheckComboBoxItemStyle}" SelectionMode="Multiple" BorderThickness="0" Background="Transparent" DisplayMemberPath="Title">
                                     </ListBox>
                                 </ScrollViewer>

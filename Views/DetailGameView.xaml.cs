@@ -155,5 +155,41 @@ namespace Game_Library.Views
                 mediaElement.Play();
             }
         }
+
+        public void ClearMediaElements()
+        {
+            try
+            {
+                if (icSlideshowImages != null)
+                {
+                    for (int i = 0; i < icSlideshowImages.Items.Count; i++)
+                    {
+                        var container = icSlideshowImages.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ContentPresenter;
+                        if (container != null && System.Windows.Media.VisualTreeHelper.GetChildrenCount(container) > 0)
+                        {
+                            var grid = System.Windows.Media.VisualTreeHelper.GetChild(container, 0) as System.Windows.Controls.Grid;
+                            if (grid != null)
+                            {
+                                foreach (var child in grid.Children)
+                                {
+                                    if (child is System.Windows.Controls.MediaElement mediaElement)
+                                    {
+                                        mediaElement.Stop();
+                                        mediaElement.Source = null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { /* Chặn lỗi truy vấn UI visual tree */ }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearMediaElements();
+            ViewModel.EditGameCommand.Execute(null);
+        }
     }
 }

@@ -16,33 +16,64 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="42"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Background="White" BorderBrush="#E6F2ED" BorderThickness="0,0,0,1" Padding="15,0">
             <Grid>
-                <Button x:Name="btnExitGame" 
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Center" 
-                        Style="{StaticResource NonableButtonStyle}" 
-                        Cursor="Hand" 
-                        Command="{Binding ExitGameCommand}">
-                    <Button.Content>
-                        <Control Template="{StaticResource IconClose}" Width="22" Height="22" Foreground="#046B59"/>
-                    </Button.Content>
-                </Button>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 <TextBlock x:Name="lblPlayingGameTitle" 
                            Text="{Binding PlayingTitle}" 
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 
                            FontSize="13"
+                           Grid.Column="0"
                            FontWeight="Bold" 
                            Foreground="#046B59"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding ToggleMuteCommand}"
+                            Style="{StaticResource NonableButtonStyle}"
+                            Margin="0,0,6,0"
+                            Cursor="Hand"
+                            ToolTip="Tắt/Mở âm thanh">
+                        <Button.Content>
+                            <Control Template="{StaticResource IconAudio}" Width="22" Height="22" Foreground="#046B59"/>
+                        </Button.Content>
+                    </Button>
+                    <Slider Width="90" 
+                            Minimum="0" Maximum="100" 
+                            Value="{Binding VolumeLevel, Mode=TwoWay}" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,15,0"
+                            ToolTip="{Binding VolumeLevel, StringFormat='Âm lượng: {0:0}%'}"/>
+                    <Button Command="{Binding FullscreenCommand}"
+                            Style="{StaticResource NonableButtonStyle}"
+                            Margin="0,0,12,0"
+                            Cursor="Hand">
+                        <Button.Content>
+                            <Control Template="{StaticResource IconFullscreen}" Width="22" Height="22" Foreground="#046B59"/>
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="btnExitGame" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center" 
+                            Style="{StaticResource NonableButtonStyle}" 
+                            Cursor="Hand"
+                            Command="{Binding ExitGameCommand}">
+                        <Button.Content>
+                            <Control Template="{StaticResource IconClose}" Width="22" Height="22" Foreground="#046B59"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" Background="#CCCCCC" SizeChanged="GameContainer_SizeChanged">
+        <Grid Grid.Row="1" Background="#CCCCCC" x:Name="GameContainer" ClipToBounds="True">
             <wfi:WindowsFormsHost x:Name="wfHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <wf:Panel x:Name="pnlGameContainer" BackColor="LightGray" />
             </wfi:WindowsFormsHost>
@@ -53,7 +84,7 @@
                 VerticalAlignment="Center" 
                 FontSize="18" 
                 FontWeight="SemiBold" 
-                Foreground="#555555" 
+                Foreground="#555555" Panel.ZIndex="99"
                 Visibility="{Binding IsLoadingVisible, Converter={StaticResource BoolToVisConverter}}"/>
         </Grid>
     </Grid>

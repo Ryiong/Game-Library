@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -63,6 +64,8 @@ namespace Game_Library.ViewModels
         #region Commands
         public ICommand SelectThumbnailCommand { get; }
         public ICommand SelectInGameImagesCommand { get; }
+        public ICommand RemoveThumbnailCommand { get; }
+        public ICommand RemoveInGameImageCommand { get; }
         public ICommand SelectFolderCommand { get; }
         public ICommand SelectSingleFileCommand { get; }
         public ICommand SaveCommand { get; }
@@ -79,6 +82,9 @@ namespace Game_Library.ViewModels
             SelectFolderCommand = new RelayCommand(_ => ExecuteSelectFolder());
             SelectSingleFileCommand = new RelayCommand(_ => ExecuteSelectSingleFile());
             SaveCommand = new RelayCommand(async w => await ExecuteSaveAsync(w));
+
+            RemoveThumbnailCommand = new RelayCommand(_ => ExecuteRemoveThumbnail());
+            RemoveInGameImageCommand = new RelayCommand(param => ExecuteRemoveInGameImage(param));
 
             LoadRelatedGamesData();
 
@@ -111,8 +117,25 @@ namespace Game_Library.ViewModels
             IsNsfw = _editingGame.isNSFW;
             SelectedType = _editingGame.Type;
 
-            if (DateTime.TryParse(_editingGame.AddedDate, out DateTime aDate)) AddedDate = aDate;
-            if (DateTime.TryParse(_editingGame.ReleaseDate, out DateTime rDate)) ReleaseDate = rDate;
+            if (!string.IsNullOrEmpty(_editingGame.AddedDate) &&
+        DateTime.TryParseExact(_editingGame.AddedDate, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime aDate))
+            {
+                AddedDate = aDate;
+            }
+            else if (DateTime.TryParse(_editingGame.AddedDate, out DateTime fallbackADate))
+            {
+                AddedDate = fallbackADate;
+            }
+
+            if (!string.IsNullOrEmpty(_editingGame.ReleaseDate) &&
+                DateTime.TryParseExact(_editingGame.ReleaseDate, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime rDate))
+            {
+                ReleaseDate = rDate;
+            }
+            else if (DateTime.TryParse(_editingGame.ReleaseDate, out DateTime fallbackRDate))
+            {
+                ReleaseDate = fallbackRDate;
+            }
 
             if (!string.IsNullOrEmpty(_editingGame.Thumbnail))
             {
@@ -144,13 +167,17 @@ namespace Game_Library.ViewModels
 
         private System.Windows.Media.Imaging.BitmapImage LoadImageUnloaded(string path)
         {
-            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(path);
-            bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
-            return bitmap;
+            if (!File.Exists(path)) return null;
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = stream;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                bitmap.Freeze();
+                return bitmap;
+            }
         }
 
         #region Execution Logic
@@ -161,6 +188,7 @@ namespace Game_Library.ViewModels
             {
                 SelectedThumbnailPath = ofd.FileName;
                 ThumbnailSource = LoadImageUnloaded(ofd.FileName);
+                OnPropertyChanged(nameof(ThumbnailSource));
             }
         }
 
@@ -229,6 +257,11 @@ namespace Game_Library.ViewModels
                 return;
             }
 
+            if (windowParam is AddGameWindow addWindow)
+            {
+                addWindow.ClearPreviewMedia();
+            }
+
             SaveButtonContent = "Processing...";
 
             string gameId = _isEditMode ? _editingGame.Id : Guid.NewGuid().ToString();
@@ -255,10 +288,20 @@ namespace Game_Library.ViewModels
                     }
 
                     string finalThumbnailRelativePath = _editingGame?.Thumbnail ?? "";
-                    if (!string.IsNullOrEmpty(SelectedThumbnailPath) && SelectedThumbnailPath != Path.Combine(AppDomain.CurrentDomain.BaseDirectory, finalThumbnailRelativePath))
+                    if (!string.IsNullOrEmpty(SelectedThumbnailPath))
                     {
                         string targetThumbPath = Path.Combine(targetGameFolder, "thumbnail" + Path.GetExtension(SelectedThumbnailPath));
-                        ImageOptimizer.OptimizeAndSave(SelectedThumbnailPath, targetThumbPath);
+                        if (SelectedThumbnailPath != targetThumbPath)
+                        {
+                            try
+                            {
+                                ImageOptimizer.OptimizeAndSave(SelectedThumbnailPath, targetThumbPath);
+                            }
+                            catch
+                            {
+                                File.Copy(SelectedThumbnailPath, targetThumbPath, true);
+                            }
+                        }
                         finalThumbnailRelativePath = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, targetThumbPath);
                     }
 
@@ -266,16 +309,36 @@ namespace Game_Library.ViewModels
                     int imgIndex = 1;
                     foreach (var srcImgPath in SelectedInGameImages)
                     {
-                        if (srcImgPath.Contains(targetGameFolder))
+                        string fullSrcPath = Path.IsPathRooted(srcImgPath)
+                            ? srcImgPath
+                            : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, srcImgPath);
+
+                        string ext = Path.GetExtension(fullSrcPath);
+                        string targetImgPath = Path.Combine(targetGameFolder, $"ingame_{imgIndex++}{ext}");
+
+                        if (string.Equals(Path.GetFullPath(fullSrcPath), Path.GetFullPath(targetImgPath), StringComparison.OrdinalIgnoreCase))
                         {
-                            finalInGameRelativePaths.Add(Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, srcImgPath));
-                        }
-                        else
-                        {
-                            string targetImgPath = Path.Combine(targetGameFolder, $"ingame_{imgIndex++}{Path.GetExtension(srcImgPath)}");
-                            ImageOptimizer.OptimizeAndSave(srcImgPath, targetImgPath);
                             finalInGameRelativePaths.Add(Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, targetImgPath));
+                            continue;
                         }
+
+                        try
+                        {
+                            if (ext.Equals(".gif", StringComparison.OrdinalIgnoreCase))
+                            {
+                                File.Copy(fullSrcPath, targetImgPath, true);
+                            }
+                            else
+                            {
+                                ImageOptimizer.OptimizeAndSave(fullSrcPath, targetImgPath);
+                            }
+                        }
+                        catch
+                        {
+                            File.Copy(fullSrcPath, targetImgPath, true);
+                        }
+
+                        finalInGameRelativePaths.Add(Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, targetImgPath));
                     }
 
                     GameModels targetGame = _isEditMode ? _editingGame : new GameModels();
@@ -304,8 +367,9 @@ namespace Game_Library.ViewModels
 
                     return await GameDataService.Instance.SaveGameAsync(targetGame, _isEditMode);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    MessageBox.Show($"Bug: {ex.Message}", "Thất bại", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
             });
@@ -321,7 +385,7 @@ namespace Game_Library.ViewModels
             }
             else
             {
-                MessageBox.Show("Hệ thống nén ảnh hoặc ghi tệp tin gặp lỗi bất thường.", "Thất bại", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 SaveButtonContent = "Save";
             }
         }
@@ -352,6 +416,24 @@ namespace Game_Library.ViewModels
             }
             catch { }
             return item;
+        }
+        #endregion
+
+        #region Logic Xóa và Preview
+        private void ExecuteRemoveThumbnail()
+        {
+            SelectedThumbnailPath = null;
+            ThumbnailSource = null;
+            GameDataService.Instance.Log("Đã xóa ảnh bìa (Thumbnail).");
+        }
+
+        private void ExecuteRemoveInGameImage(object param)
+        {
+            if (param is string imgPath && SelectedInGameImages.Contains(imgPath))
+            {
+                SelectedInGameImages.Remove(imgPath);
+                GameDataService.Instance.Log($"Đã loại bỏ ảnh ingame: {Path.GetFileName(imgPath)}");
+            }
         }
         #endregion
     }

@@ -54,7 +54,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <!-- Input layout -->
-                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Disabled" Margin="0,0,6,0" Style="{DynamicResource ModernScrollViewer}">
+                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Disabled" Margin="0,0,6,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
@@ -90,7 +90,7 @@
                                     <ComboBoxItem Content="EXE" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                 </ComboBox>
                                 <TextBlock Grid.Column="2" Text="NSFW" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,0,15,0"/>
-                                <ToggleButton Grid.Column="3" x:Name="tgNsfw" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="False" HorizontalAlignment="Left" Margin="0,6"/>
+                                <ToggleButton Grid.Column="3" x:Name="tgNsfw" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="{Binding IsNsfw, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,6"/>
                             </Grid>
 
                             <!-- Description -->
@@ -106,10 +106,12 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Ngày thêm vào" Style="{StaticResource InputHeaderLabelStyle}"/>
-                                <DatePicker Grid.Column="1" x:Name="dpAddedDate" Style="{StaticResource MordemDatePicker}" Height="32"/>
+                                <DatePicker Grid.Column="1" x:Name="dpAddedDate" Style="{StaticResource MordemDatePicker}"
+                                            SelectedDate="{Binding AddedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
 
                                 <TextBlock Grid.Column="2" Text="Ngày ra mắt" Style="{StaticResource InputHeaderLabelStyle}"/>
-                                <DatePicker Grid.Column="3" x:Name="dpReleaseDate" Style="{StaticResource MordemDatePicker}" Height="32"/>
+                                <DatePicker Grid.Column="3" x:Name="dpReleaseDate" Style="{StaticResource MordemDatePicker}"
+                                            SelectedDate="{Binding ReleaseDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
                             </Grid>
 
                             <!-- Thumbnail -->
@@ -148,7 +150,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <WrapPanel Grid.Column="0" Orientation="Horizontal">
-                                    <Button x:Name="SelectImageInGame" Width="80" Height="80" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Margin="0,0,8,8" Cursor="Hand" Command="{Binding SelectFolderCommand}">
+                                    <Button x:Name="SelectImageInGame" Width="80" Height="80" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Margin="0,0,8,8" Cursor="Hand" Command="{Binding SelectInGameImagesCommand}">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="6"/>
@@ -181,7 +183,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Text="Final Information View" FontSize="16" FontWeight="Bold" Foreground="#046B59" HorizontalAlignment="Center" Margin="0,15"/>
 
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ModernScrollViewer}">
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                             <StackPanel>
                                 <Grid Margin="0,4">
                                     <Grid.ColumnDefinitions>
@@ -253,21 +255,74 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Thumbnail" Style="{StaticResource InputHeaderLabelStyle}" Foreground="#131E1B"/>
-                                    <Border Grid.Column="1" HorizontalAlignment="Left" Width="120" Height="80" CornerRadius="8" ClipToBounds="True" Background="#EDF2F0">
-                                        <Image x:Name="imgPreviewThumbnail" 
-           Stretch="UniformToFill"
-           Source="{Binding ElementName=txtTitle, Path=Text, Converter={StaticResource ThumbnailConverter}, ConverterParameter=Thumbnail, Mode=OneWay}"/>
-                                    </Border>
+                                    <Grid Grid.Column="1" HorizontalAlignment="Left">
+                                        <Border HorizontalAlignment="Left" Width="120" Height="80" CornerRadius="8" ClipToBounds="True" Background="#EDF2F0">
+                                            <Image x:Name="imgPreviewThumbnail" 
+                                                    Stretch="UniformToFill"
+                                                    Source="{Binding ThumbnailSource}"/>
+                                        </Border>
+                                        <Button Command="{Binding RemoveThumbnailCommand}"
+                                                Style="{StaticResource NonableButtonStyle}"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Margin="0,-5,-5,0" 
+                                                Cursor="Hand" Background="Transparent">
+                                            <Button.Content>
+                                                <Control Template="{StaticResource IconClose}" Width="20" Height="20" Foreground="#046B59"/>
+                                            </Button.Content>
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                                 <Grid Margin="0,8">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="ImageInGame" Style="{StaticResource InputHeaderLabelStyle}" Foreground="#131E1B"/>
-                                    <WrapPanel x:Name="wpPreviewIngame" Grid.Column="1" Orientation="Horizontal">
-
-                                    </WrapPanel>
+                                    <TextBlock Grid.Column="0" Text="ImageInGame" Style="{StaticResource InputHeaderLabelStyle}" Foreground="#131E1B" VerticalAlignment="Top"/>
+                                    <ItemsControl Grid.Column="1" ItemsSource="{Binding SelectedInGameImages}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Width="120" Height="80" Margin="0,0,10,10">
+                                                    <Grid>
+                                                        <MediaElement x:Name="gifPreviewPlayer"
+                                                                    Source="{Binding Converter={StaticResource ThumbnailConverter}, ConverterParameter=AsUri}"
+                                                                    LoadedBehavior="Play"
+                                                                    UnloadedBehavior="Manual"
+                                                                    MediaEnded="GifPreviewPlayer_MediaEnded"
+                                                                    IsMuted="True"
+                                                                    Stretch="UniformToFill"
+                                                                    Visibility="Collapsed"/>
+                                                        <Image x:Name="staticPreviewImage"
+                                                               Source="{Binding Converter={StaticResource ThumbnailConverter}}"
+                                                               Stretch="UniformToFill"
+                                                               Visibility="Visible"/>
+                                                    </Grid>
+                                                    <Button Command="{Binding DataContext.RemoveInGameImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}"
+                                                            Style="{StaticResource NonableButtonStyle}"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Margin="0,-5,-5,0"
+                                                            Cursor="Hand" Background="Transparent">
+                                                        <Button.Content>
+                                                            <Control Template="{StaticResource IconClose}" Width="20" Height="20" Foreground="#046B59"/>
+                                                        </Button.Content>
+                                                    </Button>
+                                                </Grid>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding Converter={StaticResource ThumbnailConverter}, ConverterParameter=IsGif}" Value="True">
+                                                        <Setter TargetName="gifPreviewPlayer" Property="Visibility" Value="Visible"/>
+                                                        <Setter TargetName="staticPreviewImage" Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </Grid>
 
                                 <Grid Margin="0,8">
