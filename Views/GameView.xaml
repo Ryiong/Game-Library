@@ -36,21 +36,23 @@
                            FontWeight="Bold" 
                            Foreground="#046B59"/>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Command="{Binding ToggleMuteCommand}"
-                            Style="{StaticResource NonableButtonStyle}"
-                            Margin="0,0,6,0"
-                            Cursor="Hand"
-                            ToolTip="Tắt/Mở âm thanh">
-                        <Button.Content>
-                            <Control Template="{StaticResource IconAudio}" Width="22" Height="22" Foreground="#046B59"/>
-                        </Button.Content>
-                    </Button>
-                    <Slider Width="90" 
-                            Minimum="0" Maximum="100" 
-                            Value="{Binding VolumeLevel, Mode=TwoWay}" 
-                            VerticalAlignment="Center" 
-                            Margin="0,0,15,0"
-                            ToolTip="{Binding VolumeLevel, StringFormat='Âm lượng: {0:0}%'}"/>
+                    <StackPanel x:Name="pnlAudioControls" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
+                        <Button Command="{Binding ToggleMuteCommand}"
+                                Style="{StaticResource NonableButtonStyle}"
+                                Margin="0,0,6,0"
+                                Cursor="Hand"
+                                ToolTip="Tắt/Mở âm thanh">
+                            <Button.Content>
+                                <Control Template="{StaticResource IconAudio}" Width="22" Height="22" Foreground="#046B59"/>
+                            </Button.Content>
+                        </Button>
+                        <Slider Width="90" 
+                                Minimum="0" Maximum="100" 
+                                Value="{Binding VolumeLevel, Mode=TwoWay}" 
+                                VerticalAlignment="Center" 
+                                Margin="0,0,15,0"
+                                ToolTip="{Binding VolumeLevel, StringFormat='Âm lượng: {0:0}%'}"/>
+                    </StackPanel>
                     <Button Command="{Binding FullscreenCommand}"
                             Style="{StaticResource NonableButtonStyle}"
                             Margin="0,0,12,0"

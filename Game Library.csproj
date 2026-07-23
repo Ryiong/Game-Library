@@ -9,8 +9,8 @@
     <UseWPF>true</UseWPF>
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <ApplicationIcon>Group-17.ico</ApplicationIcon>
-	  <AssemblyVersion>1.2.5</AssemblyVersion>
-	  <FileVersion>1.2.5</FileVersion>
+	  <AssemblyVersion>1.2.7</AssemblyVersion>
+	  <FileVersion>1.2.7</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

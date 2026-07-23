@@ -163,8 +163,13 @@ namespace Game_Library.ViewModels
             editWindow.Owner = Application.Current.MainWindow;
             if (editWindow.ShowDialog() == true)
             {
+                var updatedGame = GameDataService.Instance.AllGames.FirstOrDefault(g => g.Id == CurrentGame.Id);
+                if (updatedGame != null)
+                {
+                    CurrentGame = updatedGame;
+                }
                 LoadGameData();
-                MainWindow.Instance.NavigateToDetail(CurrentGame);
+                GameDataService.Instance.Log($"[UI RELOAD] Đã cập nhật thành công dữ liệu Detail View cho game: {CurrentGame.Title}");
             }
             else
             {

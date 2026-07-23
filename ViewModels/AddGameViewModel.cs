@@ -381,6 +381,7 @@ namespace Game_Library.ViewModels
 
             if (isSuccess)
             {
+                GameDataService.Instance.Log($"[AUTO RELOAD] Đã cập nhật thành công game: {Title}");
                 MessageBox.Show("Lưu trữ thông tin cấu hình trò chơi thành công!", "Hoàn tất", MessageBoxButton.OK, MessageBoxImage.Information);
                 if (windowParam is Window window)
                 {
@@ -390,7 +391,6 @@ namespace Game_Library.ViewModels
             }
             else
             {
-
                 SaveButtonContent = "Save";
             }
         }

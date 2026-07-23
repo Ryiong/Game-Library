@@ -102,6 +102,7 @@ namespace Game_Library.Services
                         Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
                     };
                     Log("Đã lưu thành công game");
+                    GameDataService.Instance.Log($"[EDIT/SAVE] Đã cập nhật thành công game: {targetGame.Title}");
 
                     string jsonString = JsonSerializer.Serialize(AllGames, options);
                     File.WriteAllText(jsonPath, jsonString, Encoding.UTF8);
@@ -267,6 +268,12 @@ namespace Game_Library.Services
         {
             string formattedLog = $"{message}";
             OnLogChanged?.Invoke(formattedLog);
+        }
+
+        public void LoadGames()
+        {
+            InitializeData();
+            Log("Đã tải lại toàn bộ danh sách game từ dữ liệu gốc.");
         }
     }
 }

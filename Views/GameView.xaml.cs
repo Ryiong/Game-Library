@@ -63,12 +63,14 @@ namespace Game_Library.Views
             {
                 wfHost.Visibility = Visibility.Visible;
                 htmlWebView.Visibility = Visibility.Collapsed;
+                pnlAudioControls.Visibility = Visibility.Collapsed;
                 LaunchFlashGame();
             }
             else if (ViewModel.GameData.Type.Equals("HTML5", StringComparison.OrdinalIgnoreCase))
             {
                 wfHost.Visibility = Visibility.Collapsed;
                 htmlWebView.Visibility = Visibility.Visible;
+                pnlAudioControls.Visibility = Visibility.Visible;
                 LaunchHtml5Game();
             }
         }
@@ -131,6 +133,11 @@ namespace Game_Library.Views
                 }
 
                 string fullSwfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", ViewModel.GameData.Id, ViewModel.GameData.MainFile);
+
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    mainWindow.ServerStatus.Text = "Flash Player: Active";
+                }
 
                 if (!File.Exists(fullSwfPath))
                 {
@@ -207,6 +214,8 @@ namespace Game_Library.Views
                 try { _flashProcess.Kill(); } catch { }
                 _flashProcess.Dispose();
                 _flashProcess = null;
+                if (Application.Current.MainWindow is MainWindow main)
+                    main.ServerStatus.Text = "Status: Sleep";
             }
 
             if (_htmlServer != null)
@@ -215,7 +224,7 @@ namespace Game_Library.Views
                 _htmlServer = null;
 
                 if (Application.Current.MainWindow is MainWindow main)
-                    main.ServerStatus.Text = "Server Status: Off";
+                    main.ServerStatus.Text = "Status: Sleep";
             }
         }
 

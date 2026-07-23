@@ -77,6 +77,7 @@ namespace Game_Library.ViewModels
 
         public ICommand ReturnCommand { get; }
         public ICommand AddGameCommand { get; }
+        public ICommand EditGameCommand { get; }
 
         public MainViewModel()
         {
@@ -94,6 +95,7 @@ namespace Game_Library.ViewModels
 
             ReturnCommand = new RelayCommand(_ => ExecuteReturn());
             AddGameCommand = new RelayCommand(_ => ExecuteAddGame());
+            EditGameCommand = new RelayCommand(param => ExecuteEditGame(param as GameModels));
         }
 
         private void NavigateToTab(int tabIndex)
@@ -141,7 +143,6 @@ namespace Game_Library.ViewModels
             _sidebarSelectedIndex = -1;
             OnPropertyChanged(nameof(SidebarSelectedIndex));
             ToggleHeader(isDetailMode: true);
-            GameDataService.Instance.Log($"Đang khởi chạy trò chơi: {selectedGame.Title}");
         }
 
         private void ExecuteReturn()
@@ -233,6 +234,39 @@ namespace Game_Library.ViewModels
         public void Log(string message)
         {
             LogText = $"[{DateTime.Now:HH:mm:ss}] {message}";
+        }
+
+        private void ExecuteEditGame(GameModels gameToEdit)
+        {
+            if (gameToEdit == null) return;
+
+            AddGameWindow editDialog = new AddGameWindow(gameToEdit);
+            editDialog.Owner = System.Windows.Application.Current.MainWindow;
+
+            if (editDialog.ShowDialog() == true)
+            {
+                GameDataService.Instance.LoadGames();
+
+                var updatedGame = GameDataService.Instance.AllGames.FirstOrDefault(g => g.Id == gameToEdit.Id);
+
+                if (updatedGame != null)
+                {    
+                    if (CurrentView is DetailGameView)
+                    {
+                        CurrentView = new DetailGameView(updatedGame);
+                    }
+                    else
+                    {
+                        RefreshCurrentTab();
+                    }
+                }
+                else
+                {
+                    RefreshCurrentTab();
+                }
+
+                GameDataService.Instance.Log($"[UI RELOAD] Đã làm mới giao diện cho trò chơi: {gameToEdit.Title}");
+            }
         }
     }
 }
