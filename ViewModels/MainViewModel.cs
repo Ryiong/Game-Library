@@ -113,6 +113,7 @@ namespace Game_Library.ViewModels
                 case 1: CurrentView = new FlashClassicsGames(); break;
                 case 2: CurrentView = new HTML5IndieView(); break;
                 case 3: CurrentView = new FavoritesGameView(); break;
+                case 4: CurrentView = new FutureGamesView(); break;
             }
             ToggleHeader(isDetailMode: false);
         }

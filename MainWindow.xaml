@@ -108,8 +108,8 @@
                                     <TextBlock Grid.Column="1" Text="Favorites" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-                            <!-- Live Server -->
-                            <ListBoxItem Focusable="False" IsSelected="False">
+                            <!-- Future Game -->
+                            <ListBoxItem>
                                 <ListBoxItem.CommandBindings>
                                     <CommandBinding/>
                                 </ListBoxItem.CommandBindings>
@@ -120,8 +120,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
-                                    <TextBlock Grid.Column="1" Text="Live Server"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-
+                                    <TextBlock Grid.Column="1" Text="Future Game"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
                         </ListBox>
