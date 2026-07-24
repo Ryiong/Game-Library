@@ -8,11 +8,12 @@
         mc:Ignorable="d"
         FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
         Title="Game Library" Height="730" Width="1051"
+        MinHeight="525" MinWidth="668"
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
-        ResizeMode="NoResize">
+        ResizeMode="CanResizeWithGrip">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="50"
                   UseAeroCaptionButtons="False"

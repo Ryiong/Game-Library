@@ -36,16 +36,17 @@
               VirtualizingPanel.IsVirtualizing="True"
               VirtualizingPanel.VirtualizationMode="Recycling"
               VirtualizingPanel.CacheLengthUnit="Page"
+              VirtualizingPanel.ScrollUnit="Pixel"
               VirtualizingPanel.CacheLength="1,1"
               Focusable="False">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Width="450" Height="140" Margin="0,0,0,16" Background="Transparent">
+                    <Border Height="140" Margin="0,0,0,16" Background="Transparent">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -82,7 +83,7 @@
                                 </Grid>
                             </Border>
 
-                            <StackPanel Grid.Column="2" Orientation="Vertical">
+                            <StackPanel Grid.Column="2" Orientation="Vertical" Margin="10,0,0,0">
                                 <TextBlock Text="{Binding Title}" Foreground="#555555" FontSize="13" FontWeight="SemiBold" Margin="0,5,0,2" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                 <TextBlock Text="{Binding ReleaseDate}" Foreground="#555555" FontSize="10" FontWeight="SemiBold"/>
                                 <TextBlock Text="{Binding Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,15" ext:TextBlockExtensions.MaxLines="10"/>

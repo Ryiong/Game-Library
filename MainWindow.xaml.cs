@@ -46,6 +46,7 @@ namespace Game_Library
         public MainWindow()
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
             Instance = this;
             ViewModel = new MainViewModel();
             this.DataContext = ViewModel;

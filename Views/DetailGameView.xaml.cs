@@ -8,17 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Application = System.Windows.Application;
-using Button = System.Windows.Controls.Button;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
-using MessageBox = System.Windows.MessageBox;
 
 namespace Game_Library.Views
 {
     public partial class DetailGameView : System.Windows.Controls.UserControl
     {
-        private const double SlideWidth = 425.0;
         public DetailGameViewModel ViewModel { get; private set; }
 
         public DetailGameView(GameModels selectedGame)
@@ -44,33 +40,33 @@ namespace Game_Library.Views
         {
             ClearMediaElements();
             this.Unloaded -= DetailGameView_Unloaded;
-            try
-            {
-                var itemsControl = icSlideshowImages;
-                if (itemsControl != null)
-                {
-                    for (int i = 0; i < itemsControl.Items.Count; i++)
-                    {
-                        var container = itemsControl.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
-                        if (container != null && VisualTreeHelper.GetChildrenCount(container) > 0)
-                        {
-                            var grid = VisualTreeHelper.GetChild(container, 0) as Grid;
-                            if (grid != null)
-                            {
-                                foreach (var child in grid.Children)
-                                {
-                                    if (child is MediaElement mediaElement)
-                                    {
-                                        mediaElement.Stop();
-                                        mediaElement.Source = null; // Gỡ luồng Uri để HĐH tự động giải phóng RAM ngay lập tức
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch { /* Chặn lỗi âm thầm khi dọn bộ nhớ */ }
+            //try
+            //{
+            //    var itemsControl = icSlideshowImages;
+            //    if (itemsControl != null)
+            //    {
+            //        for (int i = 0; i < itemsControl.Items.Count; i++)
+            //        {
+            //            var container = itemsControl.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
+            //            if (container != null && VisualTreeHelper.GetChildrenCount(container) > 0)
+            //            {
+            //                var grid = VisualTreeHelper.GetChild(container, 0) as Grid;
+            //                if (grid != null)
+            //                {
+            //                    foreach (var child in grid.Children)
+            //                    {
+            //                        if (child is MediaElement mediaElement)
+            //                        {
+            //                            mediaElement.Stop();
+            //                            mediaElement.Source = null; // Gỡ luồng Uri để HĐH tự động giải phóng RAM ngay lập tức
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch { /* Chặn lỗi âm thầm khi dọn bộ nhớ */ }
         }
 
         private void UpdatePaginationDots()
@@ -93,9 +89,10 @@ namespace Game_Library.Views
 
         private void AnimateSlide()
         {
+            double currentWidth = SlideshowViewContainer.ActualWidth > 0 ? SlideshowViewContainer.ActualWidth : 380.0;
             DoubleAnimation slideAnimation = new DoubleAnimation
             {
-                To = -(ViewModel.CurrentSlideIndex * SlideWidth),
+                To = -(ViewModel.CurrentSlideIndex * currentWidth),
                 Duration = TimeSpan.FromSeconds(0.3),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };

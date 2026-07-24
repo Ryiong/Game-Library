@@ -10,8 +10,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent"
-        ResizeMode="NoResize"
+        Background="Transparent" MinHeight="550" MinWidth="850"
+        ResizeMode="CanResizeWithGrip"
         Title="AddGameWindow" Height="600" Width="960">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="25"
@@ -54,7 +54,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <!-- Input layout -->
-                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Disabled" Margin="0,0,6,0">
+                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Auto" Margin="0,0,6,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
@@ -84,7 +84,7 @@
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Type" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,0,15,0"/>
-                                <ComboBox Grid.Column="1" x:Name="cbType" SelectedValue="{Binding SelectedType, Mode=TwoWay}" SelectedValuePath="Content" Style="{StaticResource RoundedComboBoxStyle}" Width="100" Height="34" Margin="0,6" Background="#F2F2F7" HorizontalAlignment="Left">
+                                <ComboBox Grid.Column="1" x:Name="cbType" SelectedValue="{Binding SelectedType, Mode=TwoWay}" SelectedValuePath="Content" Style="{StaticResource RoundedComboBoxStyle}" Width="90" Height="30" Margin="0,6" Background="#F2F2F7" HorizontalAlignment="Left">
                                     <ComboBoxItem Content="FLASH" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                     <ComboBoxItem Content="HTML5" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
                                     <ComboBoxItem Content="EXE" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
@@ -105,7 +105,7 @@
                                     <ColumnDefinition Width="110"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Ngày thêm vào" Style="{StaticResource InputHeaderLabelStyle}"/>
+                                <TextBlock Grid.Column="0" Text="Ngày thêm" Style="{StaticResource InputHeaderLabelStyle}"/>
                                 <DatePicker Grid.Column="1" x:Name="dpAddedDate" Style="{StaticResource MordemDatePicker}"
                                             SelectedDate="{Binding AddedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="32"/>
 
@@ -119,11 +119,11 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="110"/>
                                     <ColumnDefinition Width="90"/>
-                                    <ColumnDefinition Width="99"/>
+                                    <ColumnDefinition Width="86"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Ảnh bìa" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,10,15,0" Height="16" Width="43"/>
-                                <Button x:Name="SelectThumbnail" Grid.Column="1" Width="80" Height="80" HorizontalAlignment="Left" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Cursor="Hand" Command="{Binding SelectThumbnailCommand}">
+                                <Button x:Name="SelectThumbnail" Grid.Column="1" Width="80" HorizontalAlignment="Left" Background="#F8FAF9" BorderBrush="#046B59" BorderThickness="1.5" Cursor="Hand" Command="{Binding SelectThumbnailCommand}">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="8"/>
@@ -135,10 +135,10 @@
                                     </StackPanel>
                                 </Button>
 
-                                <TextBlock Grid.Column="2" Text="Import Folder / File" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,0,10,0" Height="35" Width="88" TextWrapping="Wrap"/>
-                                <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Top">
-                                    <Button x:Name="SelectFolder" Content="Chọn Folder game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Margin="0,0,0,6" Command="{Binding SelectFolderCommand}"/>
-                                    <Button x:Name="SelectSingleFile" Content="Chọn File game" Height="30" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SelectSingleFileCommand}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource InputHeaderLabelStyle}" VerticalAlignment="Top" Margin="0,0,10,0" Height="35" Width="69" TextWrapping="Wrap"><Run Text="Import"/><LineBreak/><Run Text="Folder / File"/></TextBlock>
+                                <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center" Height="66">
+                                    <Button x:Name="SelectFolder" Content="Chọn Folder game" Height="30" Width="120" Style="{StaticResource MacPrimaryButtonStyle}" Margin="0,0,0,6" Command="{Binding SelectFolderCommand}" HorizontalAlignment="Left"/>
+                                    <Button x:Name="SelectSingleFile" Content="Chọn File game" Height="30" Width="120" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SelectSingleFileCommand}" HorizontalAlignment="Left"/>
                                 </StackPanel>
                             </Grid>
 
@@ -166,8 +166,8 @@
                             </Grid>
                             <TextBlock Grid.Row="6" Grid.Column="0" Text="Game liên quan" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,12,15,12"/>
                             <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbRelatedGame" Style="{StaticResource ModernCheckComboBoxStyle}" ItemsSource="{Binding RelatedGames}" Text="-- Chọn game liên quan --" Height="34" Margin="0,6,5,6" Background="#F2F2F7" HorizontalAlignment="Stretch" DisplayMemberPath="Title" SelectedValuePath="Id"/>
-                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SaveCommand}" Margin="139,10,139,0" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
-                                    Content="{Binding SaveButtonContent}"/>
+                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SaveCommand}" Margin="0,15,0,0" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
+                                    Content="{Binding SaveButtonContent}" HorizontalAlignment="Left"/>
                         </Grid>
                     </ScrollViewer>
 

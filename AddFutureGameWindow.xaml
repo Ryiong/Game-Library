@@ -10,8 +10,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent"
-        ResizeMode="NoResize"
+        Background="Transparent" MinHeight="550" MinWidth="850"
+        ResizeMode="CanResizeWithGrip"
         Title="Add Future Game" Height="600" Width="960">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="25"
@@ -54,7 +54,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <!-- Input layout -->
-                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Disabled" Margin="0,0,6,0">
+                    <ScrollViewer Grid.Column="0" Padding="0,20,15,0" VerticalScrollBarVisibility="Auto" Margin="0,0,6,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
@@ -118,8 +118,8 @@
                             
                             <TextBlock Grid.Row="6" Grid.Column="0" Text="Game liên quan" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,12,15,12"/>
                             <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbRelatedGame" Style="{StaticResource ModernCheckComboBoxStyle}" ItemsSource="{Binding RelatedGames}" Text="-- Chọn game liên quan --" Height="34" Margin="0,6,5,6" Background="#F2F2F7" HorizontalAlignment="Stretch" DisplayMemberPath="Title" SelectedValuePath="Id"/>
-                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SaveCommand}" Margin="139,10,139,0" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
-                                Content="{Binding SaveButtonContent}"/>
+                            <Button Grid.Row="7" Width="70" VerticalAlignment="Top" x:Name="SaveButton" Grid.Column="1" Height="34" Style="{StaticResource MacPrimaryButtonStyle}" Command="{Binding SaveCommand}" Margin="0,15,0,0" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 
+                                Content="{Binding SaveButtonContent}" HorizontalAlignment="Left"/>
                         </Grid>
                     </ScrollViewer>
 

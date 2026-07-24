@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Threading;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
@@ -20,6 +21,7 @@ namespace Game_Library.Views
         public GameViewModel ViewModel { get; private set; }
         private Process _flashProcess = null;
         private GameHttpServer _htmlServer = null;
+        private DispatcherTimer _resizeDebounceTimer;
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -55,6 +57,20 @@ namespace Game_Library.Views
 
             Loaded += (s, e) => GameView_Load(s, e);
             Unloaded += GameView_Unloaded;
+            InitResizeTimer();
+        }
+
+        private void InitResizeTimer()
+        {
+            _resizeDebounceTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(20)
+            };
+            _resizeDebounceTimer.Tick += (s, e) =>
+            {
+                _resizeDebounceTimer.Stop();
+                ResizeEmbeddedGame();
+            };
         }
 
         private void GameView_Load(object sender, RoutedEventArgs e)
@@ -203,8 +219,8 @@ namespace Game_Library.Views
         {
             pnlGameContainer.Width = (int)e.NewSize.Width;
             pnlGameContainer.Height = (int)e.NewSize.Height;
-
-            ResizeEmbeddedGame();
+            _resizeDebounceTimer?.Stop();
+            _resizeDebounceTimer?.Start();
         }
 
         private void CloseGameProcess()
