@@ -71,10 +71,10 @@ namespace Game_Library.ViewModels
         public ICommand SaveCommand { get; }
         #endregion
 
-        public AddGameViewModel(GameModels gameToEdit = null)
+        public AddGameViewModel(GameModels gameToEdit = null, bool isImportFromFuture = false)
         {
             _editingGame = gameToEdit;
-            _isEditMode = gameToEdit != null;
+            _isEditMode = gameToEdit != null && !isImportFromFuture;
 
             // Khởi tạo Commands
             SelectThumbnailCommand = new RelayCommand(_ => ExecuteSelectThumbnail());
@@ -92,6 +92,38 @@ namespace Game_Library.ViewModels
             {
                 WindowTitle = "EDIT TRÒ CHƠI";
                 PopulateFieldsForEditing();
+            }
+            else if (isImportFromFuture && _editingGame != null)
+            {
+                WindowTitle = "HOÀN THIỆN THÔNG TIN GAME";
+                PopulatePrefilledData();
+            }
+        }
+
+        private void PopulatePrefilledData()
+        {
+            Title = _editingGame.Title ?? string.Empty;
+            Description = _editingGame.Description ?? string.Empty;
+            IsNsfw = _editingGame.isNSFW;
+            SelectedType = _editingGame.Type;
+
+            if (!string.IsNullOrEmpty(_editingGame.ReleaseDate) &&
+                DateTime.TryParse(_editingGame.ReleaseDate, out DateTime rDate))
+            {
+                ReleaseDate = rDate;
+            }
+
+            if (!string.IsNullOrEmpty(_editingGame.Thumbnail))
+            {
+                string thumbPath = Path.IsPathRooted(_editingGame.Thumbnail)
+                    ? _editingGame.Thumbnail
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _editingGame.Thumbnail);
+
+                if (File.Exists(thumbPath))
+                {
+                    SelectedThumbnailPath = thumbPath;
+                    ThumbnailSource = LoadImageUnloaded(thumbPath);
+                }
             }
         }
 

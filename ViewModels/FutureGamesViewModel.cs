@@ -28,16 +28,20 @@ namespace Game_Library.ViewModels
             ImportToLibraryCommand = new RelayCommand(p => ExecuteImportToLibrary(p as FutureGameModel));
             DeleteFutureGameCommand = new RelayCommand(async p => await ExecuteDeleteFutureGameAsync(p as FutureGameModel));
 
-            LoadData();
+            LoadDataAsync();
         }
 
-        private void LoadData()
+        private async Task LoadDataAsync()
         {
-            FutureGames.Clear();
-            foreach (var item in FutureGameDataService.Instance.FutureGames)
+            var sourceList = FutureGameDataService.Instance.FutureGames;
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                FutureGames.Add(item);
-            }
+                FutureGames.Clear();
+                foreach (var item in sourceList)
+                {
+                    FutureGames.Add(item);
+                }
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private void ExecuteOpenAdd()
@@ -46,7 +50,7 @@ namespace Game_Library.ViewModels
             window.Owner = Application.Current.MainWindow;
             if (window.ShowDialog() == true)
             {
-                LoadData();
+                LoadDataAsync();
             }
         }
 
@@ -61,8 +65,8 @@ namespace Game_Library.ViewModels
             if (futureGame == null) return;
 
             var result = MessageBox.Show(
-                $"Bạn có chắc chắn muốn xóa game tương lai '{futureGame.Title}'?\nHành động này sẽ xóa dữ liệu và không thể hoàn tác!",
-                "Xác nhận xóa Future Game",
+                $"Bạn có chắc chắn muốn thêm game '{futureGame.Title}' vào thư viện?\nHành động này sẽ xóa dữ liệu và không thể hoàn tác!",
+                "Xác nhận thêm vào thư viện!",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -80,7 +84,9 @@ namespace Game_Library.ViewModels
                     AddedDate = DateTime.Now.ToString("yyyy-MM-dd")
                 };
 
-                AddGameWindow addWindow = new AddGameWindow(prefilledGame);
+                AddGameViewModel addVm = new AddGameViewModel(prefilledGame, isImportFromFuture: true);
+                AddGameWindow addWindow = new AddGameWindow();
+                addWindow.DataContext = addVm;
                 addWindow.Owner = Application.Current.MainWindow;
 
                 if (addWindow.ShowDialog() == true)

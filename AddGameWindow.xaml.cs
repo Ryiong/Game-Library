@@ -29,7 +29,7 @@ namespace Game_Library
     {
         public AddGameViewModel ViewModel { get; private set; }
 
-        public AddGameWindow(GameModels gameToEdit = null)
+        public AddGameWindow(GameModels gameToEdit = null, bool isImportFromFuture = false)
         {
             InitializeComponent();
 

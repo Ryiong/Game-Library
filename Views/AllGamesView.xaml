@@ -24,9 +24,9 @@
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling"
-                      VirtualizingPanel.CacheLengthUnit="Page"
+                      VirtualizingPanel.CacheLengthUnit="Item"
                       VirtualizingPanel.ScrollUnit="Pixel"
-                      VirtualizingPanel.CacheLength="1,1"
+                      VirtualizingPanel.CacheLength="4,4"
                       Focusable="False">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -17,6 +17,11 @@ namespace Game_Library.ViewModels
         private string _statusText = "Server Status: Sleep";
         private string _logText = string.Empty;
         private bool _isNsfwChecked;
+        private AllGamesView _allGamesView;
+        private FutureGamesView _futureGamesView;
+        private FlashClassicsGames _flashView;
+        private HTML5IndieView _html5View;
+        private FavoritesGameView _favoritesView;
 
         private readonly Stack<object> _viewHistory = new Stack<object>();
         private readonly Stack<int> _sidebarHistory = new Stack<int>();
@@ -87,7 +92,7 @@ namespace Game_Library.ViewModels
             GameDataService.Instance.OnLogChanged += (log) =>
                 System.Windows.Application.Current.Dispatcher.Invoke(() => LogText = log);
             GameDataService.Instance.InitializeData();
-            CurrentView = new AllGamesView();
+            CurrentView = _allGamesView ?? new AllGamesView();
 
             SidebarSelectedIndex = 0;
             StatusText = "Server Status: Off";
@@ -109,11 +114,26 @@ namespace Game_Library.ViewModels
 
             switch (tabIndex)
             {
-                case 0: CurrentView = new AllGamesView(); break;
-                case 1: CurrentView = new FlashClassicsGames(); break;
-                case 2: CurrentView = new HTML5IndieView(); break;
-                case 3: CurrentView = new FavoritesGameView(); break;
-                case 4: CurrentView = new FutureGamesView(); break;
+                case 0:
+                    _allGamesView ??= new AllGamesView();
+                    CurrentView = _allGamesView;
+                    break;
+                case 1:
+                    _flashView ??= new FlashClassicsGames();
+                    CurrentView = _flashView;
+                    break;
+                case 2:
+                    _html5View ??= new HTML5IndieView();
+                    CurrentView = _html5View;
+                    break;
+                case 3:
+                    _favoritesView ??= new FavoritesGameView();
+                    CurrentView = _favoritesView;
+                    break;
+                case 4:
+                    _futureGamesView ??= new FutureGamesView();
+                    CurrentView = _futureGamesView;
+                    break;
             }
             ToggleHeader(isDetailMode: false);
         }
