@@ -5,20 +5,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Application = System.Windows.Application;
 
 namespace Game_Library.ViewModels
 {
     public abstract class GameListViewModel : ViewModelBase, IDisposable
     {
-        private ObservableCollection<GameModels> _filteredGames;
         private string _searchKeyword = string.Empty;
+        public ObservableCollection<GameModels> FilteredGames { get; } = new ObservableCollection<GameModels>();
 
-        public ObservableCollection<GameModels> FilteredGames
-        {
-            get => _filteredGames;
-            set => SetProperty(ref _filteredGames, value);
-        }
-
+        public ICommand OpenDetailCommand { get; }
         public string SearchKeyword
         {
             get => _searchKeyword;
@@ -31,11 +28,8 @@ namespace Game_Library.ViewModels
             }
         }
 
-        public ICommand OpenDetailCommand { get; }
-
         protected GameListViewModel()
         {
-            FilteredGames = new ObservableCollection<GameModels>();
             OpenDetailCommand = new RelayCommand(p => ExecuteOpenDetail(p));
 
             MainWindow.Instance.PropertyChanged += OnMainWindowPropertyChanged;
@@ -53,18 +47,30 @@ namespace Game_Library.ViewModels
 
         protected abstract IEnumerable<GameModels> GetSourceGames();
 
-        public void ApplyFilter()
+        public async void ApplyFilter()
         {
-            var source = GetSourceGames() ?? new List<GameModels>();
-
+            var source = GetSourceGames()?.ToList() ?? new List<GameModels>();
             string keyword = SearchKeyword.Trim().ToLower();
 
-            var result = source.Where(g =>
-                (string.IsNullOrEmpty(keyword) || g.Title.ToLower().Contains(keyword)) &&
-                (MainWindow.IsNsfwEnabled || !g.isNSFW)
-            ).ToList();
+            var filteredResult = await Task.Run(() =>
+            {
+                return source.Where(g =>
+                    (string.IsNullOrEmpty(keyword) || (g.Title != null && g.Title.ToLower().Contains(keyword))) &&
+                    (MainWindow.IsNsfwEnabled || !g.isNSFW)
+                ).ToList();
+            });
 
-            FilteredGames = new ObservableCollection<GameModels>(result);
+            if (Application.Current != null)
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    FilteredGames.Clear();
+                    foreach (var game in filteredResult)
+                    {
+                        FilteredGames.Add(game);
+                    }
+                }, DispatcherPriority.Background);
+            }
         }
 
         private void ExecuteOpenDetail(object parameter)

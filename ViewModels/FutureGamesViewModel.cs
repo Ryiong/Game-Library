@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 
@@ -28,20 +29,23 @@ namespace Game_Library.ViewModels
             ImportToLibraryCommand = new RelayCommand(p => ExecuteImportToLibrary(p as FutureGameModel));
             DeleteFutureGameCommand = new RelayCommand(async p => await ExecuteDeleteFutureGameAsync(p as FutureGameModel));
 
-            LoadDataAsync();
+            _ = LoadDataAsync();
         }
 
-        private async Task LoadDataAsync()
+        public async Task LoadDataAsync()
         {
-            var sourceList = FutureGameDataService.Instance.FutureGames;
-            await Application.Current.Dispatcher.InvokeAsync(() =>
+            var sourceList = await Task.Run(() => FutureGameDataService.Instance.FutureGames.ToList());
+            if (Application.Current != null)
             {
-                FutureGames.Clear();
-                foreach (var item in sourceList)
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    FutureGames.Add(item);
-                }
-            }, System.Windows.Threading.DispatcherPriority.Background);
+                    FutureGames.Clear();
+                    foreach (var item in sourceList)
+                    {
+                        FutureGames.Add(item);
+                    }
+                }, DispatcherPriority.Background);
+            }
         }
 
         private void ExecuteOpenAdd()

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ext="clr-namespace:Game_Library.Extensions"
+             xmlns:vwp="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
              FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
              mc:Ignorable="d" Background="White">
     <UserControl.Resources>
@@ -28,7 +29,7 @@
           VirtualizingPanel.CacheLength="1,1">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" IsItemsHost="True"/>
+                    <vwp:VirtualizingWrapPanel Orientation="Horizontal" HorizontalAlignment="Left" IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
