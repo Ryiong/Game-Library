@@ -98,6 +98,15 @@ namespace Game_Library.ViewModels
                     DeleteFutureGame(futureGame);
 
                     await FutureGameDataService.Instance.SaveFutureGamesAsync();
+                    if (Application.Current.MainWindow is MainWindow mainWindow)
+                    {
+                        mainWindow.NavigateToList();
+
+                        if (mainWindow.ViewModel is MainViewModel mainVm)
+                        {
+                            mainVm.SidebarSelectedIndex = 0;
+                        }
+                    }
                     GameDataService.Instance.Log($"[FUTURE GAME] Đã chuyển game '{futureGame.Title}' trực tiếp vào thư viện chính.");
                 }
             }

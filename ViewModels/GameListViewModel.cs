@@ -1,4 +1,5 @@
 ﻿using Game_Library.Models;
+using Game_Library.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,8 +34,20 @@ namespace Game_Library.ViewModels
             OpenDetailCommand = new RelayCommand(p => ExecuteOpenDetail(p));
 
             MainWindow.Instance.PropertyChanged += OnMainWindowPropertyChanged;
+            GameDataService.Instance.OnLogChanged += Instance_OnLogChanged;
 
             ApplyFilter();
+        }
+
+        private void Instance_OnLogChanged(string logMessage)
+        {
+            if (logMessage.Contains("[AUTO RELOAD]") || logMessage.Contains("Đã tải lại") || logMessage.Contains("[EDIT/SAVE]"))
+            {
+                Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    ApplyFilter();
+                });
+            }
         }
 
         private void OnMainWindowPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -87,6 +100,7 @@ namespace Game_Library.ViewModels
             {
                 MainWindow.Instance.PropertyChanged -= OnMainWindowPropertyChanged;
             }
+            GameDataService.Instance.OnLogChanged -= Instance_OnLogChanged;
         }
     }
 }

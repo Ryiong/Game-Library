@@ -72,12 +72,12 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" >
-                        <TextBlock Text="{Binding CurrentGame.Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentGame.Title}" Foreground="#131E1B" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" MaxWidth="400"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBlock Text="Type: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
-                            <TextBlock Text="{Binding CurrentGame.Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding CurrentGame.Type}" Foreground="#046B59" FontSize="12" FontWeight="Bold" MaxWidth="550"/>
                         </StackPanel>
-                        <TextBlock Text="{Binding CurrentGame.Description}" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" ext:TextBlockExtensions.MaxLines="10"/>
+                        <TextBlock Text="{Binding CurrentGame.Description}" MaxWidth="400" Foreground="#555555" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" ext:TextBlockExtensions.MaxLines="10"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBlock Text="Added Date: " Foreground="#777777" FontWeight="SemiBold" FontSize="12"/>
                             <TextBlock Text="{Binding CurrentGame.AddedDate}" Foreground="#131E1B" FontSize="12" FontWeight="Bold"/>

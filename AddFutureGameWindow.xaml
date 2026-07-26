@@ -10,9 +10,9 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent" MinHeight="550" MinWidth="850"
+        Background="Transparent" MinWidth="850" MinHeight="484"
         ResizeMode="CanResizeWithGrip"
-        Title="Add Future Game" Height="600" Width="960">
+        Title="Add Future Game" Height="484" Width="960">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="25"
               UseAeroCaptionButtons="False"

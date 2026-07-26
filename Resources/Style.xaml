@@ -47,9 +47,9 @@
     <!-- Calendar -->
     <Style x:Key="MordemCalendarButton" TargetType="{x:Type CalendarButton}">
         <Setter Property="Background" Value="#046B59"/>
-        <Setter Property="MinWidth" Value="40"/>
-        <Setter Property="MinHeight" Value="42"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="MinWidth" Value="60"/>
+        <Setter Property="MinHeight" Value="55"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontFamily" Value="pack://application:,,,/Resources/Fonts/#SF Pro Display"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -57,7 +57,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarButton}">
-                    <Grid Margin="4,6">
+                    <Grid Margin="3,4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
@@ -385,15 +385,15 @@
                         </Grid>
                         <Grid x:Name="PART_YearView" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="1" Visibility="Hidden">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                         </Grid>
                     </Grid>
