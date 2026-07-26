@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Text;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -17,6 +18,7 @@ namespace Game_Library.ViewModels
         public ObservableCollection<GameModels> FilteredGames { get; } = new ObservableCollection<GameModels>();
 
         public ICommand OpenDetailCommand { get; }
+
         public string SearchKeyword
         {
             get => _searchKeyword;
@@ -63,14 +65,27 @@ namespace Game_Library.ViewModels
         public async void ApplyFilter()
         {
             var source = GetSourceGames()?.ToList() ?? new List<GameModels>();
-            string keyword = SearchKeyword.Trim().ToLower();
+            string rawKeyword = SearchKeyword ?? string.Empty;
 
             var filteredResult = await Task.Run(() =>
             {
-                return source.Where(g =>
-                    (string.IsNullOrEmpty(keyword) || (g.Title != null && g.Title.ToLower().Contains(keyword))) &&
-                    (MainWindow.IsNsfwEnabled || !g.isNSFW)
-                ).ToList();
+                string normalizedKeyword = RemoveDiacritics(rawKeyword.Trim().ToLower());
+                string[] tokens = normalizedKeyword.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                return source.Where(game =>
+                {
+                    if (!MainWindow.IsNsfwEnabled && game.isNSFW) return false;
+
+                    if (tokens.Length == 0) return true;
+
+                    string titleNorm = RemoveDiacritics(game.Title ?? "").ToLower();
+                    string typeNorm = RemoveDiacritics(game.Type ?? "").ToLower();
+                    string descNorm = RemoveDiacritics(game.Description ?? "").ToLower();
+
+                    string fullSearchableText = $"{titleNorm} {typeNorm} {descNorm}";
+
+                    return tokens.All(token => fullSearchableText.Contains(token));
+                }).ToList();
             });
 
             if (Application.Current != null)
@@ -84,6 +99,25 @@ namespace Game_Library.ViewModels
                     }
                 }, DispatcherPriority.Background);
             }
+        }
+
+        private static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC).Replace('đ', 'd').Replace('Đ', 'D');
         }
 
         private void ExecuteOpenDetail(object parameter)

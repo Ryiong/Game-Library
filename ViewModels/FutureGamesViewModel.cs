@@ -3,6 +3,7 @@ using Game_Library.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -15,6 +16,8 @@ namespace Game_Library.ViewModels
 {
     public class FutureGamesViewModel : ViewModelBase
     {
+        private string _searchKeyword = string.Empty;
+        private List<FutureGameModel> _allFutureGames = new List<FutureGameModel>();
         public ObservableCollection<FutureGameModel> FutureGames { get; set; } = new ObservableCollection<FutureGameModel>();
 
         public ICommand OpenAddFutureGameCommand { get; }
@@ -32,20 +35,77 @@ namespace Game_Library.ViewModels
             _ = LoadDataAsync();
         }
 
+        public string SearchKeyword
+        {
+            get => _searchKeyword;
+            set
+            {
+                if (SetProperty(ref _searchKeyword, value))
+                {
+                    ApplyFilter();
+                }
+            }
+        }
+
         public async Task LoadDataAsync()
         {
-            var sourceList = await Task.Run(() => FutureGameDataService.Instance.FutureGames.ToList());
+            _allFutureGames = await Task.Run(() => FutureGameDataService.Instance.FutureGames.ToList()); 
+
+            ApplyFilter();
+        }
+
+        public async void ApplyFilter()
+        {
+            string rawKeyword = SearchKeyword ?? string.Empty;
+            var filteredResult = await Task.Run(() =>
+            {
+                string normalizedKeyword = RemoveDiacritics(rawKeyword.Trim().ToLower());
+                string[] tokens = normalizedKeyword.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                return _allFutureGames.Where(game =>
+                {
+                    if (tokens.Length == 0) return true;
+
+                    string titleNorm = RemoveDiacritics(game.Title ?? "").ToLower();
+                    string typeNorm = RemoveDiacritics(game.Type ?? "").ToLower();
+                    string descNorm = RemoveDiacritics(game.Description ?? "").ToLower();
+
+                    string fullText = $"{titleNorm} {typeNorm} {descNorm}";
+
+                    return tokens.All(token => fullText.Contains(token));
+                }).ToList();
+            });
+
             if (Application.Current != null)
             {
                 await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     FutureGames.Clear();
-                    foreach (var item in sourceList)
+                    foreach (var item in filteredResult)
                     {
                         FutureGames.Add(item);
                     }
                 }, DispatcherPriority.Background);
             }
+        }
+
+        private static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC).Replace('đ', 'd').Replace('Đ', 'D');
         }
 
         private void ExecuteOpenAdd()

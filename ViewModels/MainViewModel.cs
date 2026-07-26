@@ -16,6 +16,7 @@ namespace Game_Library.ViewModels
         private bool _isDetailHeaderVisible = false;
         private string _statusText = "Server Status: Sleep";
         private string _logText = string.Empty;
+        private string _searchKeyword = string.Empty;
         private bool _isNsfwChecked;
         private AllGamesView _allGamesView;
         private FutureGamesView _futureGamesView;
@@ -80,6 +81,33 @@ namespace Game_Library.ViewModels
             }
         }
 
+        public string SearchKeyword
+        {
+            get => _searchKeyword;
+            set
+            {
+                if (SetProperty(ref _searchKeyword, value))
+                {
+                    ApplySearchToCurrentView(value);
+                }
+            }
+        }
+
+        private void ApplySearchToCurrentView(string keyword)
+        {
+            if (CurrentView is System.Windows.Controls.UserControl uc)
+            {
+                if (uc.DataContext is GameListViewModel listVM)
+                {
+                    listVM.SearchKeyword = keyword;
+                }
+                else if (uc.DataContext is FutureGamesViewModel futureVM)
+                {
+                    futureVM.SearchKeyword = keyword;
+                }
+            }
+        }
+
         public ICommand ReturnCommand { get; }
         public ICommand AddGameCommand { get; }
         public ICommand EditGameCommand { get; }
@@ -135,6 +163,7 @@ namespace Game_Library.ViewModels
                     CurrentView = _futureGamesView;
                     break;
             }
+            ApplySearchToCurrentView(SearchKeyword);
             ToggleHeader(isDetailMode: false);
         }
 

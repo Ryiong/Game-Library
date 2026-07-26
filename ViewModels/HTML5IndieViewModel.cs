@@ -10,7 +10,7 @@ namespace Game_Library.ViewModels
     {
         protected override IEnumerable<GameModels> GetSourceGames()
         {
-            return GameDataService.Instance.AllGames.Where(g => g.Type == "HTML5");
+            return GameDataService.Instance.AllGames.Where(g => string.Equals(g.Type, "HTML5", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

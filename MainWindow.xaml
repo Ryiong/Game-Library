@@ -124,6 +124,21 @@
                                     <TextBlock Grid.Column="1" Text="Future Game"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
+                            
+                            <!--NSFW-->
+                            <ListBoxItem Focusable="False" IsSelected="False">
+                                <ListBoxItem.CommandBindings>
+                                    <CommandBinding/>
+                                </ListBoxItem.CommandBindings>
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="1" Text="Giới hạn" VerticalAlignment="Center" Style="{StaticResource MenuItemTextStyle}" FontWeight="Bold" FontSize="15" Margin="15,0"/>
+                                    <ToggleButton IsHitTestVisible="True" Grid.Column="0" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="{Binding IsNsfwChecked, Mode=TwoWay}" x:Name="NsfwToggleButton"/>
+                                </Grid>
+                            </ListBoxItem>
                         </ListBox>
                     </StackPanel>
                 </Grid>
@@ -142,15 +157,29 @@
                         <!-- Default Header -->
                         <Grid x:Name="DefaultHeaderGrid" Visibility="{Binding IsDefaultHeaderVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+                            <!-- NSFW Button -->
                             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="35,0,0,0">
-                                <TextBlock Text="Giới hạn" VerticalAlignment="Center" Foreground="#046B59" FontWeight="Bold" FontSize="15" Margin="0,0,12,0"/>
-                                <ToggleButton IsHitTestVisible="True" Grid.Column="2" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="{Binding IsNsfwChecked, Mode=TwoWay}" x:Name="NsfwToggleButton"/>
+                                
                             </StackPanel>
+                            <Border Grid.Column="1" Height="34" MaxWidth="400" Background="#F2F2F7" CornerRadius="13" Margin="10,0" VerticalAlignment="Center">
+                                <Grid Margin="10,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Control Grid.Column="0" Template="{StaticResource IconSearch}" Width="16" Height="16" Foreground="#8E8E93" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBox Grid.Column="1" 
+                                            Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                            Background="Transparent" BorderThickness="0" 
+                                            VerticalAlignment="Center" FontSize="13" Foreground="#1C1C1E"/>
+                                </Grid>
+                            </Border>
                             <!-- Add Game Button -->
-                            <Button x:Name="AddGameButton" Grid.Column="1" Command="{Binding AddGameCommand}" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0">
+                            <Button x:Name="AddGameButton" Grid.Column="2" Command="{Binding AddGameCommand}" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Control Template="{StaticResource IconPlus}" Width="20" Height="19" Margin="5, 0"/>
