@@ -30,6 +30,18 @@ namespace Game_Library.ViewModels
 
     public class AddEditCollectionViewModel : ViewModelBase
     {
+        private string _gameSearchKeyword = string.Empty;
+        public string GameSearchKeyword
+        {
+            get => _gameSearchKeyword;
+            set
+            {
+                if (SetProperty(ref _gameSearchKeyword, value))
+                    ApplyGameFilter();
+            }
+        }
+        public ObservableCollection<GameCheckSelectModel> AllAvailableGames { get; set; } = new ObservableCollection<GameCheckSelectModel>();
+        public ObservableCollection<GameCheckSelectModel> FilteredAvailableGames { get; set; } = new ObservableCollection<GameCheckSelectModel>();
         private readonly CollectionModel _editingCollection;
         private readonly bool _isEditMode;
 
@@ -41,7 +53,6 @@ namespace Game_Library.ViewModels
         public string Title { get => _title; set => SetProperty(ref _title, value); }
         public string ThumbnailPath { get => _thumbnailPath; set => SetProperty(ref _thumbnailPath, value); }
 
-        public ObservableCollection<GameCheckSelectModel> AvailableGames { get; set; } = new ObservableCollection<GameCheckSelectModel>();
 
         public ICommand SelectThumbnailCommand { get; }
         public ICommand SaveCommand { get; }
@@ -67,12 +78,12 @@ namespace Game_Library.ViewModels
         private void LoadGames()
         {
             var allGames = GameDataService.Instance.AllGames;
-            AvailableGames.Clear();
+            AllAvailableGames.Clear();
 
             foreach (var g in allGames)
             {
                 bool selected = _isEditMode && _editingCollection.GameIds != null && _editingCollection.GameIds.Contains(g.Id);
-                AvailableGames.Add(new GameCheckSelectModel
+                AllAvailableGames.Add(new GameCheckSelectModel
                 {
                     Id = g.Id,
                     Title = g.Title,
@@ -80,6 +91,21 @@ namespace Game_Library.ViewModels
                     Thumbnail = g.Thumbnail,
                     IsSelected = selected
                 });
+            }
+            ApplyGameFilter();
+        }
+
+        private void ApplyGameFilter()
+        {
+            string kw = (GameSearchKeyword ?? "").Trim().ToLower();
+            FilteredAvailableGames.Clear();
+
+            foreach (var item in AllAvailableGames)
+            {
+                if (string.IsNullOrEmpty(kw) || (item.Title ?? "").ToLower().Contains(kw))
+                {
+                    FilteredAvailableGames.Add(item);
+                }
             }
         }
 
@@ -102,7 +128,7 @@ namespace Game_Library.ViewModels
 
             CollectionModel target = _isEditMode ? _editingCollection : new CollectionModel();
             target.Title = Title.Trim();
-            target.GameIds = AvailableGames.Where(x => x.IsSelected).Select(x => x.Id).ToList();
+            target.GameIds = AllAvailableGames.Where(x => x.IsSelected).Select(x => x.Id).ToList();
 
             if (!string.IsNullOrEmpty(ThumbnailPath) && Path.IsPathRooted(ThumbnailPath))
             {

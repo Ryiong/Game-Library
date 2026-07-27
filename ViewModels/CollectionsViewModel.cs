@@ -36,6 +36,17 @@ namespace Game_Library.ViewModels
             OpenDetailCommand = new RelayCommand(p => ExecuteOpenDetail(p as CollectionModel));
             DeleteCollectionCommand = new RelayCommand(async p => await ExecuteDeleteAsync(p as CollectionModel));
 
+            if (MainWindow.Instance != null)
+            {
+                MainWindow.Instance.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(MainWindow.IsNsfwEnabled))
+                    {
+                        ApplyFilter();
+                    }
+                };
+            }
+
             LoadData();
         }
 
@@ -46,13 +57,29 @@ namespace Game_Library.ViewModels
 
         public async void ApplyFilter()
         {
-            var source = CollectionDataService.Instance.Collections.ToList();
-            string keyword = SearchKeyword.Trim().ToLower();
+            var sourceCollections = CollectionDataService.Instance.Collections.ToList();
+            var allGames = GameDataService.Instance.AllGames;
+            string keyword = (SearchKeyword ?? "").Trim().ToLower();
 
             var result = await Task.Run(() =>
             {
-                if (string.IsNullOrEmpty(keyword)) return source;
-                return source.Where(c => (c.Title ?? "").ToLower().Contains(keyword)).ToList();
+                return sourceCollections.Where(col =>
+                {
+                    bool containsNsfwGame = false;
+                    if (col.GameIds != null && col.GameIds.Count > 0)
+                    {
+                        var gamesInCol = allGames.Where(g => col.GameIds.Contains(g.Id));
+                        containsNsfwGame = gamesInCol.Any(g => g.isNSFW);
+                    }
+
+                    if (!MainWindow.IsNsfwEnabled && containsNsfwGame)
+                    {
+                        return false;
+                    }
+
+                    if (string.IsNullOrEmpty(keyword)) return true;
+                    return (col.Title ?? "").ToLower().Contains(keyword);
+                }).ToList();
             });
 
             if (Application.Current != null)

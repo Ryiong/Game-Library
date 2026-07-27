@@ -13,7 +13,7 @@ namespace Game_Library.Extensions
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string relativePath = value as string;
-            if (string.IsNullOrEmpty(relativePath)) return null;
+            if (string.IsNullOrEmpty(relativePath)) return GetPlaceholderImage();
             string fullPath = Path.IsPathRooted(relativePath)
                     ? relativePath
                     : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
@@ -45,7 +45,7 @@ namespace Game_Library.Extensions
                         bitmap.BeginInit();
                         bitmap.StreamSource = stream;
 
-                        bitmap.DecodePixelWidth = 550;
+                        bitmap.DecodePixelWidth = 330;
 
                         bitmap.CacheOption = BitmapCacheOption.OnLoad;
                         bitmap.EndInit();
@@ -71,7 +71,6 @@ namespace Game_Library.Extensions
                 BitmapImage placeholder = new BitmapImage();
                 placeholder.BeginInit();
                 placeholder.UriSource = new Uri("pack://application:,,,/Resources/Thumbnail-Placeholder.jpg", UriKind.Absolute);
-                placeholder.DecodePixelWidth = 400;
                 placeholder.CacheOption = BitmapCacheOption.OnLoad;
                 placeholder.EndInit();
                 placeholder.Freeze();

@@ -20,11 +20,20 @@
             </Grid.RowDefinitions>
 
             <!-- Header Traffic Light -->
-            <Border Grid.Row="0" Background="#F0FCF8" BorderBrush="#FFFFFF" BorderThickness="0,0,0,1">
+            <Border Grid.Row="0" Background="#F0FCF8" BorderBrush="#ffffff" CornerRadius="14,14,0,0" BorderThickness="0,0,0,0" Panel.ZIndex="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="14" Direction="0" ShadowDepth="2" Opacity="0.14" Color="Black"/>
+                </Border.Effect>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="16,0" WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FF5F56" Click="CloseButton_Click"/>
-                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FAC146" Click="MinimizeButton_Click"/>
-                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#27C93F" Click="MaximizeButton_Click"/>
+                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FF5F56" ext:ButtonProps.HoverBackground="#F74339" ext:ButtonProps.PressedBackground="#DB332a" BorderThickness="1.5" BorderBrush="#cc4f46" Click="CloseButton_Click" Foreground="#E0443E">
+                        <Control Template="{StaticResource IconQuit}" BorderThickness="2" Width="6" Height="6" Foreground="#7b0708"/>
+                    </Button>
+                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Background="#FAC146" ext:ButtonProps.HoverBackground="#F5B11D" ext:ButtonProps.PressedBackground="#F2A807" BorderThickness="1.5" BorderBrush="#d4a338" Click="MinimizeButton_Click">
+                        <Control Template="{StaticResource IconMinimize}" BorderThickness="2" Width="8" Height="8" Foreground="#9c5512" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Style="{StaticResource MacTrafficLightButtonStyle}" Margin="0" Background="#27C93F" ext:ButtonProps.HoverBackground="#13D630" ext:ButtonProps.PressedBackground="#04C921" BorderThickness="1.5" BorderBrush="#369841" Click="MaximizeButton_Click">
+                        <Control Template="{StaticResource IconMaximize}" BorderThickness="2" Width="8" Height="8" Foreground="#0d660f"/>
+                    </Button>
                 </StackPanel>
             </Border>
             <TextBlock Text="{Binding WindowTitle}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontWeight="Bold" Foreground="#046B59"/>
@@ -61,14 +70,28 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Text="Chọn Games vào Collection" Style="{StaticResource InputHeaderLabelStyle}" Margin="0,0,0,10"/>
 
-                        <ListView Grid.Row="1" ItemsSource="{Binding AvailableGames}" BorderThickness="1" BorderBrush="#E5F0EC" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <Border Grid.Row="1" Height="30" Background="#EDF2F0" CornerRadius="6" Margin="0,0,0,10">
+                            <TextBox Text="{Binding GameSearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                      Background="Transparent" BorderThickness="0" VerticalAlignment="Center" 
+                                      Margin="8,0" FontSize="12"/>
+                        </Border>
+
+                        <ListView Grid.Row="2" ItemsSource="{Binding FilteredAvailableGames}" BorderThickness="1" BorderBrush="#E5F0EC" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="6,4"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="5,4">
+                                    <Grid Margin="5,4" Background="Transparent">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="50"/>
@@ -80,7 +103,9 @@
                                         </Border>
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
                                             <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="12" Foreground="#131E1B"/>
-                                            <TextBlock Text="{Binding Type}" FontSize="10" Foreground="#046B59"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Type}" FontSize="10" Foreground="#046B59" FontWeight="Bold" Margin="0,0,8,0"/>
+                                            </StackPanel>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>

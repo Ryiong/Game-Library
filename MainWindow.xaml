@@ -131,7 +131,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
+                                    <Control Grid.Column="0" Template="{StaticResource IconCollection}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
                                     <TextBlock Grid.Column="1" Text="Collections" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
