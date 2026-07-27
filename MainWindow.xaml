@@ -124,7 +124,18 @@
                                     <TextBlock Grid.Column="1" Text="Future Game"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
-                            
+
+                            <ListBoxItem>
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
+                                    <TextBlock Grid.Column="1" Text="Collections" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </ListBoxItem>
+
                             <!--NSFW-->
                             <ListBoxItem Focusable="False" IsSelected="False">
                                 <ListBoxItem.CommandBindings>

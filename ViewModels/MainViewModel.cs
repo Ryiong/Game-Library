@@ -23,6 +23,7 @@ namespace Game_Library.ViewModels
         private FlashClassicsGames _flashView;
         private HTML5IndieView _html5View;
         private FavoritesGameView _favoritesView;
+        private CollectionsView _collectionsView;
 
         private readonly Stack<object> _viewHistory = new Stack<object>();
         private readonly Stack<int> _sidebarHistory = new Stack<int>();
@@ -131,6 +132,20 @@ namespace Game_Library.ViewModels
             EditGameCommand = new RelayCommand(param => ExecuteEditGame(param as GameModels));
         }
 
+        public void NavigateToCollectionDetail(CollectionModel collection)
+        {
+            if (CurrentView != null)
+            {
+                _viewHistory.Push(CurrentView);
+                _sidebarHistory.Push(SidebarSelectedIndex);
+            }
+
+            CurrentView = new CollectionDetailView(collection);
+            _sidebarSelectedIndex = -1;
+            OnPropertyChanged(nameof(SidebarSelectedIndex));
+            ToggleHeader(isDetailMode: true);
+        }
+
         private void NavigateToTab(int tabIndex)
         {
             if (CurrentView is UserControl oldView && oldView.DataContext is IDisposable disposableVM)
@@ -161,6 +176,10 @@ namespace Game_Library.ViewModels
                 case 4:
                     _futureGamesView ??= new FutureGamesView();
                     CurrentView = _futureGamesView;
+                    break;
+                case 5:
+                    _collectionsView ??= new CollectionsView();
+                    CurrentView = _collectionsView;
                     break;
             }
             ApplySearchToCurrentView(SearchKeyword);
