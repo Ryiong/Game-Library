@@ -58,19 +58,6 @@
                     <StackPanel Grid.Row="1">
                         <TextBlock Text="GAME LIBRARY" Style="{StaticResource MenuHeaderStyle}"></TextBlock>
                         <ListBox x:Name="SidebarMenu" Style="{StaticResource MenuListBoxStyle}" SelectedIndex="{Binding SidebarSelectedIndex, Mode=TwoWay}">
-                            <!-- All Game -->
-                            <ListBoxItem>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Control Grid.Column="0" Template="{StaticResource IconGame}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
-
-                                    <TextBlock Grid.Column="1" Text="All Games"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ListBoxItem>
                             <!-- Flash Classics-->
                             <ListBoxItem>
                                 <Grid VerticalAlignment="Center">
@@ -78,9 +65,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-
                                     <Control Grid.Column="0" Template="{StaticResource IconFlash}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
-
                                     <TextBlock Grid.Column="1" Text="Flash Classics"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
                                 </Grid>
                             </ListBoxItem>
@@ -91,63 +76,8 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-
                                     <Control Grid.Column="0"  Template="{StaticResource IconHTML}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
-
                                     <TextBlock Grid.Column="1"  Text="HTML5 Indie"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ListBoxItem>
-                            <!-- Favorites -->
-                            <ListBoxItem>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Control Grid.Column="0" Template="{StaticResource IconHeart}" Width="20" Height="24" Style="{StaticResource MenuItemIconStyle}"/>
-                                    <TextBlock Grid.Column="1" Text="Favorites" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ListBoxItem>
-                            <!-- Future Game -->
-                            <ListBoxItem>
-                                <ListBoxItem.CommandBindings>
-                                    <CommandBinding/>
-                                </ListBoxItem.CommandBindings>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Control Grid.Column="0" Template="{StaticResource IconCloud}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
-                                    <TextBlock Grid.Column="1" Text="Future Game"  Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ListBoxItem>
-
-                            <ListBoxItem>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Control Grid.Column="0" Template="{StaticResource IconCollection}" Width="20" Height="20" Style="{StaticResource MenuItemIconStyle}"/>
-                                    <TextBlock Grid.Column="1" Text="Collections" Style="{StaticResource MenuItemTextStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ListBoxItem>
-
-                            <!--NSFW-->
-                            <ListBoxItem Focusable="False" IsSelected="False">
-                                <ListBoxItem.CommandBindings>
-                                    <CommandBinding/>
-                                </ListBoxItem.CommandBindings>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="1" Text="Giới hạn" VerticalAlignment="Center" Style="{StaticResource MenuItemTextStyle}" FontWeight="Bold" FontSize="15" Margin="15,0"/>
-                                    <ToggleButton IsHitTestVisible="True" Grid.Column="0" Style="{StaticResource ModernToggleSwitchStyle}" IsChecked="{Binding IsNsfwChecked, Mode=TwoWay}" x:Name="NsfwToggleButton"/>
                                 </Grid>
                             </ListBoxItem>
                         </ListBox>
@@ -172,10 +102,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <!-- NSFW Button -->
-                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="35,0,0,0">
-                                
-                            </StackPanel>
+
                             <Border Grid.Column="1" Height="34" MaxWidth="400" Background="#F2F2F7" CornerRadius="13" Margin="10,0" VerticalAlignment="Center">
                                 <Grid Margin="10,0">
                                     <Grid.ColumnDefinitions>
@@ -189,25 +116,11 @@
                                             VerticalAlignment="Center" FontSize="13" Foreground="#1C1C1E"/>
                                 </Grid>
                             </Border>
-                            <!-- Add Game Button -->
-                            <Button x:Name="AddGameButton" Grid.Column="2" Command="{Binding AddGameCommand}" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Control Template="{StaticResource IconPlus}" Width="20" Height="19" Margin="5, 0"/>
-                                        <TextBlock Text="Add Game" VerticalAlignment="Center" Margin="2,2,8,2" FontWeight="SemiBold"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
                         </Grid>
 
                         <!-- Header Detail -->
                         <Grid x:Name="DetailHeaderGrid" Visibility="{Binding IsDetailHeaderVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <!-- Return Button -->
-                            <Button x:Name="ReturnButton" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource NonableButtonStyle}" Margin="18,-10,0,0" Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding ReturnCommand}">
-                                <Button.Content>
-                                    <Control Template="{StaticResource IconReturn}" Width="24" Height="24" Foreground="#046B59"/>
-                                </Button.Content>
-                            </Button>
                         </Grid>
                     </Grid>
                 </Border>
