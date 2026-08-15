@@ -9,14 +9,7 @@ namespace Game_Library.Models
         public string Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
-        public string Description { get; set; }
-        public string AddedDate { get; set; }
-        public string ReleaseDate { get; set; }
-        public bool isFavorite { get; set; }
-        public bool isNSFW { get; set; }
-        public List<string> RelatedGameIds { get; set; } = new List<string>();
         public string Thumbnail { get; set; }
-        public List<string> ImageInGame { get; set; } = new List<string>();
         public string FolderName { get; set; }
         public string MainFile { get; set; }
 

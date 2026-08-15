@@ -83,18 +83,6 @@ namespace Game_Library.Services
                         if (idx != -1) AllGames[idx] = targetGame;
                     }
 
-                    foreach (var game in AllGames.Where(g => g.Id != targetGame.Id))
-                    {
-                        if (targetGame.RelatedGameIds != null && targetGame.RelatedGameIds.Contains(game.Id))
-                        {
-                            if (game.RelatedGameIds == null) game.RelatedGameIds = new List<string>();
-                            if (!game.RelatedGameIds.Contains(targetGame.Id)) game.RelatedGameIds.Add(targetGame.Id);
-                        }
-                        else
-                        {
-                            game.RelatedGameIds?.Remove(targetGame.Id);
-                        }
-                    }
 
                     var options = new JsonSerializerOptions
                     {
@@ -142,11 +130,6 @@ namespace Game_Library.Services
                     if (gameToRemove == null) return false;
 
                     AllGames.Remove(gameToRemove);
-
-                    foreach (var game in AllGames)
-                    {
-                        game.RelatedGameIds?.Remove(gameId);
-                    }
 
                     var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
                     File.WriteAllText(jsonPath, JsonSerializer.Serialize(AllGames, options), Encoding.UTF8);

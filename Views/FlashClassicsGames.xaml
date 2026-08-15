@@ -54,7 +54,6 @@
                                 </Grid>
                             </Border>
                             <TextBlock Text="{Binding Title}" Foreground="#005B41" FontSize="13" FontWeight="SemiBold" Margin="0,5,0,2" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Text"/>
-                            <TextBlock Text="{Binding AddedDate}" Foreground="#3E4945" FontSize="10" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

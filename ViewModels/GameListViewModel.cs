@@ -35,7 +35,6 @@ namespace Game_Library.ViewModels
         {
             OpenDetailCommand = new RelayCommand(p => ExecuteOpenDetail(p));
 
-            MainWindow.Instance.PropertyChanged += OnMainWindowPropertyChanged;
             GameDataService.Instance.OnLogChanged += Instance_OnLogChanged;
 
             ApplyFilter();
@@ -52,13 +51,6 @@ namespace Game_Library.ViewModels
             }
         }
 
-        private void OnMainWindowPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(MainWindow.IsNsfwEnabled))
-            {
-                ApplyFilter();
-            }
-        }
 
         protected abstract IEnumerable<GameModels> GetSourceGames();
 
@@ -74,15 +66,14 @@ namespace Game_Library.ViewModels
 
                 return source.Where(game =>
                 {
-                    if (!MainWindow.IsNsfwEnabled && game.isNSFW) return false;
+                    
 
                     if (tokens.Length == 0) return true;
 
                     string titleNorm = RemoveDiacritics(game.Title ?? "").ToLower();
                     string typeNorm = RemoveDiacritics(game.Type ?? "").ToLower();
-                    string descNorm = RemoveDiacritics(game.Description ?? "").ToLower();
 
-                    string fullSearchableText = $"{titleNorm} {typeNorm} {descNorm}";
+                    string fullSearchableText = $"{titleNorm} {typeNorm}";
 
                     return tokens.All(token => fullSearchableText.Contains(token));
                 }).ToList();
@@ -124,16 +115,13 @@ namespace Game_Library.ViewModels
         {
             if (parameter is GameModels selectedGame)
             {
-                MainWindow.Instance.NavigateToDetail(selectedGame);
+                MainWindow.Instance.NavigateToPlay(selectedGame);
             }
         }
 
         public void Dispose()
         {
-            if (MainWindow.Instance != null)
-            {
-                MainWindow.Instance.PropertyChanged -= OnMainWindowPropertyChanged;
-            }
+           
             GameDataService.Instance.OnLogChanged -= Instance_OnLogChanged;
         }
     }

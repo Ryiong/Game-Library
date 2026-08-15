@@ -51,7 +51,6 @@ namespace Game_Library
             ViewModel = new MainViewModel();
             this.DataContext = ViewModel;
         }
-        public void NavigateToDetail(GameModels selectedGame) => ViewModel.NavigateToDetail(selectedGame);
         public void NavigateToPlay(GameModels selectedGame) => ViewModel.NavigateToPlay(selectedGame);
         public void NavigateToList() => ViewModel.SidebarSelectedIndex = 0;
 

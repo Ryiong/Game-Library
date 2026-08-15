@@ -100,12 +100,11 @@ namespace Game_Library.Views
         {
             try
             {
-                string gameFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", ViewModel.GameData.Id);
+                string gameFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game-data", ViewModel.GameData.Id);
 
                 _htmlServer = new GameHttpServer();
                 _htmlServer.Start(gameFolderPath);
                 GameDataService.Instance.Log($"Live Server khởi chạy tại cổng 8080 cho game {ViewModel.GameData.Title}");
-                GameDataService.Instance.SaveGameAsync(ViewModel.GameData, true);
 
                 if (Application.Current.MainWindow is MainWindow mainWindow)
                 {
@@ -148,7 +147,7 @@ namespace Game_Library.Views
                     }
                 }
 
-                string fullSwfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "games_data", ViewModel.GameData.Id, ViewModel.GameData.MainFile);
+                string fullSwfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "game-data", ViewModel.GameData.Id, ViewModel.GameData.MainFile);
 
                 if (Application.Current.MainWindow is MainWindow mainWindow)
                 {
