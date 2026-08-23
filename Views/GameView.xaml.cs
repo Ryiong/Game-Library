@@ -111,7 +111,8 @@ namespace Game_Library.Views
                     mainWindow.ServerStatus.Text = "Server Status: Active";
                 }
 
-                await htmlWebView.EnsureCoreWebView2Async();
+                var webView2Env = await WebView2Helper.GetEnvironmentAsync();
+                await htmlWebView.EnsureCoreWebView2Async(webView2Env);
                 await htmlWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                     "window.open = function() { console.log('App Launcher: Đã chặn đứng lệnh mở quảng cáo pop-up/clickunder ngầm!'); return null; };"
                 );
