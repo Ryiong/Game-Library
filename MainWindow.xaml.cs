@@ -3,6 +3,7 @@ using Game_Library.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -13,6 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DataFormats = System.Windows.DataFormats;
+using DragDropEffects = System.Windows.DragDropEffects;
+using DragEventArgs = System.Windows.DragEventArgs;
 
 namespace Game_Library
 {
@@ -53,6 +57,48 @@ namespace Game_Library
         }
         public void NavigateToPlay(GameModels selectedGame) => ViewModel.NavigateToPlay(selectedGame);
         public void NavigateToList() => ViewModel.SidebarSelectedIndex = 0;
+
+        private void Window_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+                e.Handled = true;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files == null || files.Length == 0) return;
+
+            string droppedPath = files[0];
+
+            if (Directory.Exists(droppedPath))
+            {
+                var addDialog = new AddGameWindow();
+                addDialog.Owner = this;
+
+                if (addDialog.DataContext is AddGameViewModel vm)
+                {
+                    vm.LoadFromDirectory(droppedPath);
+                }
+                if (addDialog.ShowDialog() == true)
+                {
+                    if (DataContext is MainViewModel mainVM)
+                    {
+                        int currentTab = mainVM.SidebarSelectedIndex == -1 ? 0 : mainVM.SidebarSelectedIndex;
+                        mainVM.SidebarSelectedIndex = currentTab;
+                    }
+                }
+            }    
+        }
 
         #region Window System Action (Giữ nguyên cấu trúc điều khiển kéo đóng cửa sổ)
         private void CloseButton_Click(object sender, RoutedEventArgs e) => this.Close();

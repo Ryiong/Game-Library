@@ -62,7 +62,7 @@ namespace Game_Library.Services
         ///<summary>
         /// UPDATE SERVICE: Save or Update metadata game in background
         /// </summary>
-        public async Task<bool> SaveGameAsync(GameModels targetGame, bool isEditMode)
+        public async Task<bool> SaveGameAsync(GameModels targetGame)
         {
             OnStatusChanged?.Invoke("System: Ứng dụng đang thực hiện tối ưu hóa ảnh và đóng gói dữ liệu ngầm...");
             Log("System: Đang tối ưu hoá ảnh và chuyển dữ liệu");
@@ -72,18 +72,11 @@ namespace Game_Library.Services
                 try
                 {
                     CreateBackup();
-
-                    if (!isEditMode)
-                    {
-                        AllGames.Add(targetGame);
-                    }
+                    int idx = AllGames.FindIndex(g => g.Id == targetGame.Id);
+                    if (idx != -1)
+                        AllGames[idx] = targetGame;
                     else
-                    {
-                        int idx = AllGames.FindIndex(g => g.Id == targetGame.Id);
-                        if (idx != -1) AllGames[idx] = targetGame;
-                    }
-
-
+                        AllGames.Add(targetGame);
                     var options = new JsonSerializerOptions
                     {
                         WriteIndented = true,

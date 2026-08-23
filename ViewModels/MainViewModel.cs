@@ -105,7 +105,7 @@ namespace Game_Library.ViewModels
             SidebarSelectedIndex = 0;
             StatusText = "Server Status: Off";
             LogText = "Welcome.";
-
+            AddGameCommand = new RelayCommand(_ => ExecuteAddGame());
         }
 
 
@@ -133,17 +133,15 @@ namespace Game_Library.ViewModels
             ToggleHeader(isDetailMode: false);
         }
 
-        public void NavigateToDetail(GameModels selectedGame)
+        private void ExecuteAddGame()
         {
-            if (CurrentView != null)
+            AddGameWindow addDialog = new AddGameWindow();
+            addDialog.Owner = System.Windows.Application.Current.MainWindow;
+            if (addDialog.ShowDialog() == true)
             {
-                _viewHistory.Push(CurrentView);
-                _sidebarHistory.Push(SidebarSelectedIndex);
+                int currentTab = SidebarSelectedIndex == -1 ? 0 : SidebarSelectedIndex;
+                NavigateToTab(currentTab);
             }
-
-            _sidebarSelectedIndex = -1;
-            OnPropertyChanged(nameof(SidebarSelectedIndex));
-            ToggleHeader(isDetailMode: true);
         }
 
         public void NavigateToPlay(GameModels selectedGame)

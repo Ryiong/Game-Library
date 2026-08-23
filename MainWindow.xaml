@@ -9,6 +9,9 @@
         FontFamily="pack://application:,,,/Resources/Fonts/#SF Pro Display"
         Title="Game Library" Height="730" Width="1051"
         MinHeight="525" MinWidth="668"
+        AllowDrop="True"
+        Drop="Window_Drop"
+        PreviewDragOver="Window_PreviewDragOver"
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -102,7 +105,14 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
+                            <Button x:Name="AddGameButton" Grid.Column="0" Command="{Binding AddGameCommand}" Style="{StaticResource MacPrimaryButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" Margin="0,0,30,0">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Control Template="{StaticResource IconPlus}" Width="20" Height="19" Margin="5, 0"/>
+                                        <TextBlock Text="Add Game" VerticalAlignment="Center" Margin="2,2,8,2" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
                             <Border Grid.Column="1" Height="34" MaxWidth="400" Background="#F2F2F7" CornerRadius="13" Margin="10,0" VerticalAlignment="Center">
                                 <Grid Margin="10,0">
                                     <Grid.ColumnDefinitions>
@@ -116,6 +126,7 @@
                                             VerticalAlignment="Center" FontSize="13" Foreground="#1C1C1E"/>
                                 </Grid>
                             </Border>
+                            
                         </Grid>
 
                         <!-- Header Detail -->
